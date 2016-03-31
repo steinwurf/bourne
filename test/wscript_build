@@ -1,0 +1,7 @@
+# encoding: utf-8
+
+bld.program(
+    features='cxx test',
+    source=['bourne_tests.cpp'] + bld.path.ant_glob('src/*.cpp'),
+    target='bourne_tests',
+    use=['bourne', 'gtest'])
