@@ -30,13 +30,15 @@ TEST(test_parser, test_parse)
         "{ \"key1\" : \"value\","
         "  \"key2\" : true, "
         "  \"key3\" : 1234, "
-        "  \"key4\" : null }",
+        "  \"key4\" : -42, "
+        "  \"key5\" : null }",
         bourne::json(
         {
             "key1", "value",
             "key2", true,
             "key3", 1234,
-            "key4", nullptr
+            "key4", -42,
+            "key5", nullptr
         }
     ));
 }

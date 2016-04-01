@@ -7,7 +7,7 @@
 
 #include "parser.hpp"
 #include "json.hpp"
-
+#include "stdfix.hpp"
 #include <string>
 #include <cmath>
 #include <iostream>
@@ -83,7 +83,7 @@ namespace bourne
     json parser::parse_array()
     {
         json array = json(class_type::array);
-        unsigned index = 0;
+        uint32_t index = 0;
 
         m_offset++;
         consume_white_space();
@@ -93,7 +93,7 @@ namespace bourne
             return std::move(array);
         }
 
-        while(true)
+        while (true)
         {
             array[index++] = parse_next();
             consume_white_space();
@@ -153,7 +153,7 @@ namespace bourne
                 case 'u' :
                 {
                     val += "\\u" ;
-                    for (unsigned i = 1; i <= 4; ++i)
+                    for (uint32_t i = 1; i <= 4; ++i)
                     {
                         c = m_string[m_offset + i];
                         if ((c >= '0' && c <= '9') ||
@@ -164,7 +164,9 @@ namespace bourne
                         }
                         else
                         {
-                            std::cerr << "ERROR: string: Expected hex character in unicode escape, found '" << c << "'\n";
+                            std::cerr << "ERROR: string: Expected hex "
+                                      << "character in unicode escape, found '"
+                                      << c << "'\n";
                             return std::move(json(class_type::string));
                         }
                     }
@@ -192,17 +194,23 @@ namespace bourne
         std::string val, exp_str;
         char c;
         bool is_floating = false;
-        long exp = 0;
-        while(true) {
+        int64_t exp = 0;
+        while (true)
+        {
             c = m_string[m_offset++];
             if ((c == '-') || (c >= '0' && c <= '9'))
+            {
                 val += c;
-            else if (c == '.') {
+            }
+            else if (c == '.')
+            {
                 val += c;
                 is_floating = true;
             }
             else
+            {
                 break;
+            }
         }
         if (c == 'E' || c == 'e')
         {
@@ -213,7 +221,7 @@ namespace bourne
                 exp_str += '-';
             }
 
-            while(true)
+            while (true)
             {
                 c = m_string[m_offset++];
                 if (c >= '0' && c <= '9')
@@ -222,7 +230,8 @@ namespace bourne
                 }
                 else if (!isspace(c) && c != ',' && c != ']' && c != '}')
                 {
-                    std::cerr << "ERROR: number: Expected a number for exponent, found '" << c << "'\n";
+                    std::cerr << "ERROR: number: Expected a number for "
+                              << "exponent, found '" << c << "'\n";
                     return std::move(json(class_type::null));
                 }
                 else
@@ -230,7 +239,7 @@ namespace bourne
                     break;
                 }
             }
-            exp = std::stol(exp_str);
+            exp = stdfix::stol(exp_str);
         }
         else if (!isspace(c) && c != ',' && c != ']' && c != '}')
         {
@@ -241,17 +250,17 @@ namespace bourne
 
         if (is_floating)
         {
-            number = std::stod(val) * std::pow(10, exp);
+            number = stdfix::stod(val) * std::pow(10, exp);
         }
         else
         {
             if (!exp_str.empty())
             {
-                number = std::stol(val) * std::pow(10, exp);
+                number = stdfix::stol(val) * std::pow(10, exp);
             }
             else
             {
-                number = std::stol(val);
+                number = stdfix::stol(val);
             }
         }
         return std::move(number);
@@ -270,10 +279,11 @@ namespace bourne
         }
         else
         {
-            std::cerr << "ERROR: bool: Expected 'true' or 'false', found '" << m_string.substr(m_offset, 5) << "'\n";
+            std::cerr << "ERROR: bool: Expected 'true' or 'false', found '"
+                      << m_string.substr(m_offset, 5) << "'\n";
             return std::move(json(class_type::null));
         }
-        m_offset += (boolean.to_bool() ? 4 : 5);
+        m_offset += boolean.to_bool() ? 4 : 5;
         return std::move(boolean);
     }
 
@@ -282,7 +292,8 @@ namespace bourne
         json null;
         if (m_string.substr(m_offset, 4) != "null")
         {
-            std::cerr << "ERROR: null: Expected 'null', found '" << m_string.substr(m_offset, 4) << "'\n";
+            std::cerr << "ERROR: null: Expected 'null', found '"
+                      << m_string.substr(m_offset, 4) << "'\n";
             return std::move(json(class_type::null));
         }
         m_offset += 4;
@@ -310,7 +321,8 @@ namespace bourne
                 }
             }
         }
-        std::cerr << "ERROR: parse: Unknown starting character '" << value << "'\n";
+        std::cerr << "ERROR: parse: Unknown starting character '"
+                  << value << "'\n";
         return json();
     }
 }

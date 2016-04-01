@@ -9,6 +9,7 @@
 
 #include "parser.hpp"
 #include "class_type.hpp"
+#include "stdfix.hpp"
 
 #include <iostream>
 #include <string>
@@ -16,7 +17,6 @@
 
 namespace bourne
 {
-
     json::json() : m_internal(), m_type(class_type::null)
     {}
 
@@ -131,13 +131,17 @@ namespace bourne
 
     json& json::operator[](const std::string &key)
     {
-        set_type(class_type::object);
+        if (m_type == class_type::null)
+            set_type(class_type::object);
+        assert(m_type == class_type::object);
         return m_internal.m_map->operator[](key);
     }
 
     json& json::operator[](uint32_t index)
     {
-        set_type(class_type::array);
+        if (m_type == class_type::null)
+            set_type(class_type::array);
+        assert(m_type == class_type::array);
         if (index >= m_internal.m_array->size())
         {
             m_internal.m_array->resize(index + 1);
@@ -165,7 +169,7 @@ namespace bourne
         return m_internal.m_array->at(index);
     }
 
-    int json::length() const
+    int32_t json::length() const
     {
         if (m_type == class_type::array)
             return m_internal.m_array->size();
@@ -180,7 +184,7 @@ namespace bourne
         return false;
     }
 
-    int json::size() const
+    int32_t json::size() const
     {
         if (m_type == class_type::object)
             return m_internal.m_map->size();
@@ -201,12 +205,6 @@ namespace bourne
         return m_type == class_type::null;
     }
 
-    long json::to_int() const
-    {
-        bool b;
-        return to_int(b);
-    }
-
     bool json::to_bool() const
     {
         bool b;
@@ -219,7 +217,13 @@ namespace bourne
         return ok ? m_internal.m_bool : false;
     }
 
-    long json::to_int(bool &ok) const
+    int64_t json::to_int() const
+    {
+        bool b;
+        return to_int(b);
+    }
+
+    int64_t json::to_int(bool &ok) const
     {
         ok = (m_type == class_type::integral);
         return ok ? m_internal.m_int : 0;
@@ -291,45 +295,33 @@ namespace bourne
 
     json_wrapper<json::object_type> json::object_range()
     {
-        if (m_type != class_type::object)
-        {
-            return json_wrapper<json::object_type>(nullptr);
-        }
+        assert(m_type == class_type::object);
         return json_wrapper<json::object_type>(m_internal.m_map);
     }
 
     json_const_wrapper<json::object_type> json::object_range() const
     {
-        if (m_type != class_type::object)
-        {
-            return json_const_wrapper<json::object_type>(nullptr);
-        }
+        assert(m_type == class_type::object);
         return json_const_wrapper<json::object_type>(m_internal.m_map);
     }
 
     json_wrapper<json::array_type> json::array_range()
     {
-        if (m_type != class_type::array)
-        {
-            return json_wrapper<json::array_type>(nullptr);
-        }
+        assert(m_type == class_type::array);
         return json_wrapper<json::array_type>(m_internal.m_array);
     }
 
     json_const_wrapper<json::array_type> json::array_range() const
     {
-        if (m_type != class_type::array)
-        {
-            return json_const_wrapper<json::array_type>(nullptr);
-        }
+        assert(m_type == class_type::array);
         return json_const_wrapper<json::array_type>(m_internal.m_array);
     }
 
-    std::string json::dump(int depth, std::string tab) const
+    std::string json::dump(uint32_t depth, std::string tab) const
     {
         std::string pad = "";
 
-        for (int i = 0; i < depth; ++i, pad += tab);
+        for (uint32_t i = 0; i < depth; ++i, pad += tab);
 
         switch(m_type)
         {
@@ -339,12 +331,18 @@ namespace bourne
             {
                 std::string s = "{\n";
                 bool skip = true;
-                for (auto &p : *m_internal.m_map) {
-                    if (!skip) s += ",\n";
-                    s += (pad + "\"" + p.first + "\" : " + p.second.dump(depth + 1, tab));
+                for (auto &p : *m_internal.m_map)
+                {
+                    if (!skip)
+                    {
+                        s += ",\n";
+                    }
+                    s += pad;
+                    s += "\"" + p.first + "\" : ";
+                    s += p.second.dump(depth + 1, tab);
                     skip = false;
                 }
-                s += ("\n" + pad.erase(0, 2) + "}") ;
+                s += "\n" + pad.erase(0, 2) + "}";
                 return s;
             }
         case class_type::array:
@@ -366,9 +364,9 @@ namespace bourne
         case class_type::string:
             return "\"" + to_string() + "\"";
         case class_type::floating:
-            return std::to_string(m_internal.m_float);
+            return stdfix::to_string(m_internal.m_float);
         case class_type::integral:
-            return std::to_string(m_internal.m_int);
+            return stdfix::to_string(m_internal.m_int);
         case class_type::boolean:
             return m_internal.m_bool ? "true" : "false";
         default:

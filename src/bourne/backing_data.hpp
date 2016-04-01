@@ -12,6 +12,7 @@
 #include <string>
 #include <map>
 #include <deque>
+#include <cstdint>
 
 namespace bourne
 {
@@ -26,7 +27,7 @@ namespace bourne
         backing_data(double d):
             m_float(d)
         {}
-        backing_data(long l):
+        backing_data(int64_t l):
             m_int(l)
         {}
         backing_data(bool b):
@@ -43,7 +44,7 @@ namespace bourne
         object_type* m_map;
         std::string* m_string;
         double m_float;
-        long m_int;
+        int64_t m_int;
         bool m_bool;
     };
 }

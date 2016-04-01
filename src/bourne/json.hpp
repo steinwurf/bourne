@@ -67,7 +67,7 @@ namespace bourne
 
         template <typename T>
         json(T i, typename check_is_integral<T>::type* = 0):
-            m_internal((long)i),
+            m_internal((int64_t)i),
             m_type(class_type::integral)
         {}
 
@@ -148,11 +148,11 @@ namespace bourne
         json& at(uint32_t index);
         const json& at(uint32_t index) const;
 
-        int length() const;
+        int32_t length() const;
 
         bool has_key(const std::string &key) const;
 
-        int size() const;
+        int32_t size() const;
 
         class_type json_type() const;
 
@@ -165,8 +165,8 @@ namespace bourne
         bool to_bool() const;
         bool to_bool(bool &ok) const;
 
-        long to_int() const;
-        long to_int(bool &ok) const;
+        int64_t to_int() const;
+        int64_t to_int(bool &ok) const;
 
         double to_float() const;
         double to_float(bool &ok) const;
@@ -180,7 +180,7 @@ namespace bourne
         json_wrapper<array_type> array_range();
         json_const_wrapper<array_type> array_range() const;
 
-        std::string dump(int depth = 1, std::string tab = "  ") const;
+        std::string dump(uint32_t depth = 1, std::string tab = "  ") const;
 
         friend std::ostream& operator<<(std::ostream&, const json &);
 
