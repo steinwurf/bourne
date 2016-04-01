@@ -16,7 +16,7 @@ int main()
     bourne::json null;
     bourne::json boolean(true);
     bourne::json string("Raw string");
-    bourne::json cpp_string(std::string("C++ string" ) );
+    bourne::json cpp_string(std::string("C++ string"));
     bourne::json integer(1);
     bourne::json floating_point(1.2);
     bourne::json array = bourne::json::array();
@@ -57,10 +57,10 @@ int main()
 
     // Lets print what we've made
     std::cout << "nested objects and arrays:" << std::endl;
-    std::cout << array << std::endl << std::endl;
+    std::cout << array << std::endl;
 
     // Another, more json-like syntax, can be used to create json objects.
-    std::cout << "constructed using json like syntax:" << std::endl;
+    std::cout << std::endl << "json like syntax:" << std::endl;
     bourne::json json = {
         "key1", "Value",
         "key2", true,
@@ -74,6 +74,20 @@ int main()
 
     // This results in the following:
     std::cout << json << std::endl;
+
+    // Elements can be iterated.
+    std::cout << std::endl << "iterating arrays:" << std::endl;
+    uint32_t index = 0;
+    for (auto& v : array.array_range())
+    {
+        std::cout << "array[" << index++ << "] = " << v << std::endl;
+    }
+
+    std::cout << std::endl << "iterating objects:" << std::endl;
+    for (auto& v : object.object_range())
+    {
+        std::cout << "object[" << v.first << "] = " << v.second << std::endl;
+    }
 
     return 0;
 }

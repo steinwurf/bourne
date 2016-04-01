@@ -45,7 +45,6 @@ TEST(test_json, test_retrival_of_primitives)
     object = 42;
     EXPECT_EQ(42, object.to_int());
 
-
     object = 13.37;
     EXPECT_EQ(13.37, object.to_float());
 

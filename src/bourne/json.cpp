@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <string>
+#include <cassert>
 
 namespace bourne
 {
@@ -28,8 +29,9 @@ namespace bourne
     json::json(std::initializer_list<json> list):
         json()
     {
+        assert(list.size() % 2 == 0 && "Missing value for key value pair.");
         set_type(class_type::object);
-        for (auto i = list.begin(), e = list.end(); i != e; ++i, ++i)
+        for (auto i = list.begin(); i != list.end(); i += 2)
         {
             operator[](i->to_string()) = *std::next(i);
         }
