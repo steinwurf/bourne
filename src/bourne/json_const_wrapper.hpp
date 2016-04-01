@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <cassert>
+
 namespace bourne
 {
     template <typename Container>
@@ -19,18 +21,17 @@ namespace bourne
 
     public:
 
-        json_const_wrapper(const Container *val):
+        json_const_wrapper(const Container* val):
             m_object(val)
-        {}
-
-        json_const_wrapper(std::nullptr_t):
-            m_object(nullptr)
-        {}
+        {
+            assert(m_object);
+        }
 
         iterator begin() const
         {
             return m_object ? m_object->begin() : iterator();
         }
+
         iterator end() const
         {
             return m_object ? m_object->end() : iterator();

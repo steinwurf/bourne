@@ -291,37 +291,25 @@ namespace bourne
 
     json_wrapper<json::object_type> json::object_range()
     {
-        if (m_type != class_type::object)
-        {
-            return json_wrapper<json::object_type>(nullptr);
-        }
+        assert(m_type == class_type::object);
         return json_wrapper<json::object_type>(m_internal.m_map);
     }
 
     json_const_wrapper<json::object_type> json::object_range() const
     {
-        if (m_type != class_type::object)
-        {
-            return json_const_wrapper<json::object_type>(nullptr);
-        }
+        assert(m_type == class_type::object);
         return json_const_wrapper<json::object_type>(m_internal.m_map);
     }
 
     json_wrapper<json::array_type> json::array_range()
     {
-        if (m_type != class_type::array)
-        {
-            return json_wrapper<json::array_type>(nullptr);
-        }
+        assert(m_type == class_type::array);
         return json_wrapper<json::array_type>(m_internal.m_array);
     }
 
     json_const_wrapper<json::array_type> json::array_range() const
     {
-        if (m_type != class_type::array)
-        {
-            return json_const_wrapper<json::array_type>(nullptr);
-        }
+        assert(m_type == class_type::array);
         return json_const_wrapper<json::array_type>(m_internal.m_array);
     }
 
