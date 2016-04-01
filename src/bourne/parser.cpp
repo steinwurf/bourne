@@ -93,7 +93,7 @@ namespace bourne
             return std::move(array);
         }
 
-        while(true)
+        while (true)
         {
             array[index++] = parse_next();
             consume_white_space();
@@ -192,7 +192,7 @@ namespace bourne
         std::string val, exp_str;
         char c;
         bool is_floating = false;
-        long exp = 0;
+        int64_t exp = 0;
         while(true) {
             c = m_string[m_offset++];
             if ((c == '-') || (c >= '0' && c <= '9'))

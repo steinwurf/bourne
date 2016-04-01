@@ -6,6 +6,7 @@
 // actual or intended publication of such source code.
 
 #include <bourne/json.hpp>
+#include <bourne/to_string.hpp>
 #include <gtest/gtest.h>
 
 TEST(test_json, test_dump)
@@ -99,7 +100,7 @@ TEST(test_json, test_iterator)
     index = 0;
     for (auto& v : array.object_range())
     {
-        EXPECT_EQ(std::to_string(index), v.first);
+        EXPECT_EQ(bourne::to_string(index), v.first);
         EXPECT_EQ(expected[index], v.second.to_int());
         index++;
     }
