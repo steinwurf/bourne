@@ -131,13 +131,17 @@ namespace bourne
 
     json& json::operator[](const std::string &key)
     {
-        set_type(class_type::object);
+        if (m_type == class_type::null)
+            set_type(class_type::object);
+        assert(m_type == class_type::object);
         return m_internal.m_map->operator[](key);
     }
 
     json& json::operator[](uint32_t index)
     {
-        set_type(class_type::array);
+        if (m_type == class_type::null)
+            set_type(class_type::array);
+        assert(m_type == class_type::array);
         if (index >= m_internal.m_array->size())
         {
             m_internal.m_array->resize(index + 1);
