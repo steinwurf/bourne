@@ -165,7 +165,7 @@ namespace bourne
         return m_internal.m_array->at(index);
     }
 
-    int json::length() const
+    int32_t json::length() const
     {
         if (m_type == class_type::array)
             return m_internal.m_array->size();
@@ -180,7 +180,7 @@ namespace bourne
         return false;
     }
 
-    int json::size() const
+    int32_t json::size() const
     {
         if (m_type == class_type::object)
             return m_internal.m_map->size();
@@ -201,12 +201,6 @@ namespace bourne
         return m_type == class_type::null;
     }
 
-    long json::to_int() const
-    {
-        bool b;
-        return to_int(b);
-    }
-
     bool json::to_bool() const
     {
         bool b;
@@ -219,7 +213,13 @@ namespace bourne
         return ok ? m_internal.m_bool : false;
     }
 
-    long json::to_int(bool &ok) const
+    int64_t json::to_int() const
+    {
+        bool b;
+        return to_int(b);
+    }
+
+    int64_t json::to_int(bool &ok) const
     {
         ok = (m_type == class_type::integral);
         return ok ? m_internal.m_int : 0;
@@ -325,11 +325,11 @@ namespace bourne
         return json_const_wrapper<json::array_type>(m_internal.m_array);
     }
 
-    std::string json::dump(int depth, std::string tab) const
+    std::string json::dump(uint32_t depth, std::string tab) const
     {
         std::string pad = "";
 
-        for (int i = 0; i < depth; ++i, pad += tab);
+        for (uint32_t i = 0; i < depth; ++i, pad += tab);
 
         switch(m_type)
         {
@@ -339,12 +339,18 @@ namespace bourne
             {
                 std::string s = "{\n";
                 bool skip = true;
-                for (auto &p : *m_internal.m_map) {
-                    if (!skip) s += ",\n";
-                    s += (pad + "\"" + p.first + "\" : " + p.second.dump(depth + 1, tab));
+                for (auto &p : *m_internal.m_map)
+                {
+                    if (!skip)
+                    {
+                        s += ",\n";
+                    }
+                    s += pad;
+                    s += "\"" + p.first + "\" : ";
+                    s += p.second.dump(depth + 1, tab);
                     skip = false;
                 }
-                s += ("\n" + pad.erase(0, 2) + "}") ;
+                s += "\n" + pad.erase(0, 2) + "}";
                 return s;
             }
         case class_type::array:
