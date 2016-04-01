@@ -87,7 +87,7 @@ TEST(test_json, test_iterator)
     for(auto expect : expected)
     {
         array[index] = expect;
-        object[index] = expect;
+        object[stdfix::to_string(index)] = expect;
         index++;
     }
 
@@ -96,12 +96,14 @@ TEST(test_json, test_iterator)
     {
         EXPECT_EQ(expected[index++], v.to_int());
     }
+    EXPECT_EQ(expected.size(), index);
 
     index = 0;
-    for (auto& v : array.object_range())
+    for (auto& v : object.object_range())
     {
         EXPECT_EQ(stdfix::to_string(index), v.first);
         EXPECT_EQ(expected[index], v.second.to_int());
         index++;
     }
+    EXPECT_EQ(expected.size(), index);
 }
