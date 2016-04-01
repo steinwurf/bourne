@@ -230,7 +230,7 @@ namespace bourne
                     break;
                 }
             }
-            exp = std::stol(exp_str);
+            exp = std::stoi(exp_str);
         }
         else if (!isspace(c) && c != ',' && c != ']' && c != '}')
         {
@@ -247,11 +247,11 @@ namespace bourne
         {
             if (!exp_str.empty())
             {
-                number = std::stol(val) * std::pow(10, exp);
+                number = std::stoi(val) * std::pow(10, exp);
             }
             else
             {
-                number = std::stol(val);
+                number = std::stoi(val);
             }
         }
         return std::move(number);

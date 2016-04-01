@@ -17,7 +17,6 @@
 
 namespace bourne
 {
-
     json::json() : m_internal(), m_type(class_type::null)
     {}
 
