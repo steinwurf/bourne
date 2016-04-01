@@ -241,7 +241,7 @@ namespace bourne
 
         if (is_floating)
         {
-            number = std::stod(val) * std::pow(10, exp);
+            number = stdfix::stod(val) * std::pow(10, exp);
         }
         else
         {
