@@ -7,7 +7,7 @@
 
 #include "parser.hpp"
 #include "json.hpp"
-
+#include "stdfix.hpp"
 #include <string>
 #include <cmath>
 #include <iostream>
@@ -230,7 +230,7 @@ namespace bourne
                     break;
                 }
             }
-            exp = std::stoi(exp_str);
+            exp = stdfix::stol(exp_str);
         }
         else if (!isspace(c) && c != ',' && c != ']' && c != '}')
         {
@@ -247,11 +247,11 @@ namespace bourne
         {
             if (!exp_str.empty())
             {
-                number = std::stoi(val) * std::pow(10, exp);
+                number = stdfix::stol(val) * std::pow(10, exp);
             }
             else
             {
-                number = std::stoi(val);
+                number = stdfix::stol(val);
             }
         }
         return std::move(number);

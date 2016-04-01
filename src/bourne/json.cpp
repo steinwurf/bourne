@@ -9,7 +9,7 @@
 
 #include "parser.hpp"
 #include "class_type.hpp"
-#include "to_string.hpp"
+#include "stdfix.hpp"
 
 #include <iostream>
 #include <string>
@@ -366,9 +366,9 @@ namespace bourne
         case class_type::string:
             return "\"" + to_string() + "\"";
         case class_type::floating:
-            return bourne::to_string(m_internal.m_float);
+            return stdfix::to_string(m_internal.m_float);
         case class_type::integral:
-            return bourne::to_string(m_internal.m_int);
+            return stdfix::to_string(m_internal.m_int);
         case class_type::boolean:
             return m_internal.m_bool ? "true" : "false";
         default:
