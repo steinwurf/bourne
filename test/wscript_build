@@ -4,4 +4,5 @@ bld.program(
     features='cxx test',
     source=['bourne_tests.cpp'] + bld.path.ant_glob('src/*.cpp'),
     target='bourne_tests',
+    test_files=['test.json'],
     use=['bourne', 'gtest'])

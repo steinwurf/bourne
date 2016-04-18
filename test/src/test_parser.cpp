@@ -3,6 +3,8 @@
 //
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
+#include <fstream>
+
 #include <bourne/parser.hpp>
 #include <gtest/gtest.h>
 
@@ -39,4 +41,24 @@ TEST(test_parser, test_parse)
             "key5", nullptr
         }
     ));
+}
+
+TEST(test_parser, test_parse_file)
+{
+    std::ifstream test_json("test.json");
+    EXPECT_TRUE(test_json.is_open());
+
+    std::stringstream buffer;
+    buffer << test_json.rdbuf();
+
+    bourne::parser p(buffer.str());
+    auto json = p.parse();
+
+    EXPECT_EQ("László", json["hungarian_name"].to_string());
+    EXPECT_EQ("Jørgen", json["danish_name"].to_string());
+    EXPECT_EQ("秀英", json["chinese_name"].to_string());
+    EXPECT_EQ("John", json["english_name"].to_string());
+
+    EXPECT_EQ("værdi", json["nøgle"].to_string());
+    EXPECT_EQ("值", json["键"].to_string());
 }
