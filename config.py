@@ -3,7 +3,11 @@
 
 import traceback
 import sys
-from six.moves import input
+
+try:
+    input = raw_input
+except NameError:
+    pass
 
 project_name = 'bourne'
 project_dependencies = \
