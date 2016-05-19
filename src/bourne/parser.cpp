@@ -40,7 +40,7 @@ namespace bourne
         if (m_string[m_offset] == '}')
         {
             m_offset++;
-            return std::move(object);
+            return object;
         }
 
         while(true)
@@ -75,7 +75,7 @@ namespace bourne
             }
         }
 
-        return std::move(object);
+        return object;
     }
 
     json parser::parse_array()
@@ -88,7 +88,7 @@ namespace bourne
         if (m_string[m_offset] == ']')
         {
             m_offset++;
-            return std::move(array);
+            return array;
         }
 
         while (true)
@@ -107,11 +107,11 @@ namespace bourne
             else
             {
                 std::cerr << "ERROR: array: Expected ',' or ']', found '" << m_string[m_offset] << "'\n";
-                return std::move(json(class_type::array));
+                return json(class_type::array);
             }
         }
 
-        return std::move(array);
+        return array;
     }
 
     json parser::parse_string()
@@ -165,7 +165,7 @@ namespace bourne
                             std::cerr << "ERROR: string: Expected hex "
                                       << "character in unicode escape, found '"
                                       << c << "'\n";
-                            return std::move(json(class_type::string));
+                            return json(class_type::string);
                         }
                     }
                     m_offset += 4;
@@ -183,7 +183,7 @@ namespace bourne
         }
         m_offset++;
         string = val;
-        return std::move(string);
+        return string;
     }
 
     json parser::parse_number()
@@ -230,7 +230,7 @@ namespace bourne
                 {
                     std::cerr << "ERROR: number: Expected a number for "
                               << "exponent, found '" << c << "'\n";
-                    return std::move(json(class_type::null));
+                    return json(class_type::null);
                 }
                 else
                 {
@@ -242,7 +242,7 @@ namespace bourne
         else if (!isspace(c) && c != ',' && c != ']' && c != '}')
         {
             std::cerr << "ERROR: number: unexpected character '" << c << "'\n";
-            return std::move(json(class_type::null));
+            return json(class_type::null);
         }
         --m_offset;
 
@@ -261,7 +261,7 @@ namespace bourne
                 number = stdfix::stol(val);
             }
         }
-        return std::move(number);
+        return number;
     }
 
     json parser::parse_bool()
@@ -279,10 +279,10 @@ namespace bourne
         {
             std::cerr << "ERROR: bool: Expected 'true' or 'false', found '"
                       << m_string.substr(m_offset, 5) << "'\n";
-            return std::move(json(class_type::null));
+            return json(class_type::null);
         }
         m_offset += boolean.to_bool() ? 4 : 5;
-        return std::move(boolean);
+        return boolean;
     }
 
     json parser::parse_null()
@@ -292,10 +292,10 @@ namespace bourne
         {
             std::cerr << "ERROR: null: Expected 'null', found '"
                       << m_string.substr(m_offset, 4) << "'\n";
-            return std::move(json(class_type::null));
+            return json(class_type::null);
         }
         m_offset += 4;
-        return std::move(null);
+        return null;
     }
 
     json parser::parse_next()
@@ -305,17 +305,17 @@ namespace bourne
         value = m_string[m_offset];
         switch(value)
         {
-            case '[': return std::move(parse_array());
-            case '{': return std::move(parse_object());
-            case '\"': return std::move(parse_string());
+            case '[': return parse_array();
+            case '{': return parse_object();
+            case '\"': return parse_string();
             case 't':
-            case 'f': return std::move(parse_bool());
-            case 'n': return std::move(parse_null());
+            case 'f': return parse_bool();
+            case 'n': return parse_null();
             default:
             {
                 if ((value <= '9' && value >= '0') || value == '-')
                 {
-                    return std::move(parse_number());
+                    return parse_number();
                 }
             }
         }

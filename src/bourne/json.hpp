@@ -193,7 +193,7 @@ namespace bourne
         {
             json array = json(class_type::array);
             array.append(args...);
-            return std::move(array);
+            return array;
         }
 
         static json object();
