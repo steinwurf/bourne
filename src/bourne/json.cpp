@@ -242,7 +242,7 @@ namespace bourne
     std::string json::to_string() const
     {
         bool b;
-        return std::move(to_string(b));
+        return to_string(b);
     }
 
     std::string json::to_string(bool &ok) const
@@ -283,11 +283,11 @@ namespace bourne
                 }
             }
 
-            return std::move(output);
+            return output;
         }
         else
         {
-            return std::string("");
+            return "";
         }
     }
 
@@ -375,23 +375,23 @@ namespace bourne
     json json::parse(const std::string& string)
     {
         auto p = parser(string);
-        return std::move(p.parse());
+        return p.parse();
     }
 
     json json::array()
     {
-        return std::move(json(class_type::array));
+        return json(class_type::array);
     }
 
     json json::object()
     {
-        return std::move(json(class_type::object));
+        return json(class_type::object);
     }
 
 
     json json::object(std::initializer_list<json> list)
     {
-        return std::move(json(list));
+        return json(list);
     }
 
     void json::set_type(class_type type)
