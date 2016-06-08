@@ -105,3 +105,51 @@ TEST(test_json, test_iterator)
     }
     EXPECT_EQ(expected.size(), index);
 }
+
+TEST(test_json, test_equality)
+{
+    // Test null equality
+    EXPECT_EQ(bourne::json(), bourne::json());
+
+    bourne::json object1(
+    {
+        "k1", 1,
+        "k2", true,
+        "k3", nullptr,
+        "k4", {
+            "k5", "some string",
+            "some_array", bourne::json::array(9, "some other string", false)
+        },
+        "none", bourne::json()
+    });
+
+    bourne::json object2(
+    {
+        "k2", true,
+        "k4", {
+            "k5", "some string",
+            "some_array", bourne::json::array(9, "some other string", false)
+        },
+        "k3", nullptr,
+        "k1", 1,
+        "none", bourne::json()
+    });
+
+    // check equality
+    EXPECT_EQ(object1, object2);
+    EXPECT_EQ(object2, object1);
+
+    object1["different"] = true;
+
+    // check inequality (object 1 is different)
+    EXPECT_NE(object1, object2);
+
+    object2["different"] = true;
+
+    // check that object 2 is different too
+    EXPECT_EQ(object1, object2);
+
+    auto object3 = object2;
+
+    EXPECT_EQ(object1, object3);
+}
