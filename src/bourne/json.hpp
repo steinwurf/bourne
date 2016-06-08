@@ -9,6 +9,7 @@
 #include <string>
 #include <type_traits>
 #include <ostream>
+#include <cstdarg>
 
 #include "class_type.hpp"
 #include "backing_data.hpp"
@@ -47,12 +48,6 @@ namespace bourne
         json(class_type type);
 
         json(std::initializer_list<json> list);
-
-        template <typename... U>
-        json(U... args)
-        {
-            append(args...);
-        }
 
         json(json&& other);
         json(const json &other);
