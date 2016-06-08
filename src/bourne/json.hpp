@@ -48,12 +48,6 @@ namespace bourne
 
         json(std::initializer_list<json> list);
 
-        template <typename... U>
-        json(U... args)
-        {
-            append(args...);
-        }
-
         json(json&& other);
         json(const json &other);
 

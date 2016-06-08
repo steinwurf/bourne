@@ -25,7 +25,7 @@ TEST(test_parser, test_parse)
     test_parser(
         "\"you are a \\\"great\\\" agent\\/spy\"",
         bourne::json("you are a \"great\" agent/spy"));
-    test_parser("[1, 2,3]", bourne::json(1, 2, 3));
+    test_parser("[1, 2,3]", bourne::json::array(1, 2, 3));
     test_parser(
         "{ \"key1\" : \"value\","
         "  \"key2\" : true, "
