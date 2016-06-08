@@ -6,6 +6,10 @@ every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+2.0.0
+-----
 * Major: Removed templated constructor. This has been done to prevent slient,
   infinite append-loop when accidentally providing a none bourne::json
   convertable object to constructor.
