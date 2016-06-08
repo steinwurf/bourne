@@ -147,6 +147,51 @@ namespace bourne
         return m_internal.m_array->operator[](index);
     }
 
+
+    bool json::operator==(const json &other) const
+    {
+        if (m_type != other.m_type)
+        {
+            std::cout << "not same type" << std::endl;
+            return false;
+        }
+
+        switch(m_type)
+        {
+        case class_type::null:
+            return true;
+        case class_type::object:
+        {
+            auto this_map = m_internal.m_map;
+            auto other_map = other.m_internal.m_map;
+            return this_map->size() == other_map->size() && std::equal(
+                this_map->begin(), this_map->end(), other_map->begin());
+        }
+        case class_type::array:
+        {
+            auto this_array = m_internal.m_array;
+            auto other_array = other.m_internal.m_array;
+            return this_array->size() == other_array->size() && std::equal(
+                this_array->begin(), this_array->end(), other_array->begin());
+        }
+        case class_type::string:
+            return (*m_internal.m_string) == (*other.m_internal.m_string);
+        case class_type::floating:
+            return m_internal.m_float == other.m_internal.m_float;
+        case class_type::integral:
+            return m_internal.m_int == other.m_internal.m_int;
+        case class_type::boolean:
+            return m_internal.m_bool == other.m_internal.m_bool;
+        }
+
+        return true;
+    }
+
+    bool json::operator!=(const json &other) const
+    {
+        return !(*this == other);
+    }
+
     json& json::at(const std::string &key)
     {
         return operator[](key);

@@ -73,6 +73,12 @@ int main()
     // This results in the following:
     std::cout << json << std::endl;
 
+    // Nested elements can be accessed like so:
+    std::cout << std::endl << "accessing nested keys" << std::endl;
+    std::cout << "json[\"key3\"][\"nested objects\"][\"is_cool\"]: "
+              << json["key3"]["nested objects"]["is_cool"].to_bool()
+              << std::endl;
+
     // Elements can be iterated.
     std::cout << std::endl << "iterating arrays:" << std::endl;
     uint32_t index = 0;

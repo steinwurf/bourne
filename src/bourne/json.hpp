@@ -124,6 +124,9 @@ namespace bourne
         json& operator[](const std::string &key);
         json& operator[](uint32_t index);
 
+        bool operator==(const json &other) const;
+        bool operator!=(const json &other) const;
+
     public:
 
         template <typename T>
