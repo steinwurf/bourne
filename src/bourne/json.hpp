@@ -153,21 +153,20 @@ namespace bourne
 
     public:
 
-        /// Functions for getting primitives from the json object.
-
+        // Functions for checking the type of the json attribute
         bool is_null() const;
+        bool is_bool() const;
+        bool is_int() const;
+        bool is_float() const;
+        bool is_string() const;
+        bool is_object() const;
+        bool is_array() const;
 
+        /// Functions for getting primitives from the json object.
         bool to_bool() const;
-        bool to_bool(bool &ok) const;
-
         int64_t to_int() const;
-        int64_t to_int(bool &ok) const;
-
         double to_float() const;
-        double to_float(bool &ok) const;
-
         std::string to_string() const;
-        std::string to_string(bool &ok) const;
 
         json_wrapper<object_type> object_range();
         json_const_wrapper<object_type> object_range() const;
@@ -198,6 +197,7 @@ namespace bourne
 
     private:
 
+        void clean_up();
         void set_type(class_type type);
 
     private:
