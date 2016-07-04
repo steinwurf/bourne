@@ -248,115 +248,114 @@ namespace bourne
         return m_type == class_type::null;
     }
 
-    bool json::to_bool() const
+    bool json::is_bool() const
     {
-        bool b;
-        return to_bool(b);
+        return m_type == class_type::boolean;
     }
 
-    bool json::to_bool(bool &ok) const
+    bool json::is_int() const
     {
-        ok = (m_type == class_type::boolean);
-        return ok ? m_internal.m_bool : false;
+        return m_type == class_type::integral;
+    }
+
+    bool json::is_float() const
+    {
+        return m_type == class_type::floating;
+    }
+
+    bool json::is_string() const
+    {
+        return m_type == class_type::string;
+    }
+
+    bool json::is_object() const
+    {
+        return m_type == class_type::object;
+    }
+
+    bool json::is_array() const
+    {
+        return m_type == class_type::array;
+    }
+
+    bool json::to_bool() const
+    {
+        assert(is_bool());
+        return m_internal.m_bool;
     }
 
     int64_t json::to_int() const
     {
-        bool b;
-        return to_int(b);
-    }
-
-    int64_t json::to_int(bool &ok) const
-    {
-        ok = (m_type == class_type::integral);
-        return ok ? m_internal.m_int : 0;
+        assert(is_int());
+        return m_internal.m_int;
     }
 
     double json::to_float() const
     {
-        bool b;
-        return to_float(b);
-    }
-
-    double json::to_float(bool &ok) const
-    {
-        ok = (m_type == class_type::floating);
-        return ok ? m_internal.m_float : 0.0;
+        assert(is_float());
+        return m_internal.m_float;
     }
 
     std::string json::to_string() const
     {
-        bool b;
-        return to_string(b);
-    }
-
-    std::string json::to_string(bool &ok) const
-    {
-        ok = (m_type == class_type::string);
-        if (ok)
+        assert(is_string());
+        const std::string& str = *m_internal.m_string;
+        std::string output;
+        for (uint32_t i = 0; i < str.length(); ++i)
         {
-            const std::string& str = *m_internal.m_string;
-            std::string output;
-            for (uint32_t i = 0; i < str.length(); ++i)
+            switch(str[i])
             {
-                switch(str[i])
-                {
-                case '\"':
-                    output += "\\\"";
-                    break;
-                case '\\':
-                    output += "\\\\";
-                    break;
-                case '\b':
-                    output += "\\b";
-                    break;
-                case '\f':
-                    output += "\\f";
-                    break;
-                case '\n':
-                    output += "\\n";
-                    break;
-                case '\r':
-                    output += "\\r";
-                    break;
-                case '\t':
-                    output += "\\t";
-                    break;
-                default:
-                    output += str[i];
-                    break;
-                }
+            case '\"':
+                output += "\\\"";
+                break;
+            case '\\':
+                output += "\\\\";
+                break;
+            case '\b':
+                output += "\\b";
+                break;
+            case '\f':
+                output += "\\f";
+                break;
+            case '\n':
+                output += "\\n";
+                break;
+            case '\r':
+                output += "\\r";
+                break;
+            case '\t':
+                output += "\\t";
+                break;
+            default:
+                output += str[i];
+                break;
             }
+        }
 
-            return output;
-        }
-        else
-        {
-            return "";
-        }
+        return output;
     }
 
     json_wrapper<json::object_type> json::object_range()
     {
-        assert(m_type == class_type::object);
+        assert(is_object());
         return json_wrapper<json::object_type>(m_internal.m_map);
     }
 
     json_const_wrapper<json::object_type> json::object_range() const
     {
-        assert(m_type == class_type::object);
+        assert(is_object());
         return json_const_wrapper<json::object_type>(m_internal.m_map);
     }
 
     json_wrapper<json::array_type> json::array_range()
     {
-        assert(m_type == class_type::array);
+        assert(is_array());
         return json_wrapper<json::array_type>(m_internal.m_array);
     }
 
     json_const_wrapper<json::array_type> json::array_range() const
     {
-        assert(m_type == class_type::array);
+        assert(is_array());
         return json_const_wrapper<json::array_type>(m_internal.m_array);
     }
 
