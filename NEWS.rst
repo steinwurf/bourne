@@ -6,6 +6,10 @@ every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+3.0.0
+-----
 * Major: Replaced ``to_[type](bool)`` functions with a combination of
   ``to_[type]`` and ``is_[type]``.
 * Minor: Added ``is_bool``, ``is_int``, ``is_float``, ``is_string``, ``is_object``, and
