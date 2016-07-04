@@ -8,9 +8,9 @@ Latest
 ------
 * Major: Replaced ``to_[type](bool)`` functions with a combination of
   ``to_[type]`` and ``is_[type]``.
-* Added ``is_bool``, ``is_int``, ``is_float``, ``is_string``, ``is_object``, and
+* Minor: Added ``is_bool``, ``is_int``, ``is_float``, ``is_string``, ``is_object``, and
   ``is_array``.
-
+* Patch: Fixed memory leak on reassignment.
 
 2.0.0
 -----

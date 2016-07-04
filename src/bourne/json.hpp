@@ -197,6 +197,7 @@ namespace bourne
 
     private:
 
+        void clean_up();
         void set_type(class_type type);
 
     private:

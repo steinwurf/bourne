@@ -50,6 +50,7 @@ namespace bourne
 
     json::json(const json &other)
     {
+        clean_up();
         switch(other.m_type)
         {
         case class_type::object:
@@ -76,23 +77,12 @@ namespace bourne
 
     json::~json()
     {
-        switch(m_type)
-        {
-        case class_type::array:
-            delete m_internal.m_array;
-            break;
-        case class_type::object:
-            delete m_internal.m_map;
-            break;
-        case class_type::string:
-            delete m_internal.m_string;
-            break;
-        default:;
-        }
+        clean_up();
     }
 
     json& json::operator=(json&& other)
     {
+        clean_up();
         m_internal = other.m_internal;
         m_type = other.m_type;
         other.m_internal.m_map = nullptr;
@@ -438,24 +428,29 @@ namespace bourne
         return json(list);
     }
 
-    void json::set_type(class_type type)
+    void json::clean_up()
     {
-        if (type == m_type)
-            return;
-
         switch(m_type)
         {
-        case class_type::object:
-            delete m_internal.m_map;
-            break;
         case class_type::array:
             delete m_internal.m_array;
+            break;
+        case class_type::object:
+            delete m_internal.m_map;
             break;
         case class_type::string:
             delete m_internal.m_string;
             break;
         default:;
         }
+    }
+
+    void json::set_type(class_type type)
+    {
+        if (type == m_type)
+            return;
+
+        clean_up();
 
         switch(type)
         {

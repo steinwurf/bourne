@@ -36,61 +36,60 @@ TEST(test_json, test_dump)
 
 TEST(test_json, test_retrival_of_primitives)
 {
-    bourne::json object;
+    bourne::json element;
 
-    object = true;
-    EXPECT_TRUE(object.is_bool());
-    EXPECT_FALSE(object.is_int());
-    EXPECT_FALSE(object.is_float());
-    EXPECT_FALSE(object.is_string());
-    EXPECT_FALSE(object.is_object());
-    EXPECT_FALSE(object.is_array());
-    EXPECT_EQ(true, object.to_bool());
+    element = true;
+    EXPECT_TRUE(element.is_bool());
+    EXPECT_FALSE(element.is_int());
+    EXPECT_FALSE(element.is_float());
+    EXPECT_FALSE(element.is_string());
+    EXPECT_FALSE(element.is_object());
+    EXPECT_FALSE(element.is_array());
+    EXPECT_EQ(true, element.to_bool());
 
-    object = 42;
-    EXPECT_FALSE(object.is_bool());
-    EXPECT_TRUE(object.is_int());
-    EXPECT_FALSE(object.is_float());
-    EXPECT_FALSE(object.is_string());
-    EXPECT_FALSE(object.is_object());
-    EXPECT_FALSE(object.is_array());
-    EXPECT_EQ(42, object.to_int());
+    element = 42;
+    EXPECT_FALSE(element.is_bool());
+    EXPECT_TRUE(element.is_int());
+    EXPECT_FALSE(element.is_float());
+    EXPECT_FALSE(element.is_string());
+    EXPECT_FALSE(element.is_object());
+    EXPECT_FALSE(element.is_array());
+    EXPECT_EQ(42, element.to_int());
 
-    object = 13.37;
-    EXPECT_FALSE(object.is_bool());
-    EXPECT_FALSE(object.is_int());
-    EXPECT_TRUE(object.is_float());
-    EXPECT_FALSE(object.is_string());
-    EXPECT_FALSE(object.is_object());
-    EXPECT_FALSE(object.is_array());
-    EXPECT_EQ(13.37, object.to_float());
+    element = 13.37;
+    EXPECT_FALSE(element.is_bool());
+    EXPECT_FALSE(element.is_int());
+    EXPECT_TRUE(element.is_float());
+    EXPECT_FALSE(element.is_string());
+    EXPECT_FALSE(element.is_object());
+    EXPECT_FALSE(element.is_array());
+    EXPECT_EQ(13.37, element.to_float());
 
-    object = "test";
-    EXPECT_FALSE(object.is_bool());
-    EXPECT_FALSE(object.is_int());
-    EXPECT_FALSE(object.is_float());
-    EXPECT_TRUE(object.is_string());
-    EXPECT_FALSE(object.is_object());
-    EXPECT_FALSE(object.is_array());
-    EXPECT_EQ("test", object.to_string());
+    element = "test";
+    EXPECT_FALSE(element.is_bool());
+    EXPECT_FALSE(element.is_int());
+    EXPECT_FALSE(element.is_float());
+    EXPECT_TRUE(element.is_string());
+    EXPECT_FALSE(element.is_object());
+    EXPECT_FALSE(element.is_array());
+    EXPECT_EQ("test", element.to_string());
 
-    object = bourne::json::object();
-    EXPECT_FALSE(object.is_bool());
-    EXPECT_FALSE(object.is_int());
-    EXPECT_FALSE(object.is_float());
-    EXPECT_FALSE(object.is_string());
-    EXPECT_TRUE(object.is_object());
-    EXPECT_FALSE(object.is_array());
-    EXPECT_EQ(bourne::json::object(), object);
+    element = bourne::json::object();
+    EXPECT_FALSE(element.is_bool());
+    EXPECT_FALSE(element.is_int());
+    EXPECT_FALSE(element.is_float());
+    EXPECT_FALSE(element.is_string());
+    EXPECT_TRUE(element.is_object());
+    EXPECT_FALSE(element.is_array());
 
-    object = bourne::json::array();
-    EXPECT_FALSE(object.is_bool());
-    EXPECT_FALSE(object.is_int());
-    EXPECT_FALSE(object.is_float());
-    EXPECT_FALSE(object.is_string());
-    EXPECT_FALSE(object.is_object());
-    EXPECT_TRUE(object.is_array());
-    EXPECT_EQ(bourne::json::array(), object);
+    element = bourne::json::array();
+    EXPECT_FALSE(element.is_bool());
+    EXPECT_FALSE(element.is_int());
+    EXPECT_FALSE(element.is_float());
+    EXPECT_FALSE(element.is_string());
+    EXPECT_FALSE(element.is_object());
+    EXPECT_TRUE(element.is_array());
+    EXPECT_EQ(bourne::json::array(), element);
 }
 
 
