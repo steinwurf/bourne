@@ -26,15 +26,15 @@ namespace bourne
 
         template<class T, class R = void>
         using check_is_integral = std::enable_if<
-            std::is_integral<T>::value && !std::is_same<T, bool>::value, R>;
+                                  std::is_integral<T>::value && !std::is_same<T, bool>::value, R>;
 
         template<class T, class R = void>
         using check_is_floating_point = std::enable_if<
-            std::is_floating_point<T>::value, R>;
+                                        std::is_floating_point<T>::value, R>;
 
         template<class T, class R = void>
         using check_is_string = std::enable_if<
-            std::is_convertible<T, std::string>::value, R>;
+                                std::is_convertible<T, std::string>::value, R>;
 
         using object_type = backing_data::object_type;
 
@@ -49,28 +49,28 @@ namespace bourne
         json(std::initializer_list<json> list);
 
         json(json&& other);
-        json(const json &other);
+        json(const json& other);
 
         template <typename T>
-        json(T b, typename check_is_bool<T>::type* = 0):
+        json(T b, typename check_is_bool<T>::type* = 0) :
             m_internal(b),
             m_type(class_type::boolean)
         {}
 
         template <typename T>
-        json(T i, typename check_is_integral<T>::type* = 0):
+        json(T i, typename check_is_integral<T>::type* = 0) :
             m_internal((int64_t)i),
             m_type(class_type::integral)
         {}
 
         template <typename T>
-        json(T f, typename check_is_floating_point<T>::type* = 0):
+        json(T f, typename check_is_floating_point<T>::type* = 0) :
             m_internal((double)f),
             m_type(class_type::floating)
         {}
 
         template <typename T>
-        json(T s, typename check_is_string<T>::type* = 0):
+        json(T s, typename check_is_string<T>::type* = 0) :
             m_internal(std::string(s)),
             m_type(class_type::string)
         {}
@@ -83,7 +83,7 @@ namespace bourne
     public:
 
         json& operator=(json&& other);
-        json& operator=(const json &other);
+        json& operator=(const json& other);
 
         template <typename T>
         typename check_is_bool<T, json&>::type operator=(T b)
@@ -115,11 +115,11 @@ namespace bourne
             return *this;
         }
 
-        json& operator[](const std::string &key);
+        json& operator[](const std::string& key);
         json& operator[](uint32_t index);
 
-        bool operator==(const json &other) const;
-        bool operator!=(const json &other) const;
+        bool operator==(const json& other) const;
+        bool operator!=(const json& other) const;
 
     public:
 
@@ -137,15 +137,15 @@ namespace bourne
             append(args...);
         }
 
-        json& at(const std::string &key);
-        const json& at(const std::string &key) const;
+        json& at(const std::string& key);
+        const json& at(const std::string& key) const;
 
         json& at(uint32_t index);
         const json& at(uint32_t index) const;
 
         int32_t length() const;
 
-        bool has_key(const std::string &key) const;
+        bool has_key(const std::string& key) const;
 
         int32_t size() const;
 
@@ -176,7 +176,7 @@ namespace bourne
 
         std::string dump(uint32_t depth = 1, std::string tab = "  ") const;
 
-        friend std::ostream& operator<<(std::ostream&, const json &);
+        friend std::ostream& operator<<(std::ostream&, const json&);
 
     public:
 
@@ -206,5 +206,5 @@ namespace bourne
         class_type m_type = class_type::null;
     };
 
-    std::ostream& operator<<(std::ostream &os, const json &json);
+    std::ostream& operator<<(std::ostream& os, const json& json);
 }

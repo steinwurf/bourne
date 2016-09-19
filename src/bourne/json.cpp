@@ -15,16 +15,17 @@
 
 namespace bourne
 {
-    json::json() : m_internal(), m_type(class_type::null)
+    json::json() :
+        m_internal(), m_type(class_type::null)
     {}
 
-    json::json(class_type type):
+    json::json(class_type type) :
         json()
     {
         set_type(type);
     }
 
-    json::json(std::initializer_list<json> list):
+    json::json(std::initializer_list<json> list) :
         json()
     {
         assert(list.size() % 2 == 0 && "Missing value for key value pair.");
@@ -35,7 +36,7 @@ namespace bourne
         }
     }
 
-    json::json(json&& other):
+    json::json(json&& other) :
         m_internal(other.m_internal),
         m_type(other.m_type)
     {
@@ -43,15 +44,15 @@ namespace bourne
         other.m_internal.m_map = nullptr;
     }
 
-    json::json(std::nullptr_t):
+    json::json(std::nullptr_t) :
         m_internal(),
         m_type(class_type::null)
     {}
 
-    json::json(const json &other)
+    json::json(const json& other)
     {
         clean_up();
-        switch(other.m_type)
+        switch (other.m_type)
         {
         case class_type::object:
             m_internal.m_map =
@@ -66,8 +67,8 @@ namespace bourne
                     other.m_internal.m_array->end());
             break;
         case class_type::string:
-            m_internal.m_string = new std::string(
-                *other.m_internal.m_string);
+            m_internal.m_string =
+                new std::string(*other.m_internal.m_string);
             break;
         default:
             m_internal = other.m_internal;
@@ -90,9 +91,9 @@ namespace bourne
         return *this;
     }
 
-    json& json::operator=(const json &other)
+    json& json::operator=(const json& other)
     {
-        switch(other.m_type)
+        switch (other.m_type)
         {
         case class_type::object:
             m_internal.m_map =
@@ -107,8 +108,8 @@ namespace bourne
                     other.m_internal.m_array->end());
             break;
         case class_type::string:
-            m_internal.m_string = new std::string(
-                *other.m_internal.m_string);
+            m_internal.m_string =
+                new std::string(*other.m_internal.m_string);
             break;
         default:
             m_internal = other.m_internal;
@@ -117,7 +118,7 @@ namespace bourne
         return *this;
     }
 
-    json& json::operator[](const std::string &key)
+    json& json::operator[](const std::string& key)
     {
         if (m_type == class_type::null)
             set_type(class_type::object);
@@ -137,8 +138,7 @@ namespace bourne
         return m_internal.m_array->operator[](index);
     }
 
-
-    bool json::operator==(const json &other) const
+    bool json::operator==(const json& other) const
     {
         if (m_type != other.m_type)
         {
@@ -146,7 +146,7 @@ namespace bourne
             return false;
         }
 
-        switch(m_type)
+        switch (m_type)
         {
         case class_type::null:
             return true;
@@ -154,15 +154,17 @@ namespace bourne
         {
             auto this_map = m_internal.m_map;
             auto other_map = other.m_internal.m_map;
-            return this_map->size() == other_map->size() && std::equal(
-                this_map->begin(), this_map->end(), other_map->begin());
+            return this_map->size() == other_map->size() &&
+                   std::equal(this_map->begin(), this_map->end(),
+                              other_map->begin());
         }
         case class_type::array:
         {
             auto this_array = m_internal.m_array;
             auto other_array = other.m_internal.m_array;
-            return this_array->size() == other_array->size() && std::equal(
-                this_array->begin(), this_array->end(), other_array->begin());
+            return this_array->size() == other_array->size() &&
+                   std::equal(this_array->begin(), this_array->end(),
+                              other_array->begin());
         }
         case class_type::string:
             return (*m_internal.m_string) == (*other.m_internal.m_string);
@@ -177,17 +179,17 @@ namespace bourne
         return true;
     }
 
-    bool json::operator!=(const json &other) const
+    bool json::operator!=(const json& other) const
     {
         return !(*this == other);
     }
 
-    json& json::at(const std::string &key)
+    json& json::at(const std::string& key)
     {
         return operator[](key);
     }
 
-    const json& json::at(const std::string &key) const
+    const json& json::at(const std::string& key) const
     {
         return m_internal.m_map->at(key);
     }
@@ -210,7 +212,7 @@ namespace bourne
             return -1;
     }
 
-    bool json::has_key(const std::string &key) const
+    bool json::has_key(const std::string& key) const
     {
         if (m_type == class_type::object)
             return m_internal.m_map->find(key) != m_internal.m_map->end();
@@ -293,7 +295,7 @@ namespace bourne
         std::string output;
         for (uint32_t i = 0; i < str.length(); ++i)
         {
-            switch(str[i])
+            switch (str[i])
             {
             case '\"':
                 output += "\\\"";
@@ -355,44 +357,44 @@ namespace bourne
 
         for (uint32_t i = 0; i < depth; ++i, pad += tab);
 
-        switch(m_type)
+        switch (m_type)
         {
         case class_type::null:
             return "null";
         case class_type::object:
+        {
+            std::string s = "{\n";
+            bool skip = true;
+            for (auto& p : *m_internal.m_map)
             {
-                std::string s = "{\n";
-                bool skip = true;
-                for (auto &p : *m_internal.m_map)
+                if (!skip)
                 {
-                    if (!skip)
-                    {
-                        s += ",\n";
-                    }
-                    s += pad;
-                    s += "\"" + p.first + "\" : ";
-                    s += p.second.dump(depth + 1, tab);
-                    skip = false;
+                    s += ",\n";
                 }
-                s += "\n" + pad.erase(0, 2) + "}";
-                return s;
+                s += pad;
+                s += "\"" + p.first + "\" : ";
+                s += p.second.dump(depth + 1, tab);
+                skip = false;
             }
+            s += "\n" + pad.erase(0, 2) + "}";
+            return s;
+        }
         case class_type::array:
+        {
+            std::string s = "[";
+            bool skip = true;
+            for (auto& p : *m_internal.m_array)
             {
-                std::string s = "[";
-                bool skip = true;
-                for (auto &p : *m_internal.m_array)
+                if (!skip)
                 {
-                    if (!skip)
-                    {
-                        s += ", ";
-                    }
-                    s += p.dump(depth + 1, tab);
-                    skip = false;
+                    s += ", ";
                 }
-                s += "]";
-                return s;
+                s += p.dump(depth + 1, tab);
+                skip = false;
             }
+            s += "]";
+            return s;
+        }
         case class_type::string:
             return "\"" + to_string() + "\"";
         case class_type::floating:
@@ -430,7 +432,7 @@ namespace bourne
 
     void json::clean_up()
     {
-        switch(m_type)
+        switch (m_type)
         {
         case class_type::array:
             delete m_internal.m_array;
@@ -452,7 +454,7 @@ namespace bourne
 
         clean_up();
 
-        switch(type)
+        switch (type)
         {
         case class_type::null:
             m_internal.m_map = nullptr;
@@ -480,7 +482,7 @@ namespace bourne
         m_type = type;
     }
 
-    std::ostream& operator<<(std::ostream &os, const json &json)
+    std::ostream& operator<<(std::ostream& os, const json& json)
     {
         os << json.dump();
         return os;

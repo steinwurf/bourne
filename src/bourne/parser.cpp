@@ -12,7 +12,7 @@
 
 namespace bourne
 {
-    parser::parser(const std::string& string):
+    parser::parser(const std::string& string) :
         m_string(string),
         m_offset(0)
     { }
@@ -25,7 +25,7 @@ namespace bourne
 
     void parser::consume_white_space()
     {
-        while(isspace(m_string[m_offset]))
+        while (isspace(m_string[m_offset]))
         {
             m_offset++;
         }
@@ -43,13 +43,14 @@ namespace bourne
             return object;
         }
 
-        while(true)
+        while (true)
         {
             json Key = parse_next();
             consume_white_space();
             if (m_string[m_offset] != ':')
             {
-                std::cerr << "Error: object: Expected colon, found '" << m_string[m_offset] << "'\n";
+                std::cerr << "Error: object: Expected colon, found '"
+                          << m_string[m_offset] << "'\n";
                 break;
             }
             m_offset++;
@@ -70,7 +71,8 @@ namespace bourne
             }
             else
             {
-                std::cerr << "ERROR: object: Expected comma, found '" << m_string[m_offset] << "'\n";
+                std::cerr << "ERROR: object: Expected comma, found '"
+                          << m_string[m_offset] << "'\n";
                 break;
             }
         }
@@ -106,7 +108,8 @@ namespace bourne
             }
             else
             {
-                std::cerr << "ERROR: array: Expected ',' or ']', found '" << m_string[m_offset] << "'\n";
+                std::cerr << "ERROR: array: Expected ',' or ']', found '"
+                          << m_string[m_offset] << "'\n";
                 return json(class_type::array);
             }
         }
@@ -122,7 +125,7 @@ namespace bourne
         {
             if (c == '\\')
             {
-                switch(m_string[ ++m_offset ])
+                switch (m_string[ ++m_offset ])
                 {
                 case '\"':
                     val += '\"';
@@ -303,21 +306,21 @@ namespace bourne
         char value;
         consume_white_space();
         value = m_string[m_offset];
-        switch(value)
+        switch (value)
         {
-            case '[': return parse_array();
-            case '{': return parse_object();
-            case '\"': return parse_string();
-            case 't':
-            case 'f': return parse_bool();
-            case 'n': return parse_null();
-            default:
+        case '[': return parse_array();
+        case '{': return parse_object();
+        case '\"': return parse_string();
+        case 't':
+        case 'f': return parse_bool();
+        case 'n': return parse_null();
+        default:
+        {
+            if ((value <= '9' && value >= '0') || value == '-')
             {
-                if ((value <= '9' && value >= '0') || value == '-')
-                {
-                    return parse_number();
-                }
+                return parse_number();
             }
+        }
         }
         std::cerr << "ERROR: parse: Unknown starting character '"
                   << value << "'\n";

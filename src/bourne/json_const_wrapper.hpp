@@ -19,7 +19,7 @@ namespace bourne
 
     public:
 
-        json_const_wrapper(const Container* val):
+        json_const_wrapper(const Container* val) :
             m_object(val)
         {
             assert(m_object);

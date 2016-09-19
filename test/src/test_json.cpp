@@ -123,7 +123,7 @@ TEST(test_json, test_iterator)
 
     auto array = bourne::json(bourne::class_type::array);
     auto object = bourne::json(bourne::class_type::object);
-    for(auto expect : expected)
+    for (auto expect : expected)
     {
         array[index] = expect;
         object[stdfix::to_string(index)] = expect;

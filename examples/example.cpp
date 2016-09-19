@@ -59,7 +59,8 @@ int main()
 
     // Another, more json-like syntax, can be used to create json objects.
     std::cout << std::endl << "json like syntax:" << std::endl;
-    bourne::json json = {
+    bourne::json json =
+    {
         "key1", "Value",
         "key2", true,
         "key3", {

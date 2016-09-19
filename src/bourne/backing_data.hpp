@@ -22,19 +22,19 @@ namespace bourne
         using object_type = std::map<std::string, json>;
         using array_type = std::deque<json>;
 
-        backing_data(double d):
+        backing_data(double d) :
             m_float(d)
         {}
-        backing_data(int64_t l):
+        backing_data(int64_t l) :
             m_int(l)
         {}
-        backing_data(bool b):
+        backing_data(bool b) :
             m_bool(b)
         {}
-        backing_data(std::string s):
+        backing_data(std::string s) :
             m_string(new std::string(s))
         {}
-        backing_data():
+        backing_data() :
             m_int(0)
         {}
 
