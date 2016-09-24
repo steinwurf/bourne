@@ -7,14 +7,14 @@
 
 namespace bourne
 {
-    enum class class_type
-    {
-        null,
-        object,
-        array,
-        string,
-        floating,
-        integral,
-        boolean
-    };
+enum class class_type
+{
+    null,
+    object,
+    array,
+    string,
+    floating,
+    integral,
+    boolean
+};
 }

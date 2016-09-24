@@ -11,28 +11,28 @@
 
 namespace bourne
 {
-    class parser
-    {
+class parser
+{
 
-    public:
+public:
 
-        parser(const std::string& string);
-        json parse();
+    parser(const std::string& string);
+    json parse();
 
-    private:
+private:
 
-        void consume_white_space();
-        json parse_object();
-        json parse_array();
-        json parse_string();
-        json parse_number();
-        json parse_bool();
-        json parse_null();
-        json parse_next();
+    void consume_white_space();
+    json parse_object();
+    json parse_array();
+    json parse_string();
+    json parse_number();
+    json parse_bool();
+    json parse_null();
+    json parse_next();
 
-    private:
+private:
 
-        std::string m_string;
-        size_t m_offset;
-    };
+    std::string m_string;
+    size_t m_offset;
+};
 }

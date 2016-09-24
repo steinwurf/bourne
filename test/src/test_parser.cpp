@@ -10,11 +10,11 @@
 
 namespace
 {
-    void test_parser(const std::string& json_string, const bourne::json& expected)
-    {
-        bourne::parser p(json_string);
-        EXPECT_EQ(expected.dump(), p.parse().dump());
-    }
+void test_parser(const std::string& json_string, const bourne::json& expected)
+{
+    bourne::parser p(json_string);
+    EXPECT_EQ(expected.dump(), p.parse().dump());
+}
 }
 
 TEST(test_parser, test_parse)
