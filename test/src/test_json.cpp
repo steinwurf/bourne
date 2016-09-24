@@ -10,15 +10,15 @@
 TEST(test_json, test_dump)
 {
     bourne::json object(
-    {
-        "k1", 1,
-        "k2", true,
-        "k3", nullptr,
-        "k4", {
-            "k5", "some string",
-            "some_array", bourne::json::array(9, "some other string", false)
-        }
-    });
+        {
+            "k1", 1,
+            "k2", true,
+            "k3", nullptr,
+            "k4", {
+                "k5", "some string",
+                "some_array", bourne::json::array(9, "some other string", false)
+            }
+        });
 
     std::string expected =
         "{\n"
@@ -123,7 +123,7 @@ TEST(test_json, test_iterator)
 
     auto array = bourne::json(bourne::class_type::array);
     auto object = bourne::json(bourne::class_type::object);
-    for(auto expect : expected)
+    for (auto expect : expected)
     {
         array[index] = expect;
         object[stdfix::to_string(index)] = expect;
@@ -153,28 +153,28 @@ TEST(test_json, test_equality)
     EXPECT_EQ(bourne::json(), bourne::json());
 
     bourne::json object1(
-    {
-        "k1", 1,
-        "k2", true,
-        "k3", nullptr,
-        "k4", {
-            "k5", "some string",
-            "some_array", bourne::json::array(9, "some other string", false)
-        },
-        "none", bourne::json()
-    });
+        {
+            "k1", 1,
+            "k2", true,
+            "k3", nullptr,
+            "k4", {
+                "k5", "some string",
+                "some_array", bourne::json::array(9, "some other string", false)
+            },
+            "none", bourne::json()
+        });
 
     bourne::json object2(
-    {
-        "k2", true,
-        "k4", {
-            "k5", "some string",
-            "some_array", bourne::json::array(9, "some other string", false)
-        },
-        "k3", nullptr,
-        "k1", 1,
-        "none", bourne::json()
-    });
+        {
+            "k2", true,
+            "k4", {
+                "k5", "some string",
+                "some_array", bourne::json::array(9, "some other string", false)
+            },
+            "k3", nullptr,
+            "k1", 1,
+            "none", bourne::json()
+        });
 
     // check equality
     EXPECT_EQ(object1, object2);

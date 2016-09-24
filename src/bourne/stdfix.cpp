@@ -8,19 +8,19 @@
 
 namespace stdfix
 {
-    int64_t stol(const std::string& s)
-    {
-        std::istringstream str(s);
-        int64_t i;
-        str >> i;
-        return i;
-    }
+int64_t stol(const std::string& s)
+{
+    std::istringstream str(s);
+    int64_t i;
+    str >> i;
+    return i;
+}
 
-    double stod(const std::string& s)
-    {
-        std::istringstream str(s);
-        double d;
-        str >> d;
-        return d;
-    }
+double stod(const std::string& s)
+{
+    std::istringstream str(s);
+    double d;
+    str >> d;
+    return d;
+}
 }

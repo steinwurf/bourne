@@ -10,11 +10,11 @@
 
 namespace
 {
-    void test_parser(const std::string& json_string, const bourne::json& expected)
-    {
-        bourne::parser p(json_string);
-        EXPECT_EQ(expected.dump(), p.parse().dump());
-    }
+void test_parser(const std::string& json_string, const bourne::json& expected)
+{
+    bourne::parser p(json_string);
+    EXPECT_EQ(expected.dump(), p.parse().dump());
+}
 }
 
 TEST(test_parser, test_parse)
@@ -26,21 +26,22 @@ TEST(test_parser, test_parse)
         "\"you are a \\\"great\\\" agent\\/spy\"",
         bourne::json("you are a \"great\" agent/spy"));
     test_parser("[1, 2,3]", bourne::json::array(1, 2, 3));
+
+    bourne::json expected_json =
+    {
+        "key1", "value",
+        "key2", true,
+        "key3", 1234,
+        "key4", -42,
+        "key5", nullptr
+    };
     test_parser(
         "{ \"key1\" : \"value\","
         "  \"key2\" : true, "
         "  \"key3\" : 1234, "
         "  \"key4\" : -42, "
         "  \"key5\" : null }",
-        bourne::json(
-        {
-            "key1", "value",
-            "key2", true,
-            "key3", 1234,
-            "key4", -42,
-            "key5", nullptr
-        }
-    ));
+        expected_json);
 }
 
 TEST(test_parser, test_parse_file)

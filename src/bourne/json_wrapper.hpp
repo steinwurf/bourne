@@ -9,46 +9,46 @@
 
 namespace bourne
 {
-    template <typename Container>
-    class json_wrapper
+template <typename Container>
+class json_wrapper
+{
+
+private:
+
+    using iterator = typename Container::iterator;
+    using const_iterator = typename Container::const_iterator;
+
+public:
+
+    json_wrapper(Container* val) :
+        m_object(val)
     {
+        assert(m_object);
+    }
 
-    private:
+    iterator begin()
+    {
+        return m_object ? m_object->begin() : iterator();
+    }
 
-        using iterator = typename Container::iterator;
-        using const_iterator = typename Container::const_iterator;
+    iterator end()
+    {
+        return m_object ? m_object->end() : iterator();
+    }
 
-    public:
+    const_iterator begin() const
+    {
+        return m_object ? m_object->begin() : const_iterator();
+    }
 
-        json_wrapper(Container* val):
-            m_object(val)
-        {
-            assert(m_object);
-        }
+    const_iterator end() const
+    {
+        return m_object ? m_object->end() : const_iterator();
+    }
 
-        iterator begin()
-        {
-            return m_object ? m_object->begin() : iterator();
-        }
+private:
 
-        iterator end()
-        {
-            return m_object ? m_object->end() : iterator();
-        }
+    Container* m_object;
 
-        const_iterator begin() const
-        {
-            return m_object ? m_object->begin() : const_iterator();
-        }
-
-        const_iterator end() const
-        {
-            return m_object ? m_object->end() : const_iterator();
-        }
-
-    private:
-
-        Container* m_object;
-
-    };
+};
 }
