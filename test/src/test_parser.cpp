@@ -35,7 +35,7 @@ TEST(test_parser, test_parse)
             "key4", -42,
             "key5", nullptr
         };
-    
+
     test_parser(
         "{ \"key1\" : \"value\","
         "  \"key2\" : true, "
