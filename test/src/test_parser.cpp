@@ -28,13 +28,14 @@ TEST(test_parser, test_parse)
     test_parser("[1, 2,3]", bourne::json::array(1, 2, 3));
 
     bourne::json expected_json =
-    {
-        "key1", "value",
-        "key2", true,
-        "key3", 1234,
-        "key4", -42,
-        "key5", nullptr
-    };
+        {
+            "key1", "value",
+            "key2", true,
+            "key3", 1234,
+            "key4", -42,
+            "key5", nullptr
+        };
+    
     test_parser(
         "{ \"key1\" : \"value\","
         "  \"key2\" : true, "
