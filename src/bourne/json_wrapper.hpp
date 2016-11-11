@@ -5,23 +5,25 @@
 
 #pragma once
 
+#include "json_const_wrapper.hpp"
+
 #include <cassert>
 
 namespace bourne
 {
-template <typename Container>
-class json_wrapper
+template <class Container>
+class json_wrapper : public json_const_wrapper<Container>
 {
 
 private:
 
     using iterator = typename Container::iterator;
-    using const_iterator = typename Container::const_iterator;
 
 public:
 
-    json_wrapper(Container* val) :
-        m_object(val)
+    json_wrapper(Container* json) :
+        json_const_wrapper<Container>(json),
+        m_object(json)
     {
         assert(m_object);
     }
@@ -34,16 +36,6 @@ public:
     iterator end()
     {
         return m_object ? m_object->end() : iterator();
-    }
-
-    const_iterator begin() const
-    {
-        return m_object ? m_object->begin() : const_iterator();
-    }
-
-    const_iterator end() const
-    {
-        return m_object ? m_object->end() : const_iterator();
     }
 
 private:

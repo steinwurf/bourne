@@ -6,7 +6,10 @@ every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Major: Removed length function, use size instead.
+* Major: Values are no longer silently converted to array values if append is
+  used.
+* Minor: Added more comments.
 
 3.0.0
 -----
