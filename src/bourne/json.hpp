@@ -158,9 +158,9 @@ public:
     /// Assignment operator for null value
     json& operator=(std::nullptr_t);
 
-    ///////////////////////
-    /// Access opeators ///
-    ///////////////////////
+    ////////////////////////
+    /// Access operators ///
+    ////////////////////////
 
     /// Access operator for keys this assumes the json value is of type object
     json& operator[](const std::string& key);
@@ -195,7 +195,7 @@ public:
         append(args...);
     }
 
-    /// Returns true if the key is availabe. This functions assumes this object
+    /// Returns true if the key is available. This functions assumes this object
     /// is a json object value.
     bool has_key(const std::string& key) const;
 
