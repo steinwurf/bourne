@@ -34,6 +34,22 @@ TEST(test_json, test_dump)
     EXPECT_EQ(expected, object.dump());
 }
 
+TEST(test_json, test_assignment)
+{
+    auto object = bourne::json::object();
+    object["a"] = true;
+    object["b"] = 0;
+    object["c"] = 0.0f;
+    object["d"] = "";
+    object["e"] = nullptr;
+
+    EXPECT_TRUE(object["a"].is_bool());
+    EXPECT_TRUE(object["b"].is_int());
+    EXPECT_TRUE(object["c"].is_float());
+    EXPECT_TRUE(object["d"].is_string());
+    EXPECT_TRUE(object["e"].is_null());
+}
+
 TEST(test_json, test_retrival_of_primitives)
 {
     bourne::json element;
@@ -45,6 +61,7 @@ TEST(test_json, test_retrival_of_primitives)
     EXPECT_FALSE(element.is_string());
     EXPECT_FALSE(element.is_object());
     EXPECT_FALSE(element.is_array());
+    EXPECT_FALSE(element.is_null());
     EXPECT_EQ(true, element.to_bool());
 
     element = 42;
@@ -54,6 +71,7 @@ TEST(test_json, test_retrival_of_primitives)
     EXPECT_FALSE(element.is_string());
     EXPECT_FALSE(element.is_object());
     EXPECT_FALSE(element.is_array());
+    EXPECT_FALSE(element.is_null());
     EXPECT_EQ(42, element.to_int());
 
     element = 13.37;
@@ -63,6 +81,7 @@ TEST(test_json, test_retrival_of_primitives)
     EXPECT_FALSE(element.is_string());
     EXPECT_FALSE(element.is_object());
     EXPECT_FALSE(element.is_array());
+    EXPECT_FALSE(element.is_null());
     EXPECT_EQ(13.37, element.to_float());
 
     element = "test";
@@ -72,6 +91,7 @@ TEST(test_json, test_retrival_of_primitives)
     EXPECT_TRUE(element.is_string());
     EXPECT_FALSE(element.is_object());
     EXPECT_FALSE(element.is_array());
+    EXPECT_FALSE(element.is_null());
     EXPECT_EQ("test", element.to_string());
 
     element = bourne::json::object();
@@ -81,6 +101,7 @@ TEST(test_json, test_retrival_of_primitives)
     EXPECT_FALSE(element.is_string());
     EXPECT_TRUE(element.is_object());
     EXPECT_FALSE(element.is_array());
+    EXPECT_FALSE(element.is_null());
 
     element = bourne::json::array();
     EXPECT_FALSE(element.is_bool());
@@ -89,6 +110,7 @@ TEST(test_json, test_retrival_of_primitives)
     EXPECT_FALSE(element.is_string());
     EXPECT_FALSE(element.is_object());
     EXPECT_TRUE(element.is_array());
+    EXPECT_FALSE(element.is_null());
     EXPECT_EQ(bourne::json::array(), element);
 }
 

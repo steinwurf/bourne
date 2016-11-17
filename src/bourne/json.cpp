@@ -51,7 +51,7 @@ json::json(std::nullptr_t) :
 
 json::json(const json& other)
 {
-    clean_up();
+    clear();
     switch (other.m_type)
     {
     case class_type::object:
@@ -78,12 +78,12 @@ json::json(const json& other)
 
 json::~json()
 {
-    clean_up();
+    clear();
 }
 
 json& json::operator=(json&& other)
 {
-    clean_up();
+    clear();
     m_internal = other.m_internal;
     m_type = other.m_type;
     other.m_internal.m_map = nullptr;
@@ -122,7 +122,7 @@ json& json::operator[](const std::string& key)
 {
     if (m_type == class_type::null)
         set_type(class_type::object);
-    assert(m_type == class_type::object);
+    assert(is_object());
     return m_internal.m_map->operator[](key);
 }
 
@@ -130,7 +130,7 @@ json& json::operator[](uint32_t index)
 {
     if (m_type == class_type::null)
         set_type(class_type::array);
-    assert(m_type == class_type::array);
+    assert(is_array());
     if (index >= m_internal.m_array->size())
     {
         m_internal.m_array->resize(index + 1);
@@ -179,6 +179,12 @@ bool json::operator==(const json& other) const
     return true;
 }
 
+json& json::operator=(std::nullptr_t)
+{
+    set_type(class_type::null);
+    return *this;
+}
+
 bool json::operator!=(const json& other) const
 {
     return !(*this == other);
@@ -186,47 +192,43 @@ bool json::operator!=(const json& other) const
 
 json& json::at(const std::string& key)
 {
-    return operator[](key);
+    assert(is_object());
+    return m_internal.m_map->at(key);
 }
 
 const json& json::at(const std::string& key) const
 {
+    assert(is_object());
     return m_internal.m_map->at(key);
 }
 
 json& json::at(uint32_t index)
 {
-    return operator[](index);
+    assert(is_array());
+    return m_internal.m_array->at(index);
 }
 
 const json& json::at(uint32_t index) const
 {
+    assert(is_array());
     return m_internal.m_array->at(index);
-}
-
-int32_t json::length() const
-{
-    if (m_type == class_type::array)
-        return m_internal.m_array->size();
-    else
-        return -1;
 }
 
 bool json::has_key(const std::string& key) const
 {
-    if (m_type == class_type::object)
-        return m_internal.m_map->find(key) != m_internal.m_map->end();
-    return false;
+    assert(is_object());
+    return m_internal.m_map->find(key) != m_internal.m_map->end();
 }
 
-int32_t json::size() const
+uint32_t json::size() const
 {
-    if (m_type == class_type::object)
+    assert(is_array() || is_object());
+    if (is_object())
         return m_internal.m_map->size();
-    else if (m_type == class_type::array)
+    if (is_array())
         return m_internal.m_array->size();
-    else
-        return -1;
+
+    return 0;
 }
 
 class_type json::json_type() const
@@ -234,7 +236,6 @@ class_type json::json_type() const
     return m_type;
 }
 
-/// Functions for getting primitives from the json object.
 bool json::is_null() const
 {
     return m_type == class_type::null;
@@ -430,7 +431,7 @@ json json::object(std::initializer_list<json> list)
     return json(list);
 }
 
-void json::clean_up()
+void json::clear()
 {
     switch (m_type)
     {
@@ -445,15 +446,12 @@ void json::clean_up()
         break;
     default:;
     }
+    m_type = class_type::null;
 }
 
 void json::set_type(class_type type)
 {
-    if (type == m_type)
-        return;
-
-    clean_up();
-
+    clear();
     switch (type)
     {
     case class_type::null:
