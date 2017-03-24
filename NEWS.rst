@@ -6,6 +6,10 @@ every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+4.0.0
+-----
 * Minor: Added templated ``to`` and ``is`` function for checking and getting
   fields of certain types.
 * Major: Removed length function, use size instead.
