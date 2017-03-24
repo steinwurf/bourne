@@ -206,6 +206,7 @@ public:
     /// Returns the type of this object.
     class_type json_type() const;
 
+    /// Returns true if this object matches the given type
     template <class T>
     bool is() const
     {
