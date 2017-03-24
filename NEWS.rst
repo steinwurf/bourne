@@ -6,6 +6,8 @@ every change, see the Git log.
 
 Latest
 ------
+* Minor: Added templated ``to`` and ``is`` function for checking and getting
+  fields of certain types.
 * Major: Removed length function, use size instead.
 * Major: Values are no longer silently converted to array values if append is
   used.
