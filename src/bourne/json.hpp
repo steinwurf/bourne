@@ -206,6 +206,28 @@ public:
     /// Returns the type of this object.
     class_type json_type() const;
 
+    template <class T>
+    bool is() const
+    {
+        if (std::is_same<T, bool>::value)
+        {
+            return m_type == class_type::boolean;
+        }
+        else if (std::is_integral<T>::value)
+        {
+            return m_type == class_type::integral;
+        }
+        else if (std::is_floating_point<T>::value)
+        {
+            return m_type == class_type::floating;
+        }
+        else if (std::is_convertible<T, std::string>::value)
+        {
+            return m_type == class_type::string;
+        }
+        return false;
+    }
+
     /// Returns true if this object is a null value
     bool is_null() const;
 
@@ -226,6 +248,34 @@ public:
 
     /// Returns true if this object is a array value
     bool is_array() const;
+
+    /// Converter for extracting the boolean value.
+    template <typename T>
+    void to(T& t, typename check_is_bool<T>::type* = 0) const
+    {
+        t = to_bool();
+    }
+
+    /// Converter for extracting the integral value.
+    template <typename T>
+    void to(T& t, typename check_is_integral<T>::type* = 0) const
+    {
+        t = to_int();
+    }
+
+    /// Converter for extracting the floating point value.
+    template <typename T>
+    void to(T& t, typename check_is_floating_point<T>::type* = 0) const
+    {
+        t = to_float();
+    }
+
+    /// Converter for extracting the string value.
+    template <typename T>
+    void to(T& t, typename check_is_string<T>::type* = 0) const
+    {
+        t = to_string();
+    }
 
     /// Returns the underlying boolean value of this object. If this is not a
     /// boolean value an assert is triggered.

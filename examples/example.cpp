@@ -64,7 +64,13 @@ int main()
             "key1", "Value",
             "key2", true,
             "key3", {
-                "nested array", bourne::json::array("look", "an", "array", 6, true),
+                "nested array", bourne::json::array(
+                    "look",
+                    "an",
+                    "array",
+                    6,
+                    true,
+                    bourne::json({"key", "value"})),
                 "nested objects", {
                     "is_cool", true
                 }
