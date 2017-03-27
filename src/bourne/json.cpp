@@ -288,9 +288,14 @@ double json::to_float() const
 {
     assert(is_float());
     if (m_type == class_type::floating)
+    {
         return m_internal.m_float;
-    else if (m_type == class_type::integral)
+    }
+    else
+    {
+        assert(m_type == class_type::integral);
         return (double) m_internal.m_int;
+    }
 }
 
 std::string json::to_string() const
