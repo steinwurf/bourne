@@ -67,12 +67,13 @@ TEST(test_json, test_retrival_of_primitives)
     element = 42;
     EXPECT_FALSE(element.is_bool());
     EXPECT_TRUE(element.is_int());
-    EXPECT_FALSE(element.is_float());
+    EXPECT_TRUE(element.is_float());
     EXPECT_FALSE(element.is_string());
     EXPECT_FALSE(element.is_object());
     EXPECT_FALSE(element.is_array());
     EXPECT_FALSE(element.is_null());
     EXPECT_EQ(42, element.to_int());
+    EXPECT_EQ(42, element.to_float());
 
     element = 13.37;
     EXPECT_FALSE(element.is_bool());

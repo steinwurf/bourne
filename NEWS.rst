@@ -6,7 +6,7 @@ every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Minor: Allow integers to be converted implicitly to floating point values.
 
 4.0.0
 -----
