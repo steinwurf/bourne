@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 APPNAME = 'bourne'
-VERSION = '4.0.0'
+VERSION = '4.1.0'
 
 import waflib.extras.wurf_options
 
