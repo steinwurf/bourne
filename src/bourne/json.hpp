@@ -212,19 +212,19 @@ public:
     {
         if (std::is_same<T, bool>::value)
         {
-            return m_type == class_type::boolean;
+            return is_bool();
         }
         else if (std::is_integral<T>::value)
         {
-            return m_type == class_type::integral;
+            return is_int();
         }
         else if (std::is_floating_point<T>::value)
         {
-            return m_type == class_type::floating;
+            return is_float();
         }
         else if (std::is_convertible<T, std::string>::value)
         {
-            return m_type == class_type::string;
+            return is_string();
         }
         return false;
     }

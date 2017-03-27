@@ -253,7 +253,8 @@ bool json::is_int() const
 
 bool json::is_float() const
 {
-    return m_type == class_type::floating;
+    return m_type == class_type::floating ||
+           m_type == class_type::integral;
 }
 
 bool json::is_string() const
@@ -286,7 +287,10 @@ int64_t json::to_int() const
 double json::to_float() const
 {
     assert(is_float());
-    return m_internal.m_float;
+    if (m_type == class_type::floating)
+        return m_internal.m_float;
+    else if (m_type == class_type::integral)
+        return (double) m_internal.m_int;
 }
 
 std::string json::to_string() const
