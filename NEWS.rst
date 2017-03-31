@@ -8,6 +8,11 @@ Latest
 ------
 * tbd
 
+5.0.0
+-----
+* Major: Upgrade to waf-tools 4
+* Minor: Upgrade to gtest 4
+
 4.1.0
 -----
 * Minor: Allow integers to be converted implicitly to floating point values.
