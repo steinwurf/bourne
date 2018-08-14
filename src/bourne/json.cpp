@@ -418,10 +418,10 @@ std::string json::dump(uint32_t depth, std::string tab) const
     }
 }
 
-json json::parse(const std::string& string)
+json json::parse(const std::string& input, std::error_code& error)
 {
-    auto p = parser(string);
-    return p.parse();
+    assert(!error);
+    return parser::parse(input, error);
 }
 
 json json::array()

@@ -12,67 +12,67 @@
 
 namespace bourne
 {
-parser::parser(const std::string& string) :
-    m_string(string),
-    m_offset(0)
-{ }
-
-json parser::parse()
+json parser::parse(const std::string& input, std::error_code& error)
 {
-    m_offset = 0;
-    return parse_next();
+    assert(!error);
+    std::size_t offset = 0;
+    return parse_next(input, offset, error);
 }
 
-void parser::consume_white_space()
+void parser::consume_white_space(const std::string& input, size_t& offset, std::error_code& error)
 {
-    while (isspace(m_string[m_offset]))
+    assert(!error);
+    while (isspace(input[offset]))
     {
-        m_offset++;
+        offset++;
     }
 }
 
-json parser::parse_object()
+json parser::parse_object(const std::string& input, size_t& offset, std::error_code& error)
 {
+    assert(!error);
     json object = json(class_type::object);
 
-    m_offset++;
-    consume_white_space();
-    if (m_string[m_offset] == '}')
+    offset++;
+    consume_white_space(input, offset, error);
+    if (input[offset] == '}')
     {
-        m_offset++;
+        offset++;
         return object;
     }
 
     while (true)
     {
-        json Key = parse_next();
-        consume_white_space();
-        if (m_string[m_offset] != ':')
+        json Key = parse_next(input, offset, error);
+        consume_white_space(input, offset, error);
+        if (input[offset] != ':')
         {
+            error = std::make_error_code(std::errc::invalid_argument);
             std::cerr << "Error: object: Expected colon, found '"
-                      << m_string[m_offset] << "'\n";
+                      << input[offset] << "'\n";
             break;
         }
-        m_offset++;
-        consume_white_space();
-        json Value = parse_next();
+        offset++;
+        consume_white_space(input, offset, error);
+        json Value = parse_next(input, offset, error);
         object[Key.to_string()] = Value;
 
-        consume_white_space();
-        if (m_string[m_offset] == ',')
+        consume_white_space(input, offset, error);
+        if (input[offset] == ',')
         {
-            m_offset++;
+            offset++;
             continue;
         }
-        else if (m_string[m_offset] == '}')
+        else if (input[offset] == '}')
         {
-            m_offset++;
+            offset++;
             break;
         }
         else
         {
+            error = std::make_error_code(std::errc::invalid_argument);
             std::cerr << "ERROR: object: Expected comma, found '"
-                      << m_string[m_offset] << "'\n";
+                      << input[offset] << "'\n";
             break;
         }
     }
@@ -80,36 +80,37 @@ json parser::parse_object()
     return object;
 }
 
-json parser::parse_array()
+json parser::parse_array(const std::string& input, size_t& offset, std::error_code& error)
 {
     json array = json(class_type::array);
     uint32_t index = 0;
 
-    m_offset++;
-    consume_white_space();
-    if (m_string[m_offset] == ']')
+    offset++;
+    consume_white_space(input, offset, error);
+    if (input[offset] == ']')
     {
-        m_offset++;
+        offset++;
         return array;
     }
 
     while (true)
     {
-        array[index++] = parse_next();
-        consume_white_space();
+        array[index++] = parse_next(input, offset, error);
+        consume_white_space(input, offset, error);
 
-        if (m_string[m_offset] == ',')
+        if (input[offset] == ',')
         {
-            m_offset++; continue;
+            offset++; continue;
         }
-        else if (m_string[m_offset] == ']')
+        else if (input[offset] == ']')
         {
-            m_offset++; break;
+            offset++; break;
         }
         else
         {
+            error = std::make_error_code(std::errc::invalid_argument);
             std::cerr << "ERROR: array: Expected ',' or ']', found '"
-                      << m_string[m_offset] << "'\n";
+                      << input[offset] << "'\n";
             return json(class_type::array);
         }
     }
@@ -117,15 +118,15 @@ json parser::parse_array()
     return array;
 }
 
-json parser::parse_string()
+json parser::parse_string(const std::string& input, size_t& offset, std::error_code& error)
 {
     json string;
     std::string val;
-    for (char c = m_string[++m_offset]; c != '\"' ; c = m_string[++m_offset])
+    for (char c = input[++offset]; c != '\"' ; c = input[++offset])
     {
         if (c == '\\')
         {
-            switch (m_string[ ++m_offset ])
+            switch (input[ ++offset ])
             {
             case '\"':
                 val += '\"';
@@ -156,7 +157,7 @@ json parser::parse_string()
                 val += "\\u" ;
                 for (uint32_t i = 1; i <= 4; ++i)
                 {
-                    c = m_string[m_offset + i];
+                    c = input[offset + i];
                     if ((c >= '0' && c <= '9') ||
                         (c >= 'a' && c <= 'f') ||
                         (c >= 'A' && c <= 'F'))
@@ -165,13 +166,14 @@ json parser::parse_string()
                     }
                     else
                     {
+                        error = std::make_error_code(std::errc::invalid_argument);
                         std::cerr << "ERROR: string: Expected hex "
                                   << "character in unicode escape, found '"
                                   << c << "'\n";
                         return json(class_type::string);
                     }
                 }
-                m_offset += 4;
+                offset += 4;
                 break;
             }
             default:
@@ -184,12 +186,12 @@ json parser::parse_string()
             val += c;
         }
     }
-    m_offset++;
+    offset++;
     string = val;
     return string;
 }
 
-json parser::parse_number()
+json parser::parse_number(const std::string& input, size_t& offset, std::error_code& error)
 {
     json number;
     std::string val, exp_str;
@@ -198,7 +200,7 @@ json parser::parse_number()
     int64_t exp = 0;
     while (true)
     {
-        c = m_string[m_offset++];
+        c = input[offset++];
         if ((c == '-') || (c >= '0' && c <= '9'))
         {
             val += c;
@@ -215,22 +217,23 @@ json parser::parse_number()
     }
     if (c == 'E' || c == 'e')
     {
-        c = m_string[m_offset++];
+        c = input[offset++];
         if (c == '-')
         {
-            m_offset++;
+            offset++;
             exp_str += '-';
         }
 
         while (true)
         {
-            c = m_string[m_offset++];
+            c = input[offset++];
             if (c >= '0' && c <= '9')
             {
                 exp_str += c;
             }
             else if (!isspace(c) && c != ',' && c != ']' && c != '}')
             {
+                error = std::make_error_code(std::errc::invalid_argument);
                 std::cerr << "ERROR: number: Expected a number for "
                           << "exponent, found '" << c << "'\n";
                 return json(class_type::null);
@@ -244,10 +247,11 @@ json parser::parse_number()
     }
     else if (!isspace(c) && c != ',' && c != ']' && c != '}')
     {
+        error = std::make_error_code(std::errc::invalid_argument);
         std::cerr << "ERROR: number: unexpected character '" << c << "'\n";
         return json(class_type::null);
     }
-    --m_offset;
+    --offset;
 
     if (is_floating)
     {
@@ -267,61 +271,64 @@ json parser::parse_number()
     return number;
 }
 
-json parser::parse_bool()
+json parser::parse_bool(const std::string& input, size_t& offset, std::error_code& error)
 {
     json boolean;
-    if (m_string.substr(m_offset, 4) == "true")
+    if (input.substr(offset, 4) == "true")
     {
         boolean = true;
     }
-    else if (m_string.substr(m_offset, 5) == "false")
+    else if (input.substr(offset, 5) == "false")
     {
         boolean = false;
     }
     else
     {
+        error = std::make_error_code(std::errc::invalid_argument);
         std::cerr << "ERROR: bool: Expected 'true' or 'false', found '"
-                  << m_string.substr(m_offset, 5) << "'\n";
+                  << input.substr(offset, 5) << "'\n";
         return json(class_type::null);
     }
-    m_offset += boolean.to_bool() ? 4 : 5;
+    offset += boolean.to_bool() ? 4 : 5;
     return boolean;
 }
 
-json parser::parse_null()
+json parser::parse_null(const std::string& input, size_t& offset, std::error_code& error)
 {
     json null;
-    if (m_string.substr(m_offset, 4) != "null")
+    if (input.substr(offset, 4) != "null")
     {
+        error = std::make_error_code(std::errc::invalid_argument);
         std::cerr << "ERROR: null: Expected 'null', found '"
-                  << m_string.substr(m_offset, 4) << "'\n";
+                  << input.substr(offset, 4) << "'\n";
         return json(class_type::null);
     }
-    m_offset += 4;
+    offset += 4;
     return null;
 }
 
-json parser::parse_next()
+json parser::parse_next(const std::string& input, size_t& offset, std::error_code& error)
 {
     char value;
-    consume_white_space();
-    value = m_string[m_offset];
+    consume_white_space(input, offset, error);
+    value = input[offset];
     switch (value)
     {
-    case '[': return parse_array();
-    case '{': return parse_object();
-    case '\"': return parse_string();
+    case '[': return parse_array(input, offset, error);
+    case '{': return parse_object(input, offset, error);
+    case '\"': return parse_string(input, offset, error);
     case 't':
-    case 'f': return parse_bool();
-    case 'n': return parse_null();
+    case 'f': return parse_bool(input, offset, error);
+    case 'n': return parse_null(input, offset, error);
     default:
     {
         if ((value <= '9' && value >= '0') || value == '-')
         {
-            return parse_number();
+            return parse_number(input, offset, error);
         }
     }
     }
+    error = std::make_error_code(std::errc::invalid_argument);
     std::cerr << "ERROR: parse: Unknown starting character '"
               << value << "'\n";
     return json();

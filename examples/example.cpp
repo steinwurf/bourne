@@ -80,6 +80,14 @@ int main()
     // This results in the following:
     std::cout << json << std::endl;
 
+    // Dump the data to a string.
+    std::string json_dump = json.dump();
+
+    // Parse the dumped json string.
+    std::error_code error;
+    bourne::json parsed_json = bourne::json::parse(json_dump, error);
+    assert(!error);
+
     // Nested elements can be accessed like so:
     std::cout << std::endl << "accessing nested keys" << std::endl;
     std::cout << "json[\"key3\"][\"nested objects\"][\"is_cool\"]: "

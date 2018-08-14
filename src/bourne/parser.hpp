@@ -16,23 +16,17 @@ class parser
 
 public:
 
-    parser(const std::string& string);
-    json parse();
+    static json parse(const std::string& input, std::error_code& error);
 
 private:
 
-    void consume_white_space();
-    json parse_object();
-    json parse_array();
-    json parse_string();
-    json parse_number();
-    json parse_bool();
-    json parse_null();
-    json parse_next();
-
-private:
-
-    std::string m_string;
-    size_t m_offset;
+    static void consume_white_space(const std::string& input, size_t& offest, std::error_code& error);
+    static json parse_object(const std::string& input, size_t& offest, std::error_code& error);
+    static json parse_array(const std::string& input, size_t& offest, std::error_code& error);
+    static json parse_string(const std::string& input, size_t& offest, std::error_code& error);
+    static json parse_number(const std::string& input, size_t& offest, std::error_code& error);
+    static json parse_bool(const std::string& input, size_t& offest, std::error_code& error);
+    static json parse_null(const std::string& input, size_t& offest, std::error_code& error);
+    static json parse_next(const std::string& input, size_t& offest, std::error_code& error);
 };
 }

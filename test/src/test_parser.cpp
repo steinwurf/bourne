@@ -12,8 +12,8 @@ namespace
 {
 void test_parser(const std::string& json_string, const bourne::json& expected)
 {
-    bourne::parser p(json_string);
-    EXPECT_EQ(expected.dump(), p.parse().dump());
+    std::error_code error;
+    EXPECT_EQ(expected.dump(), bourne::parser::parse(json_string, error).dump());
 }
 }
 
@@ -53,8 +53,8 @@ TEST(test_parser, test_parse_file)
     std::stringstream buffer;
     buffer << test_json.rdbuf();
 
-    bourne::parser p(buffer.str());
-    auto json = p.parse();
+    std::error_code error;
+    auto json = bourne::parser::parse(buffer.str(), error);
 
     EXPECT_EQ("László", json["hungarian_name"].to_string());
     EXPECT_EQ("Jørgen", json["danish_name"].to_string());
