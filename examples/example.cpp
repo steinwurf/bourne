@@ -86,6 +86,7 @@ int main()
     // Parse the dumped json string.
     std::error_code error;
     bourne::json parsed_json = bourne::json::parse(json_dump, error);
+    // Use the error code to determine if the parsing was successful.
     assert(!error);
 
     // Nested elements can be accessed like so:

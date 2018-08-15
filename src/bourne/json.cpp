@@ -429,6 +429,11 @@ json json::array()
     return json(class_type::array);
 }
 
+json json::null()
+{
+    return json(nullptr);
+}
+
 json json::object()
 {
     return json(class_type::object);

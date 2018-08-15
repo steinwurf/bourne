@@ -6,9 +6,11 @@
 #include "parser.hpp"
 #include "json.hpp"
 #include "stdfix.hpp"
+
 #include <string>
 #include <cmath>
 #include <iostream>
+#include <cctype>
 
 namespace bourne
 {
@@ -205,7 +207,7 @@ json parser::parse_number(const std::string& input, size_t& offset, std::error_c
         {
             val += c;
         }
-        else if (c == '.')
+        else if (c == '.' && !is_floating)
         {
             val += c;
             is_floating = true;
@@ -233,9 +235,8 @@ json parser::parse_number(const std::string& input, size_t& offset, std::error_c
             }
             else if (!isspace(c) && c != ',' && c != ']' && c != '}')
             {
+                // Error: expected a number for exponent
                 error = std::make_error_code(std::errc::invalid_argument);
-                std::cerr << "ERROR: number: Expected a number for "
-                          << "exponent, found '" << c << "'\n";
                 return json(class_type::null);
             }
             else
@@ -248,7 +249,7 @@ json parser::parse_number(const std::string& input, size_t& offset, std::error_c
     else if (!isspace(c) && c != ',' && c != ']' && c != '}')
     {
         error = std::make_error_code(std::errc::invalid_argument);
-        std::cerr << "ERROR: number: unexpected character '" << c << "'\n";
+        // Error: unexpected character
         return json(class_type::null);
     }
     --offset;
@@ -285,8 +286,7 @@ json parser::parse_bool(const std::string& input, size_t& offset, std::error_cod
     else
     {
         error = std::make_error_code(std::errc::invalid_argument);
-        std::cerr << "ERROR: bool: Expected 'true' or 'false', found '"
-                  << input.substr(offset, 5) << "'\n";
+        // Error: expected bool ('true' or 'false')
         return json(class_type::null);
     }
     offset += boolean.to_bool() ? 4 : 5;
@@ -299,9 +299,8 @@ json parser::parse_null(const std::string& input, size_t& offset, std::error_cod
     if (input.substr(offset, 4) != "null")
     {
         error = std::make_error_code(std::errc::invalid_argument);
-        std::cerr << "ERROR: null: Expected 'null', found '"
-                  << input.substr(offset, 4) << "'\n";
-        return json(class_type::null);
+        // "Error: expected 'null
+        return null;
     }
     offset += 4;
     return null;
@@ -328,9 +327,8 @@ json parser::parse_next(const std::string& input, size_t& offset, std::error_cod
         }
     }
     }
+    // Error: Unknown starting character
     error = std::make_error_code(std::errc::invalid_argument);
-    std::cerr << "ERROR: parse: Unknown starting character '"
-              << value << "'\n";
     return json();
 }
 }

@@ -347,6 +347,9 @@ public:
     }
 
     /// Create an empty json object
+    static json null();
+
+    /// Create an empty json object
     static json object();
 
     /// Create a json object
