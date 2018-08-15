@@ -164,9 +164,11 @@ public:
 
     /// Access operator for keys this assumes the json value is of type object
     json& operator[](const std::string& key);
+    const json& operator[](const std::string& key) const;
 
     /// Access operator for index this assumes the json value is of type array
     json& operator[](uint32_t index);
+    const json& operator[](uint32_t index) const;
 
     /// Returns a reference to the json value of the element identified with the
     /// given key. If this

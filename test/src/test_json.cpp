@@ -217,3 +217,15 @@ TEST(test_json, test_equality)
 
     EXPECT_EQ(object1, object3);
 }
+
+TEST(test_json, test_const_retrival)
+{
+    auto obj = bourne::json::object();
+    obj["test"] = 4;
+    auto const_retrival = [](const bourne::json& json) {
+        ASSERT_TRUE(json.has_key("test"));
+        ASSERT_TRUE(json["test"].is_int());
+        EXPECT_EQ(4, json["test"].to_int());
+    };
+    const_retrival(obj);
+}

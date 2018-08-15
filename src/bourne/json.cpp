@@ -126,6 +126,12 @@ json& json::operator[](const std::string& key)
     return m_internal.m_map->operator[](key);
 }
 
+const json& json::operator[](const std::string& key) const
+{
+    assert(is_object());
+    return m_internal.m_map->operator[](key);
+}
+
 json& json::operator[](uint32_t index)
 {
     if (m_type == class_type::null)
@@ -135,6 +141,13 @@ json& json::operator[](uint32_t index)
     {
         m_internal.m_array->resize(index + 1);
     }
+    return m_internal.m_array->operator[](index);
+}
+
+const json& json::operator[](uint32_t index) const
+{
+    assert(is_array());
+    assert(index < m_internal.m_array->size());
     return m_internal.m_array->operator[](index);
 }
 
