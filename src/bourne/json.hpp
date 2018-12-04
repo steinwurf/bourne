@@ -9,6 +9,7 @@
 #include <string>
 #include <type_traits>
 #include <ostream>
+#include <system_error>
 
 #include "class_type.hpp"
 #include "detail/backing_data.hpp"
