@@ -5,7 +5,7 @@
 
 #include "json.hpp"
 
-#include "parser.hpp"
+#include "detail/parser.hpp"
 #include "class_type.hpp"
 #include "stdfix.hpp"
 
@@ -350,28 +350,28 @@ std::string json::to_string() const
     return output;
 }
 
-json_wrapper<json::object_type> json::object_range()
+detail::json_wrapper<json::object_type> json::object_range()
 {
     assert(is_object());
-    return json_wrapper<json::object_type>(m_internal.m_map);
+    return detail::json_wrapper<json::object_type>(m_internal.m_map);
 }
 
-json_const_wrapper<json::object_type> json::object_range() const
+detail::json_const_wrapper<json::object_type> json::object_range() const
 {
     assert(is_object());
-    return json_const_wrapper<json::object_type>(m_internal.m_map);
+    return detail::json_const_wrapper<json::object_type>(m_internal.m_map);
 }
 
-json_wrapper<json::array_type> json::array_range()
+detail::json_wrapper<json::array_type> json::array_range()
 {
     assert(is_array());
-    return json_wrapper<json::array_type>(m_internal.m_array);
+    return detail::json_wrapper<json::array_type>(m_internal.m_array);
 }
 
-json_const_wrapper<json::array_type> json::array_range() const
+detail::json_const_wrapper<json::array_type> json::array_range() const
 {
     assert(is_array());
-    return json_const_wrapper<json::array_type>(m_internal.m_array);
+    return detail::json_const_wrapper<json::array_type>(m_internal.m_array);
 }
 
 std::string json::dump(uint32_t depth, std::string tab) const
@@ -434,7 +434,7 @@ std::string json::dump(uint32_t depth, std::string tab) const
 json json::parse(const std::string& input, std::error_code& error)
 {
     assert(!error);
-    return parser::parse(input, error);
+    return detail::parser::parse(input, error);
 }
 
 json json::array()

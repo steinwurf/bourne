@@ -4,8 +4,8 @@
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
 #include "parser.hpp"
-#include "json.hpp"
-#include "stdfix.hpp"
+#include "../json.hpp"
+#include "../stdfix.hpp"
 
 #include <string>
 #include <cmath>
@@ -13,6 +13,8 @@
 #include <cctype>
 
 namespace bourne
+{
+namespace detail
 {
 json parser::parse(const std::string& input, std::error_code& error)
 {
@@ -330,5 +332,6 @@ json parser::parse_next(const std::string& input, size_t& offset, std::error_cod
     // Error: Unknown starting character
     error = std::make_error_code(std::errc::invalid_argument);
     return json();
+}
 }
 }

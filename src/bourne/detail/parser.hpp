@@ -5,11 +5,13 @@
 
 #pragma once
 
-#include "json.hpp"
+#include "../json.hpp"
 
 #include <string>
 
 namespace bourne
+{
+namespace detail
 {
 class parser
 {
@@ -29,4 +31,5 @@ private:
     static json parse_null(const std::string& input, size_t& offest, std::error_code& error);
     static json parse_next(const std::string& input, size_t& offest, std::error_code& error);
 };
+}
 }

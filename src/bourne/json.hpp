@@ -11,9 +11,9 @@
 #include <ostream>
 
 #include "class_type.hpp"
-#include "backing_data.hpp"
-#include "json_const_wrapper.hpp"
-#include "json_wrapper.hpp"
+#include "detail/backing_data.hpp"
+#include "detail/json_const_wrapper.hpp"
+#include "detail/json_wrapper.hpp"
 
 namespace bourne
 {
@@ -38,9 +38,9 @@ private:
 
 private:
 
-    using object_type = backing_data::object_type;
+    using object_type = detail::backing_data::object_type;
 
-    using array_type = backing_data::array_type;
+    using array_type = detail::backing_data::array_type;
 
 public:
 
@@ -298,19 +298,19 @@ public:
 
     /// Returns an iterable object range. If this is not an object value an
     /// assert is triggered.
-    json_wrapper<object_type> object_range();
+    detail::json_wrapper<object_type> object_range();
 
     /// Returns an const iterable object range. If this is not an object value
     /// an assert is triggered.
-    json_const_wrapper<object_type> object_range() const;
+    detail::json_const_wrapper<object_type> object_range() const;
 
     /// Returns an iterable array range. If this is not an array value an
     /// assert is triggered.
-    json_wrapper<array_type> array_range();
+    detail::json_wrapper<array_type> array_range();
 
     /// Returns an const iterable array range. If this is not an array value
     /// an assert is triggered.
-    json_const_wrapper<array_type> array_range() const;
+    detail::json_const_wrapper<array_type> array_range() const;
 
     /// Dumps this object as a json string.
     std::string dump(uint32_t depth = 1, std::string tab = "  ") const;
@@ -369,7 +369,7 @@ private:
 private:
 
     /// The object containing the underlying data
-    backing_data m_internal;
+    detail::backing_data m_internal;
 
     /// The type of this object
     class_type m_type = class_type::null;
