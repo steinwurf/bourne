@@ -23,7 +23,8 @@ json parser::parse(const std::string& input, std::error_code& error)
     return parse_next(input, offset, error);
 }
 
-void parser::consume_white_space(const std::string& input, size_t& offset, std::error_code& error)
+void parser::consume_white_space(
+    const std::string& input, size_t& offset, std::error_code& error)
 {
     assert(!error);
     while (isspace(input[offset]))
@@ -32,7 +33,8 @@ void parser::consume_white_space(const std::string& input, size_t& offset, std::
     }
 }
 
-json parser::parse_object(const std::string& input, size_t& offset, std::error_code& error)
+json parser::parse_object(
+    const std::string& input, size_t& offset, std::error_code& error)
 {
     assert(!error);
     json object = json(class_type::object);
@@ -84,7 +86,8 @@ json parser::parse_object(const std::string& input, size_t& offset, std::error_c
     return object;
 }
 
-json parser::parse_array(const std::string& input, size_t& offset, std::error_code& error)
+json parser::parse_array(
+    const std::string& input, size_t& offset, std::error_code& error)
 {
     json array = json(class_type::array);
     uint32_t index = 0;
@@ -122,7 +125,8 @@ json parser::parse_array(const std::string& input, size_t& offset, std::error_co
     return array;
 }
 
-json parser::parse_string(const std::string& input, size_t& offset, std::error_code& error)
+json parser::parse_string(
+    const std::string& input, size_t& offset, std::error_code& error)
 {
     json string;
     std::string val;
@@ -195,7 +199,8 @@ json parser::parse_string(const std::string& input, size_t& offset, std::error_c
     return string;
 }
 
-json parser::parse_number(const std::string& input, size_t& offset, std::error_code& error)
+json parser::parse_number(
+    const std::string& input, size_t& offset, std::error_code& error)
 {
     json number;
     std::string val, exp_str;
@@ -274,7 +279,8 @@ json parser::parse_number(const std::string& input, size_t& offset, std::error_c
     return number;
 }
 
-json parser::parse_bool(const std::string& input, size_t& offset, std::error_code& error)
+json parser::parse_bool(
+    const std::string& input, size_t& offset, std::error_code& error)
 {
     json boolean;
     if (input.substr(offset, 4) == "true")
@@ -295,7 +301,8 @@ json parser::parse_bool(const std::string& input, size_t& offset, std::error_cod
     return boolean;
 }
 
-json parser::parse_null(const std::string& input, size_t& offset, std::error_code& error)
+json parser::parse_null(
+    const std::string& input, size_t& offset, std::error_code& error)
 {
     json null;
     if (input.substr(offset, 4) != "null")
@@ -308,7 +315,8 @@ json parser::parse_null(const std::string& input, size_t& offset, std::error_cod
     return null;
 }
 
-json parser::parse_next(const std::string& input, size_t& offset, std::error_code& error)
+json parser::parse_next(
+    const std::string& input, size_t& offset, std::error_code& error)
 {
     char value;
     consume_white_space(input, offset, error);
