@@ -11,6 +11,7 @@
 #include <cmath>
 #include <iostream>
 #include <cctype>
+#include <system_error>
 
 namespace bourne
 {

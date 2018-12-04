@@ -8,6 +8,7 @@
 #include "../json.hpp"
 
 #include <string>
+#include <system_error>
 
 namespace bourne
 {
