@@ -5,7 +5,7 @@
 
 #include "json.hpp"
 
-#include "parser.hpp"
+#include "detail/parser.hpp"
 #include "class_type.hpp"
 #include "stdfix.hpp"
 
@@ -126,6 +126,12 @@ json& json::operator[](const std::string& key)
     return m_internal.m_map->operator[](key);
 }
 
+const json& json::operator[](const std::string& key) const
+{
+    assert(is_object());
+    return m_internal.m_map->operator[](key);
+}
+
 json& json::operator[](uint32_t index)
 {
     if (m_type == class_type::null)
@@ -135,6 +141,13 @@ json& json::operator[](uint32_t index)
     {
         m_internal.m_array->resize(index + 1);
     }
+    return m_internal.m_array->operator[](index);
+}
+
+const json& json::operator[](uint32_t index) const
+{
+    assert(is_array());
+    assert(index < m_internal.m_array->size());
     return m_internal.m_array->operator[](index);
 }
 
@@ -337,28 +350,28 @@ std::string json::to_string() const
     return output;
 }
 
-json_wrapper<json::object_type> json::object_range()
+detail::json_wrapper<json::object_type> json::object_range()
 {
     assert(is_object());
-    return json_wrapper<json::object_type>(m_internal.m_map);
+    return detail::json_wrapper<json::object_type>(m_internal.m_map);
 }
 
-json_const_wrapper<json::object_type> json::object_range() const
+detail::json_const_wrapper<json::object_type> json::object_range() const
 {
     assert(is_object());
-    return json_const_wrapper<json::object_type>(m_internal.m_map);
+    return detail::json_const_wrapper<json::object_type>(m_internal.m_map);
 }
 
-json_wrapper<json::array_type> json::array_range()
+detail::json_wrapper<json::array_type> json::array_range()
 {
     assert(is_array());
-    return json_wrapper<json::array_type>(m_internal.m_array);
+    return detail::json_wrapper<json::array_type>(m_internal.m_array);
 }
 
-json_const_wrapper<json::array_type> json::array_range() const
+detail::json_const_wrapper<json::array_type> json::array_range() const
 {
     assert(is_array());
-    return json_const_wrapper<json::array_type>(m_internal.m_array);
+    return detail::json_const_wrapper<json::array_type>(m_internal.m_array);
 }
 
 std::string json::dump(uint32_t depth, std::string tab) const
@@ -418,15 +431,20 @@ std::string json::dump(uint32_t depth, std::string tab) const
     }
 }
 
-json json::parse(const std::string& string)
+json json::parse(const std::string& input, std::error_code& error)
 {
-    auto p = parser(string);
-    return p.parse();
+    assert(!error);
+    return detail::parser::parse(input, error);
 }
 
 json json::array()
 {
     return json(class_type::array);
+}
+
+json json::null()
+{
+    return json(nullptr);
 }
 
 json json::object()

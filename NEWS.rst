@@ -6,7 +6,9 @@ every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Minor: Added const version of ``operator[]`` accessors.
+* Major: Made ``parser::parse`` static, and added an error code.
+* Major: Moved details into detail namespace.
 
 5.0.0
 -----

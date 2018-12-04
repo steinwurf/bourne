@@ -9,11 +9,12 @@
 #include <string>
 #include <type_traits>
 #include <ostream>
+#include <system_error>
 
 #include "class_type.hpp"
-#include "backing_data.hpp"
-#include "json_const_wrapper.hpp"
-#include "json_wrapper.hpp"
+#include "detail/backing_data.hpp"
+#include "detail/json_const_wrapper.hpp"
+#include "detail/json_wrapper.hpp"
 
 namespace bourne
 {
@@ -38,9 +39,9 @@ private:
 
 private:
 
-    using object_type = backing_data::object_type;
+    using object_type = detail::backing_data::object_type;
 
-    using array_type = backing_data::array_type;
+    using array_type = detail::backing_data::array_type;
 
 public:
 
@@ -164,9 +165,11 @@ public:
 
     /// Access operator for keys this assumes the json value is of type object
     json& operator[](const std::string& key);
+    const json& operator[](const std::string& key) const;
 
     /// Access operator for index this assumes the json value is of type array
     json& operator[](uint32_t index);
+    const json& operator[](uint32_t index) const;
 
     /// Returns a reference to the json value of the element identified with the
     /// given key. If this
@@ -296,19 +299,19 @@ public:
 
     /// Returns an iterable object range. If this is not an object value an
     /// assert is triggered.
-    json_wrapper<object_type> object_range();
+    detail::json_wrapper<object_type> object_range();
 
     /// Returns an const iterable object range. If this is not an object value
     /// an assert is triggered.
-    json_const_wrapper<object_type> object_range() const;
+    detail::json_const_wrapper<object_type> object_range() const;
 
     /// Returns an iterable array range. If this is not an array value an
     /// assert is triggered.
-    json_wrapper<array_type> array_range();
+    detail::json_wrapper<array_type> array_range();
 
     /// Returns an const iterable array range. If this is not an array value
     /// an assert is triggered.
-    json_const_wrapper<array_type> array_range() const;
+    detail::json_const_wrapper<array_type> array_range() const;
 
     /// Dumps this object as a json string.
     std::string dump(uint32_t depth = 1, std::string tab = "  ") const;
@@ -334,7 +337,7 @@ public:
     ////////////////////////
 
     /// Parse a string as a json object.
-    static json parse(const std::string& string);
+    static json parse(const std::string& input, std::error_code& error);
 
     /// Create a json array
     static json array();
@@ -345,6 +348,9 @@ public:
         array.append(args...);
         return array;
     }
+
+    /// Create an empty json object
+    static json null();
 
     /// Create an empty json object
     static json object();
@@ -364,7 +370,7 @@ private:
 private:
 
     /// The object containing the underlying data
-    backing_data m_internal;
+    detail::backing_data m_internal;
 
     /// The type of this object
     class_type m_type = class_type::null;

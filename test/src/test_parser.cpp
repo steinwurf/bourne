@@ -5,27 +5,34 @@
 
 #include <fstream>
 
-#include <bourne/parser.hpp>
+#include <bourne/detail/parser.hpp>
 #include <gtest/gtest.h>
 
 namespace
 {
 void test_parser(const std::string& json_string, const bourne::json& expected)
 {
-    bourne::parser p(json_string);
-    EXPECT_EQ(expected.dump(), p.parse().dump());
+    std::error_code error;
+    EXPECT_EQ(
+        expected.dump(),
+        bourne::detail::parser::parse(json_string, error).dump())
+        << "Input: '" << json_string << "'";
 }
 }
 
 TEST(test_parser, test_parse)
 {
+    test_parser("753 ", bourne::json(753));
+    test_parser(" 75..3 ", bourne::json::null());
     test_parser(" 753 ", bourne::json(753));
     test_parser(" 90200.10 ", bourne::json(90200.10));
+    test_parser(" 90200..10 ", bourne::json::null());
     test_parser("\"Text String\"", bourne::json("Text String"));
     test_parser(
         "\"you are a \\\"great\\\" agent\\/spy\"",
         bourne::json("you are a \"great\" agent/spy"));
     test_parser("[1, 2,3]", bourne::json::array(1, 2, 3));
+    test_parser("{\"value\":3}", bourne::json {"value", 3});
 
     bourne::json expected_json =
         {
@@ -53,8 +60,8 @@ TEST(test_parser, test_parse_file)
     std::stringstream buffer;
     buffer << test_json.rdbuf();
 
-    bourne::parser p(buffer.str());
-    auto json = p.parse();
+    std::error_code error;
+    auto json = bourne::detail::parser::parse(buffer.str(), error);
 
     EXPECT_EQ("László", json["hungarian_name"].to_string());
     EXPECT_EQ("Jørgen", json["danish_name"].to_string());

@@ -9,6 +9,8 @@
 
 namespace bourne
 {
+namespace detail
+{
 template <typename Container>
 class json_const_wrapper
 {
@@ -39,4 +41,5 @@ private:
 
     const Container* m_object;
 };
+}
 }

@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "json.hpp"
+#include "../json.hpp"
 
 #include <string>
 #include <map>
@@ -16,6 +16,9 @@ namespace bourne
 {
 // handle circular dependency
 class json;
+
+namespace detail
+{
 
 union backing_data
 {
@@ -45,4 +48,5 @@ union backing_data
     int64_t m_int;
     bool m_bool;
 };
+}
 }
