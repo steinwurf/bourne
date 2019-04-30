@@ -12,7 +12,20 @@ def build(bld):
         'STEINWURF_BOURNE_VERSION="{}"'.format(
             VERSION))
 
-    bld.recurse('src/bourne')
+    if bld.is_toplevel():
+        bld.stlib(
+            features='cxx',
+            source=bld.path.ant_glob('src/**/*.cpp'),
+            target='bourne',
+            use=[],
+            export_includes=['src'])
+    else:
+         bld.objects(
+            features='cxx',
+            source=bld.path.ant_glob('src/**/*.cpp'),
+            target='bourne',
+            use=[],
+            export_includes=['src'])
 
     if bld.is_toplevel():
 
