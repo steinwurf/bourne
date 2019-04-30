@@ -12,20 +12,16 @@ def build(bld):
         'STEINWURF_BOURNE_VERSION="{}"'.format(
             VERSION))
 
+    # Build static library if this is top-level otherwise just .o files
+    features = ['cxx']
     if bld.is_toplevel():
-        bld.stlib(
-            features='cxx',
-            source=bld.path.ant_glob('src/**/*.cpp'),
-            target='bourne',
-            use=[],
-            export_includes=['src'])
-    else:
-         bld.objects(
-            features='cxx',
-            source=bld.path.ant_glob('src/**/*.cpp'),
-            target='bourne',
-            use=[],
-            export_includes=['src'])
+        features += ['cxxstlib']
+
+    bld(features=features,
+        source=bld.path.ant_glob('src/**/*.cpp'),
+        target='bourne',
+        use=[],
+        export_includes=['src'])
 
     if bld.is_toplevel():
 
