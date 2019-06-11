@@ -12,6 +12,8 @@
 
 namespace bourne
 {
+inline namespace STEINWURF_BOURNE_VERSION
+{
 namespace detail
 {
 class parser
@@ -40,5 +42,6 @@ private:
     static json parse_next(
         const std::string& input, size_t& offest, std::error_code& error);
 };
+}
 }
 }
