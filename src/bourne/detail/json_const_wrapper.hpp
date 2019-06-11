@@ -9,6 +9,8 @@
 
 namespace bourne
 {
+inline namespace STEINWURF_BOURNE_VERSION
+{
 namespace detail
 {
 template <typename Container>
@@ -41,5 +43,6 @@ private:
 
     const Container* m_object;
 };
+}
 }
 }

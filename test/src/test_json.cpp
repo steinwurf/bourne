@@ -4,7 +4,6 @@
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
 #include <bourne/json.hpp>
-#include <bourne/stdfix.hpp>
 #include <gtest/gtest.h>
 
 TEST(test_json, test_dump)
@@ -149,7 +148,7 @@ TEST(test_json, test_iterator)
     for (auto expect : expected)
     {
         array[index] = expect;
-        object[stdfix::to_string(index)] = expect;
+        object[std::to_string(index)] = expect;
         index++;
     }
 
@@ -163,7 +162,7 @@ TEST(test_json, test_iterator)
     index = 0;
     for (auto& v : object.object_range())
     {
-        EXPECT_EQ(stdfix::to_string(index), v.first);
+        EXPECT_EQ(std::to_string(index), v.first);
         EXPECT_EQ(expected[index], v.second.to_int());
         index++;
     }

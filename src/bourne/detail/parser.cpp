@@ -5,7 +5,6 @@
 
 #include "parser.hpp"
 #include "../json.hpp"
-#include "../stdfix.hpp"
 
 #include <string>
 #include <cmath>
@@ -14,6 +13,8 @@
 #include <system_error>
 
 namespace bourne
+{
+inline namespace STEINWURF_BOURNE_VERSION
 {
 namespace detail
 {
@@ -252,7 +253,7 @@ json parser::parse_number(
                 break;
             }
         }
-        exp = stdfix::stol(exp_str);
+        exp = std::stol(exp_str);
     }
     else if (!isspace(c) && c != ',' && c != ']' && c != '}')
     {
@@ -264,17 +265,17 @@ json parser::parse_number(
 
     if (is_floating)
     {
-        number = stdfix::stod(val) * std::pow(10, exp);
+        number = std::stod(val) * std::pow(10, exp);
     }
     else
     {
         if (!exp_str.empty())
         {
-            number = stdfix::stol(val) * std::pow(10, exp);
+            number = std::stol(val) * std::pow(10, exp);
         }
         else
         {
-            number = stdfix::stol(val);
+            number = std::stol(val);
         }
     }
     return number;
@@ -341,6 +342,7 @@ json parser::parse_next(
     // Error: Unknown starting character
     error = std::make_error_code(std::errc::invalid_argument);
     return json();
+}
 }
 }
 }

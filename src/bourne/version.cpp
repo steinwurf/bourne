@@ -3,23 +3,16 @@
 //
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
-#pragma once
-
 #include "version.hpp"
 
 namespace bourne
 {
+
 inline namespace STEINWURF_BOURNE_VERSION
 {
-enum class class_type
+std::string version()
 {
-    null,
-    object,
-    array,
-    string,
-    floating,
-    integral,
-    boolean
-};
+    return "6.0.0";
+}
 }
 }

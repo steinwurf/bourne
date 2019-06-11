@@ -14,6 +14,8 @@
 
 namespace bourne
 {
+inline namespace STEINWURF_BOURNE_VERSION
+{
 // handle circular dependency
 class json;
 
@@ -48,5 +50,6 @@ union backing_data
     int64_t m_int;
     bool m_bool;
 };
+}
 }
 }

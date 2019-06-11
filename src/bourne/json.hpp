@@ -11,12 +11,15 @@
 #include <ostream>
 #include <system_error>
 
+#include "version.hpp"
 #include "class_type.hpp"
 #include "detail/backing_data.hpp"
 #include "detail/json_const_wrapper.hpp"
 #include "detail/json_wrapper.hpp"
 
 namespace bourne
+{
+inline namespace STEINWURF_BOURNE_VERSION
 {
 class json
 {
@@ -377,4 +380,5 @@ private:
 };
 
 std::ostream& operator<<(std::ostream& os, const json& json);
+}
 }
