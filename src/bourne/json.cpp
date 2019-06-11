@@ -7,7 +7,6 @@
 
 #include "class_type.hpp"
 #include "detail/parser.hpp"
-#include "stdfix.hpp"
 
 #include <cassert>
 #include <iostream>

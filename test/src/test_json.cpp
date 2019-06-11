@@ -4,7 +4,6 @@
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
 #include <bourne/json.hpp>
-#include <bourne/stdfix.hpp>
 #include <gtest/gtest.h>
 
 TEST(test_json, test_dump)

@@ -5,7 +5,6 @@
 
 #include "parser.hpp"
 #include "../json.hpp"
-#include "../stdfix.hpp"
 
 #include <string>
 #include <cmath>
