@@ -6,7 +6,8 @@ every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Minor: Change stol -> stoll. On Window stol returns a 32 bit, we need 64 bit.
+  See more here: https://stackoverflow.com/a/30741963/1717320
 
 7.0.0
 -----
