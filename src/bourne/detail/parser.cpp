@@ -253,7 +253,7 @@ json parser::parse_number(
                 break;
             }
         }
-        exp = std::stol(exp_str);
+        exp = std::stoll(exp_str);
     }
     else if (!isspace(c) && c != ',' && c != ']' && c != '}')
     {
@@ -271,11 +271,11 @@ json parser::parse_number(
     {
         if (!exp_str.empty())
         {
-            number = std::stol(val) * std::pow(10, exp);
+            number = std::stoll(val) * std::pow(10, exp);
         }
         else
         {
-            number = std::stol(val);
+            number = std::stoll(val);
         }
     }
     return number;
