@@ -5,28 +5,26 @@
 
 #include "json.hpp"
 
-#include "detail/parser.hpp"
 #include "class_type.hpp"
+#include "detail/parser.hpp"
 #include "stdfix.hpp"
 
+#include <cassert>
 #include <iostream>
 #include <string>
-#include <cassert>
 
 namespace bourne
 {
-json::json() :
-    m_internal(), m_type(class_type::null)
-{}
+json::json() : m_internal(), m_type(class_type::null)
+{
+}
 
-json::json(class_type type) :
-    json()
+json::json(class_type type) : json()
 {
     set_type(type);
 }
 
-json::json(std::initializer_list<json> list) :
-    json()
+json::json(std::initializer_list<json> list) : json()
 {
     assert(list.size() % 2 == 0 && "Missing value for key value pair.");
     set_type(class_type::object);
@@ -36,18 +34,15 @@ json::json(std::initializer_list<json> list) :
     }
 }
 
-json::json(json&& other) :
-    m_internal(other.m_internal),
-    m_type(other.m_type)
+json::json(json&& other) : m_internal(other.m_internal), m_type(other.m_type)
 {
     other.m_type = class_type::null;
     other.m_internal.m_map = nullptr;
 }
 
-json::json(std::nullptr_t) :
-    m_internal(),
-    m_type(class_type::null)
-{}
+json::json(std::nullptr_t) : m_internal(), m_type(class_type::null)
+{
+}
 
 json::json(const json& other)
 {
@@ -55,20 +50,15 @@ json::json(const json& other)
     switch (other.m_type)
     {
     case class_type::object:
-        m_internal.m_map =
-            new json::object_type(
-                other.m_internal.m_map->begin(),
-                other.m_internal.m_map->end());
+        m_internal.m_map = new json::object_type(
+            other.m_internal.m_map->begin(), other.m_internal.m_map->end());
         break;
     case class_type::array:
-        m_internal.m_array =
-            new json::array_type(
-                other.m_internal.m_array->begin(),
-                other.m_internal.m_array->end());
+        m_internal.m_array = new json::array_type(
+            other.m_internal.m_array->begin(), other.m_internal.m_array->end());
         break;
     case class_type::string:
-        m_internal.m_string =
-            new std::string(*other.m_internal.m_string);
+        m_internal.m_string = new std::string(*other.m_internal.m_string);
         break;
     default:
         m_internal = other.m_internal;
@@ -96,20 +86,15 @@ json& json::operator=(const json& other)
     switch (other.m_type)
     {
     case class_type::object:
-        m_internal.m_map =
-            new json::object_type(
-                other.m_internal.m_map->begin(),
-                other.m_internal.m_map->end());
+        m_internal.m_map = new json::object_type(
+            other.m_internal.m_map->begin(), other.m_internal.m_map->end());
         break;
     case class_type::array:
-        m_internal.m_array =
-            new json::array_type(
-                other.m_internal.m_array->begin(),
-                other.m_internal.m_array->end());
+        m_internal.m_array = new json::array_type(
+            other.m_internal.m_array->begin(), other.m_internal.m_array->end());
         break;
     case class_type::string:
-        m_internal.m_string =
-            new std::string(*other.m_internal.m_string);
+        m_internal.m_string = new std::string(*other.m_internal.m_string);
         break;
     default:
         m_internal = other.m_internal;
@@ -266,8 +251,7 @@ bool json::is_int() const
 
 bool json::is_float() const
 {
-    return m_type == class_type::floating ||
-           m_type == class_type::integral;
+    return m_type == class_type::floating || m_type == class_type::integral;
 }
 
 bool json::is_string() const
@@ -307,7 +291,7 @@ double json::to_float() const
     else
     {
         assert(m_type == class_type::integral);
-        return (double) m_internal.m_int;
+        return (double)m_internal.m_int;
     }
 }
 
@@ -378,7 +362,8 @@ std::string json::dump(uint32_t depth, std::string tab) const
 {
     std::string pad = "";
 
-    for (uint32_t i = 0; i < depth; ++i, pad += tab);
+    for (uint32_t i = 0; i < depth; ++i, pad += tab)
+        ;
 
     switch (m_type)
     {
@@ -421,9 +406,9 @@ std::string json::dump(uint32_t depth, std::string tab) const
     case class_type::string:
         return "\"" + to_string() + "\"";
     case class_type::floating:
-        return stdfix::to_string(m_internal.m_float);
+        return std::to_string(m_internal.m_float);
     case class_type::integral:
-        return stdfix::to_string(m_internal.m_int);
+        return std::to_string(m_internal.m_int);
     case class_type::boolean:
         return m_internal.m_bool ? "true" : "false";
     default:
@@ -451,7 +436,6 @@ json json::object()
 {
     return json(class_type::object);
 }
-
 
 json json::object(std::initializer_list<json> list)
 {

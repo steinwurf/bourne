@@ -252,7 +252,7 @@ json parser::parse_number(
                 break;
             }
         }
-        exp = stdfix::stol(exp_str);
+        exp = std::stol(exp_str);
     }
     else if (!isspace(c) && c != ',' && c != ']' && c != '}')
     {
@@ -264,17 +264,17 @@ json parser::parse_number(
 
     if (is_floating)
     {
-        number = stdfix::stod(val) * std::pow(10, exp);
+        number = std::stod(val) * std::pow(10, exp);
     }
     else
     {
         if (!exp_str.empty())
         {
-            number = stdfix::stol(val) * std::pow(10, exp);
+            number = std::stol(val) * std::pow(10, exp);
         }
         else
         {
-            number = stdfix::stol(val);
+            number = std::stol(val);
         }
     }
     return number;
