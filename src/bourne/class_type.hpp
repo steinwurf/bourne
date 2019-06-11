@@ -5,7 +5,11 @@
 
 #pragma once
 
+#include "version.hpp"
+
 namespace bourne
+{
+inline namespace STEINWURF_BOURNE_VERSION
 {
 enum class class_type
 {
@@ -17,4 +21,5 @@ enum class class_type
     integral,
     boolean
 };
+}
 }

@@ -14,6 +14,8 @@
 
 namespace bourne
 {
+inline namespace STEINWURF_BOURNE_VERSION
+{
 namespace detail
 {
 json parser::parse(const std::string& input, std::error_code& error)
@@ -340,6 +342,7 @@ json parser::parse_next(
     // Error: Unknown starting character
     error = std::make_error_code(std::errc::invalid_argument);
     return json();
+}
 }
 }
 }

@@ -14,6 +14,8 @@
 
 namespace bourne
 {
+inline namespace STEINWURF_BOURNE_VERSION
+{
 json::json() :
     m_internal(), m_type(class_type::null)
 {
@@ -499,5 +501,6 @@ std::ostream& operator<<(std::ostream& os, const json& json)
 {
     os << json.dump();
     return os;
+}
 }
 }
