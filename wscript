@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 # encoding: utf-8
 
+from waflib.Build import BuildContext
+
 APPNAME = 'bourne'
 VERSION = '6.0.0'
 
