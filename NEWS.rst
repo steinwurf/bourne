@@ -6,6 +6,10 @@ every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+7.0.0
+-----
 * Major: Added inline namespace for versioning.
 * Major: Added prepare_release function to wscript.
 * Major: Expose objects rather than static lib when used as a dependency.
