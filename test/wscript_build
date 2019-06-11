@@ -5,4 +5,5 @@ bld.program(
     source=['bourne_tests.cpp'] + bld.path.ant_glob('src/*.cpp'),
     target='bourne_tests',
     test_files=['test.json'],
+    install_path=None,
     use=['bourne', 'gtest'])
