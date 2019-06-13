@@ -146,7 +146,6 @@ bool json::operator==(const json& other) const
 {
     if (m_type != other.m_type)
     {
-        std::cout << "not same type" << std::endl;
         return false;
     }
 
