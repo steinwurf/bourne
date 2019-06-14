@@ -6,6 +6,10 @@ every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+7.0.2
+-----
 * Patch: Remove print when comparing objects of different types.
 
 7.0.1

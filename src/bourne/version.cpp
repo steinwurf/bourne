@@ -12,7 +12,7 @@ inline namespace STEINWURF_BOURNE_VERSION
 {
 std::string version()
 {
-    return "7.0.1";
+    return "7.0.2";
 }
 }
 }
