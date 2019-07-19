@@ -41,6 +41,12 @@ nessecary files needed to use the library (e.g. static library,
 headers etc.). You can change the output folder by passing a different
 path to ``--destdir``:
 
+Alternatively you can use cmake to build like so:
+
+::
+
+   mkdir -p build && cd build && cmake ../ && make
+
 Credit
 ======
 
