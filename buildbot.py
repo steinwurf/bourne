@@ -3,6 +3,8 @@
 
 import sys
 import json
+import os
+import shutil
 import subprocess
 
 project_name = 'bourne'
@@ -78,6 +80,20 @@ def install(properties):
     run_command(command)
 
 
+def cmake(properties):
+    build_path = 'build'
+    if os.path.exists(build_path):
+        print("Path {} already exists - removing".format(build_path))
+        shutil.rmtree(build_path)
+    os.mkdir(build_path)
+
+    old_cwd = os.getcwd()
+    os.chdir(build_path)
+    run_command(['cmake', '../'])
+    run_command(['make'])
+    os.chdir(old_cwd)
+
+
 def coverage_settings(options):
     options['required_line_coverage'] = 0.0
 
@@ -86,7 +102,7 @@ def main():
     argv = sys.argv
 
     if len(argv) != 3:
-        print("Usage: {} <command> <properties>".format(argv[0]))
+        print("Usage: '{}' <command> <properties>".format(argv[0]))
         sys.exit(0)
 
     cmd = argv[1]
@@ -100,6 +116,8 @@ def main():
         run_tests(properties)
     elif cmd == 'install':
         install(properties)
+    elif cmd == 'cmake':
+        cmake(properties)
     else:
         print("Unknown command: {}".format(cmd))
 

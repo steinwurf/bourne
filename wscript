@@ -9,11 +9,6 @@ VERSION = '7.0.2'
 
 def build(bld):
 
-    bld.env.append_unique(
-        'DEFINES_STEINWURF_VERSION',
-        'STEINWURF_BOURNE_VERSION="{}"'.format(
-            VERSION))
-
     # Build static library if this is top-level otherwise just .o files
     features = ['cxx']
     if bld.is_toplevel():
@@ -33,12 +28,12 @@ def build(bld):
         bld.recurse('test')
         bld.recurse('examples')
 
-        sourcepath = bld.path.find_node('src')
+        source_path = bld.path.find_node('src')
 
         bld.install_files(
             dest="${PREFIX}/include",
-            files=sourcepath.ant_glob('**/*.hpp'),
-            cwd=sourcepath,
+            files=source_path.ant_glob('**/*.hpp'),
+            cwd=source_path,
             relative_trick=True)
 
         bld.install_files(
