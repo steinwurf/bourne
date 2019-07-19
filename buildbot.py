@@ -90,7 +90,7 @@ def cmake(properties):
     old_cwd = os.getcwd()
     os.chdir(build_path)
     run_command(['cmake', '../'])
-    run_command(['make'])
+    run_command(['cmake', '--build', '.'])
     os.chdir(old_cwd)
 
 
