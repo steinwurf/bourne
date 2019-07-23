@@ -6,7 +6,7 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU")
 elseif(CMAKE_C_COMPILER_ID MATCHES "AppleClang|Clang")
   list(APPEND cxxflags -O2)
 elseif(CMAKE_C_COMPILER_ID MATCHES "MSVC")
-  list(APPEND cxxflags /MT /O2 /EHs /bigobj)
+  list(APPEND cxxflags /O2 /MT /EHs /bigobj)
 endif()
 
 file( GLOB_RECURSE bourne_sources ./src/*.cpp)
