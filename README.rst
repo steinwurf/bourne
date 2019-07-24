@@ -45,7 +45,7 @@ Alternatively you can use cmake to build like so:
 
 ::
 
-   mkdir -p build && cd build && cmake ../ && make
+   mkdir -p build && cd build && cmake ../ && cmake --build .
 
 Credit
 ======
