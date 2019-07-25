@@ -10,10 +10,10 @@ import subprocess
 project_name = 'bourne'
 
 
-def run_command(args):
+def run_command(args, env_ext={}):
     print("Running: {}".format(args))
     sys.stdout.flush()
-    subprocess.check_call(args)
+    subprocess.check_call(args, env=dict(os.environ.copy(), **env_ext))
 
 
 def get_tool_options(properties):
@@ -89,8 +89,8 @@ def cmake(properties):
 
     old_cwd = os.getcwd()
     os.chdir(build_path)
-    run_command(['cmake', '../'])
-    run_command(['cmake', '--build', '.'])
+    run_command(['cmake', '../'], env_ext={'VERBOSE': '1'})
+    run_command(['cmake', '--build', '.'], env_ext={'VERBOSE': '1'})
     os.chdir(old_cwd)
 
 
