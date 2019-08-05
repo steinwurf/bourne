@@ -41,11 +41,18 @@ nessecary files needed to use the library (e.g. static library,
 headers etc.). You can change the output folder by passing a different
 path to ``--destdir``:
 
-Alternatively you can use cmake to build like so:
+Use as Dependency in CMake
+==========================
+
+To depend on this project when using the CMake build system, add the following
+in your CMake build script:
 
 ::
 
-   mkdir -p build && cd build && cmake ../ && cmake --build .
+   add_subdirectory("/path/to/bourne" bourne)
+   target_link_libraries(<my_target> steinuwrf::bourne)
+
+Where ``<my_target>`` is replaced by your target.
 
 Credit
 ======
