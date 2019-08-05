@@ -50,7 +50,7 @@ in your CMake build script:
 ::
 
    add_subdirectory("/path/to/bourne" bourne)
-   target_link_libraries(<my_target> steinuwrf::bourne)
+   target_link_libraries(<my_target> steinwurf::bourne)
 
 Where ``<my_target>`` is replaced by your target.
 
