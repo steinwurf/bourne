@@ -2,6 +2,9 @@
 bourne
 ======
 
+.. image:: https://travis-ci.org/steinwurf/bourne.svg?branch=master
+    :target: https://travis-ci.org/steinwurf/bourne
+    
 .. image:: https://raw.githubusercontent.com/steinwurf/bourne/master/bourne.gif
 
 A simple c++11 json reader and writer.
