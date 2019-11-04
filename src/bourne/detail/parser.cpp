@@ -5,6 +5,8 @@
 
 #include "parser.hpp"
 #include "../json.hpp"
+#include "throw_if_error.hpp"
+#include "../error.hpp"
 
 #include <string>
 #include <cmath>
@@ -18,18 +20,34 @@ inline namespace STEINWURF_BOURNE_VERSION
 {
 namespace detail
 {
+json parser::parse(const std::string& input)
+{
+    std::error_code error;
+    std::size_t offset = 0;
+    auto result = parse_next(input, offset, error);
+    throw_if_error(error);
+    return result;
+}
 json parser::parse(const std::string& input, std::error_code& error)
 {
     assert(!error);
     std::size_t offset = 0;
-    return parse_next(input, offset, error);
+    auto result = parse_next(input, offset, error);
+    if (error)
+        return result;
+    consume_white_space(input, offset);
+    if (offset != input.size())
+    {
+        error = bourne::error::parse_found_multiple_unstructured_elements;
+        return json(class_type::null);
+    }
+    assert(offset == input.size());
+    return result;
 }
 
-void parser::consume_white_space(
-    const std::string& input, size_t& offset, std::error_code& error)
+void parser::consume_white_space(const std::string& input, size_t& offset)
 {
-    assert(!error);
-    while (isspace(input[offset]))
+    while (offset < input.size() && isspace(input[offset]))
     {
         offset++;
     }
@@ -42,7 +60,7 @@ json parser::parse_object(
     json object = json(class_type::object);
 
     offset++;
-    consume_white_space(input, offset, error);
+    consume_white_space(input, offset);
     if (input[offset] == '}')
     {
         offset++;
@@ -51,21 +69,26 @@ json parser::parse_object(
 
     while (true)
     {
-        json Key = parse_next(input, offset, error);
-        consume_white_space(input, offset, error);
+        json key = parse_next(input, offset, error);
+        if (error)
+            return json(class_type::null);
+
+        consume_white_space(input, offset);
         if (input[offset] != ':')
         {
-            error = std::make_error_code(std::errc::invalid_argument);
-            std::cerr << "Error: object: Expected colon, found '"
-                      << input[offset] << "'\n";
-            break;
+            error = bourne::error::parse_object_expected_colon;
+            return json(class_type::null);
         }
         offset++;
-        consume_white_space(input, offset, error);
-        json Value = parse_next(input, offset, error);
-        object[Key.to_string()] = Value;
+        consume_white_space(input, offset);
+        json value = parse_next(input, offset, error);
+        if (error)
+            return json(class_type::null);
 
-        consume_white_space(input, offset, error);
+
+        object[key.to_string()] = value;
+
+        consume_white_space(input, offset);
         if (input[offset] == ',')
         {
             offset++;
@@ -78,10 +101,8 @@ json parser::parse_object(
         }
         else
         {
-            error = std::make_error_code(std::errc::invalid_argument);
-            std::cerr << "ERROR: object: Expected comma, found '"
-                      << input[offset] << "'\n";
-            break;
+            error = bourne::error::parse_object_expected_comma;
+            return json(class_type::null);
         }
     }
 
@@ -91,11 +112,12 @@ json parser::parse_object(
 json parser::parse_array(
     const std::string& input, size_t& offset, std::error_code& error)
 {
+    assert(!error);
     json array = json(class_type::array);
     uint32_t index = 0;
 
     offset++;
-    consume_white_space(input, offset, error);
+    consume_white_space(input, offset);
     if (input[offset] == ']')
     {
         offset++;
@@ -105,7 +127,9 @@ json parser::parse_array(
     while (true)
     {
         array[index++] = parse_next(input, offset, error);
-        consume_white_space(input, offset, error);
+        if (error)
+            return json(class_type::null);
+        consume_white_space(input, offset);
 
         if (input[offset] == ',')
         {
@@ -117,10 +141,8 @@ json parser::parse_array(
         }
         else
         {
-            error = std::make_error_code(std::errc::invalid_argument);
-            std::cerr << "ERROR: array: Expected ',' or ']', found '"
-                      << input[offset] << "'\n";
-            return json(class_type::array);
+            error = bourne::error::parse_array_expected_comma_or_closing_bracket;
+            return json(class_type::null);
         }
     }
 
@@ -130,6 +152,7 @@ json parser::parse_array(
 json parser::parse_string(
     const std::string& input, size_t& offset, std::error_code& error)
 {
+    assert(!error);
     json string;
     std::string val;
     for (char c = input[++offset]; c != '\"' ; c = input[++offset])
@@ -176,11 +199,8 @@ json parser::parse_string(
                     }
                     else
                     {
-                        error = std::make_error_code(std::errc::invalid_argument);
-                        std::cerr << "ERROR: string: Expected hex "
-                                  << "character in unicode escape, found '"
-                                  << c << "'\n";
-                        return json(class_type::string);
+                        error = bourne::error::parse_string_expected_hex_char;
+                        return json(class_type::null);
                     }
                 }
                 offset += 4;
@@ -204,8 +224,9 @@ json parser::parse_string(
 json parser::parse_number(
     const std::string& input, size_t& offset, std::error_code& error)
 {
+    assert(!error);
     json number;
-    std::string val, exp_str;
+    std::string val;
     char c;
     bool is_floating = false;
     int64_t exp = 0;
@@ -226,8 +247,10 @@ json parser::parse_number(
             break;
         }
     }
-    if (c == 'E' || c == 'e')
+    if (tolower(c) == 'e')
     {
+        std::string exp_str;
+
         c = input[offset++];
         if (c == '-')
         {
@@ -244,8 +267,7 @@ json parser::parse_number(
             }
             else if (!isspace(c) && c != ',' && c != ']' && c != '}')
             {
-                // Error: expected a number for exponent
-                error = std::make_error_code(std::errc::invalid_argument);
+                error = bourne::error::parse_number_expected_number_for_component;
                 return json(class_type::null);
             }
             else
@@ -257,8 +279,7 @@ json parser::parse_number(
     }
     else if (!isspace(c) && c != ',' && c != ']' && c != '}')
     {
-        error = std::make_error_code(std::errc::invalid_argument);
-        // Error: unexpected character
+        error = bourne::error::parse_number_unexpected_char;
         return json(class_type::null);
     }
     --offset;
@@ -269,14 +290,7 @@ json parser::parse_number(
     }
     else
     {
-        if (!exp_str.empty())
-        {
-            number = std::stoll(val) * std::pow(10, exp);
-        }
-        else
-        {
-            number = std::stoll(val);
-        }
+        number = std::stoll(val) * (uint64_t)std::pow(10, exp);
     }
     return number;
 }
@@ -284,44 +298,45 @@ json parser::parse_number(
 json parser::parse_bool(
     const std::string& input, size_t& offset, std::error_code& error)
 {
+    assert(!error);
     json boolean;
     if (input.substr(offset, 4) == "true")
     {
-        boolean = true;
+        offset += 4;
+        return true;
     }
     else if (input.substr(offset, 5) == "false")
     {
-        boolean = false;
+        offset += 5;
+        return false;
     }
     else
     {
-        error = std::make_error_code(std::errc::invalid_argument);
-        // Error: expected bool ('true' or 'false')
+        error = bourne::error::parse_boolean_expected_true_or_false;
         return json(class_type::null);
     }
-    offset += boolean.to_bool() ? 4 : 5;
-    return boolean;
+
 }
 
 json parser::parse_null(
     const std::string& input, size_t& offset, std::error_code& error)
 {
-    json null;
+    assert(!error);
     if (input.substr(offset, 4) != "null")
     {
-        error = std::make_error_code(std::errc::invalid_argument);
-        // "Error: expected 'null
-        return null;
+        error = bourne::error::parse_null_expected_null;
+        return json(class_type::null);
     }
     offset += 4;
-    return null;
+    return json(class_type::null);
 }
 
 json parser::parse_next(
     const std::string& input, size_t& offset, std::error_code& error)
 {
+    assert(!error);
     char value;
-    consume_white_space(input, offset, error);
+    consume_white_space(input, offset);
     value = input[offset];
     switch (value)
     {
@@ -339,9 +354,8 @@ json parser::parse_next(
         }
     }
     }
-    // Error: Unknown starting character
-    error = std::make_error_code(std::errc::invalid_argument);
-    return json();
+    error = bourne::error::parse_next_unexpected_char;
+    return json(class_type::null);
 }
 }
 }

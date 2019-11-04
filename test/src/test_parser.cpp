@@ -71,3 +71,116 @@ TEST(test_parser, test_parse_file)
     EXPECT_EQ("værdi", json["nøgle"].to_string());
     EXPECT_EQ("值", json["键"].to_string());
 }
+
+TEST(test_parser, test_parse_out_of_object_structure_elements_error)
+{
+    auto expected_error = bourne::error::parse_found_multiple_unstructured_elements;
+    std::error_code error;
+    std::string json_string = "{} 1  ";
+    auto result = bourne::detail::parser::parse(json_string, error);
+    EXPECT_EQ(expected_error, error) << error.message();
+    ASSERT_EQ(bourne::json::null(), result);
+}
+
+TEST(test_parser, test_parse_object_expected_colon_error)
+{
+    auto expected_error = bourne::error::parse_object_expected_colon;
+    std::error_code error;
+    std::string json_string = "{\"bourne\"}";
+    auto result = bourne::detail::parser::parse(json_string, error);
+    EXPECT_EQ(expected_error, error) << error.message();
+    ASSERT_EQ(bourne::json::null(), result);
+}
+
+TEST(test_parser, test_parse_object_expected_comma_error)
+{
+    auto expected_error = bourne::error::parse_object_expected_comma;
+    std::error_code error;
+    std::string json_string = "{\"bourne\": 1 :}";
+    auto result = bourne::detail::parser::parse(json_string, error);
+    EXPECT_EQ(expected_error, error) << error.message();
+    ASSERT_EQ(bourne::json::null(), result);
+}
+
+TEST(test_parser, test_parse_array_expected_comma_or_closing_bracket_error)
+{
+    auto expected_error = bourne::error::parse_array_expected_comma_or_closing_bracket;
+    std::error_code error;
+    std::string json_string = "{\"bourne\": [0 0}";
+    auto result = bourne::detail::parser::parse(json_string, error);
+    EXPECT_EQ(expected_error, error) << error.message();
+    ASSERT_EQ(bourne::json::null(), result);
+}
+
+TEST(test_parser, test_parse_string_expected_hex_char_error)
+{
+    auto expected_error = bourne::error::parse_string_expected_hex_char;
+    std::error_code error;
+    std::string json_string = "{\"bourne\": \"\\uG\"}";
+    auto result = bourne::detail::parser::parse(json_string, error);
+    EXPECT_EQ(expected_error, error) << error.message();
+    ASSERT_EQ(bourne::json::null(), result);
+}
+
+TEST(test_parser, test_parse_number_expected_number_for_component_error)
+{
+    auto expected_error = bourne::error::parse_number_expected_number_for_component;
+    std::error_code error;
+    std::string json_string = "{\"bourne\": 1e}";
+    auto result = bourne::detail::parser::parse(json_string, error);
+    EXPECT_EQ(expected_error, error) << error.message();
+    ASSERT_EQ(bourne::json::null(), result);
+}
+
+TEST(test_parser, test_parse_number_unexpected_char_error)
+{
+    auto expected_error = bourne::error::parse_number_unexpected_char;
+    std::error_code error;
+    std::string json_string = "{\"bourne\": 123a}";
+    auto result = bourne::detail::parser::parse(json_string, error);
+    EXPECT_EQ(expected_error, error) << error.message();
+    ASSERT_EQ(bourne::json::null(), result);
+}
+
+TEST(test_parser, test_parse_boolean_expected_true_or_false_error)
+{
+    auto expected_error = bourne::error::parse_boolean_expected_true_or_false;
+    std::error_code error;
+    std::string json_string = "{\"bourne\": foo}";
+    auto result = bourne::detail::parser::parse(json_string, error);
+    EXPECT_EQ(expected_error, error) << error.message();
+    ASSERT_EQ(bourne::json::null(), result);
+}
+
+TEST(test_parser, test_parse_null_expected_null_error)
+{
+    auto expected_error = bourne::error::parse_null_expected_null;
+    std::error_code error;
+    std::string json_string = "{\"bourne\": nut}";
+    auto result = bourne::detail::parser::parse(json_string, error);
+    EXPECT_EQ(expected_error, error) << error.message();
+    ASSERT_EQ(bourne::json::null(), result);
+}
+
+TEST(test_parser, test_parse_next_unexpected_char_error)
+{
+    auto expected_error = bourne::error::parse_next_unexpected_char;
+    std::error_code error;
+    std::string json_string = "]";
+    auto result = bourne::detail::parser::parse(json_string, error);
+    EXPECT_EQ(expected_error, error) << error.message();
+    ASSERT_EQ(bourne::json::null(), result);
+}
+
+TEST(test_parser, test_exception_throw)
+{
+    std::string json_string = "]";
+    try
+    {
+        auto result = bourne::detail::parser::parse(json_string);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+}
