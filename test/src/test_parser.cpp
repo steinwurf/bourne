@@ -74,7 +74,8 @@ TEST(test_parser, test_parse_file)
 
 TEST(test_parser, test_parse_out_of_object_structure_elements_error)
 {
-    auto expected_error = bourne::error::parse_found_multiple_unstructured_elements;
+    auto expected_error =
+        bourne::error::parse_found_multiple_unstructured_elements;
     std::error_code error;
     std::string json_string = "{} 1  ";
     auto result = bourne::detail::parser::parse(json_string, error);
@@ -104,7 +105,8 @@ TEST(test_parser, test_parse_object_expected_comma_error)
 
 TEST(test_parser, test_parse_array_expected_comma_or_closing_bracket_error)
 {
-    auto expected_error = bourne::error::parse_array_expected_comma_or_closing_bracket;
+    auto expected_error =
+        bourne::error::parse_array_expected_comma_or_closing_bracket;
     std::error_code error;
     std::string json_string = "{\"bourne\": [0 0}";
     auto result = bourne::detail::parser::parse(json_string, error);
@@ -124,7 +126,8 @@ TEST(test_parser, test_parse_string_expected_hex_char_error)
 
 TEST(test_parser, test_parse_number_expected_number_for_component_error)
 {
-    auto expected_error = bourne::error::parse_number_expected_number_for_component;
+    auto expected_error =
+        bourne::error::parse_number_expected_number_for_component;
     std::error_code error;
     std::string json_string = "{\"bourne\": 1e}";
     auto result = bourne::detail::parser::parse(json_string, error);
@@ -175,12 +178,14 @@ TEST(test_parser, test_parse_next_unexpected_char_error)
 TEST(test_parser, test_exception_throw)
 {
     std::string json_string = "]";
+    bool caught = false;
     try
     {
         auto result = bourne::detail::parser::parse(json_string);
     }
-    catch(const std::exception& e)
+    catch (const std::exception& e)
     {
-        std::cerr << e.what() << '\n';
+        caught = true;
     }
+    EXPECT_TRUE(caught);
 }

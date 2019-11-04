@@ -9,13 +9,13 @@
 
 namespace bourne
 {
-    /// Small helper function which throws an exception if the error code
-    /// passed indicates an error.
-    inline void throw_if_error(const std::error_code& error)
+/// Small helper function which throws an exception if the error code
+/// passed indicates an error.
+inline void throw_if_error(const std::error_code& error)
+{
+    if (error)
     {
-        if (error)
-        {
-            throw std::system_error(error);
-        }
+        throw std::system_error(error);
     }
+}
 }
