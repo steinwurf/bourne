@@ -6,6 +6,10 @@ every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+7.3.0
+-----
 * Patch: Fixed multiple unhandled corner cases for parser.
 * Minor: Added custom error codes for parser.
 * Minor: Lowered CMake version requirement.
