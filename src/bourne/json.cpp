@@ -197,24 +197,28 @@ bool json::operator!=(const json& other) const
 json& json::at(const std::string& key)
 {
     assert(is_object());
+    assert(has_key(key));
     return m_internal.m_map->at(key);
 }
 
 const json& json::at(const std::string& key) const
 {
     assert(is_object());
+    assert(has_key(key));
     return m_internal.m_map->at(key);
 }
 
 json& json::at(uint32_t index)
 {
     assert(is_array());
+    assert(index < size());
     return m_internal.m_array->at(index);
 }
 
 const json& json::at(uint32_t index) const
 {
     assert(is_array());
+    assert(index < size());
     return m_internal.m_array->at(index);
 }
 
