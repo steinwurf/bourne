@@ -11,6 +11,7 @@
 #include <cassert>
 #include <iostream>
 #include <string>
+#include <stdexcept>
 
 namespace bourne
 {
@@ -425,6 +426,11 @@ json json::parse(const std::string& input, std::error_code& error)
 {
     assert(!error);
     return detail::parser::parse(input, error);
+}
+
+json json::parse(const std::string& input)
+{
+    return detail::parser::parse(input);
 }
 
 json json::array()

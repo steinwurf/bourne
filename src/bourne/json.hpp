@@ -342,6 +342,9 @@ public:
     /// Parse a string as a json object.
     static json parse(const std::string& input, std::error_code& error);
 
+    /// Parse a string as a json object.
+    static json parse(const std::string& input);
+
     /// Create a json array
     static json array();
     template <typename... T>
