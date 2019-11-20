@@ -95,7 +95,7 @@ def cmake(properties):
 
 
 def coverage_settings(options):
-    options['required_line_coverage'] = 0.0
+    options['required_line_coverage'] = 79.9
 
 
 def main():
