@@ -62,6 +62,12 @@ TEST(test_json, test_retrival_of_primitives)
     EXPECT_FALSE(element.is_array());
     EXPECT_FALSE(element.is_null());
     EXPECT_EQ(true, element.to_bool());
+    {
+        bool result = false;
+        element.to(result);
+        EXPECT_EQ(element.to_bool(), result);
+    }
+
 
     element = 42;
     EXPECT_FALSE(element.is_bool());
@@ -74,6 +80,18 @@ TEST(test_json, test_retrival_of_primitives)
     EXPECT_EQ(42, element.to_int());
     EXPECT_EQ(42, element.to_float());
 
+    {
+        uint32_t result = 0;
+        element.to(result);
+        EXPECT_EQ(element.to_int(), result);
+    }
+
+    {
+        float result = 0.0;
+        element.to(result);
+        EXPECT_FLOAT_EQ(element.to_float(), result);
+    }
+
     element = 13.37;
     EXPECT_FALSE(element.is_bool());
     EXPECT_FALSE(element.is_int());
@@ -83,6 +101,11 @@ TEST(test_json, test_retrival_of_primitives)
     EXPECT_FALSE(element.is_array());
     EXPECT_FALSE(element.is_null());
     EXPECT_EQ(13.37, element.to_float());
+    {
+        float result = 0.0;
+        element.to(result);
+        EXPECT_FLOAT_EQ(element.to_float(), result);
+    }
 
     element = "test";
     EXPECT_FALSE(element.is_bool());
@@ -93,6 +116,11 @@ TEST(test_json, test_retrival_of_primitives)
     EXPECT_FALSE(element.is_array());
     EXPECT_FALSE(element.is_null());
     EXPECT_EQ("test", element.to_string());
+    {
+        std::string result = "";
+        element.to(result);
+        EXPECT_EQ(element.to_string(), result);
+    }
 
     element = bourne::json::object();
     EXPECT_FALSE(element.is_bool());
