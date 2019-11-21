@@ -260,28 +260,28 @@ public:
     template <typename T>
     void to(T& t, typename check_is_bool<T>::type* = 0) const
     {
-        t = (T)to_bool();
+        t = to_bool();
     }
 
     /// Converter for extracting the integral value.
     template <typename T>
     void to(T& t, typename check_is_integral<T>::type* = 0) const
     {
-        t = (T)to_int();
+        t = to_int();
     }
 
     /// Converter for extracting the floating point value.
     template <typename T>
     void to(T& t, typename check_is_floating_point<T>::type* = 0) const
     {
-        t = (T)to_float();
+        t = to_float();
     }
 
     /// Converter for extracting the string value.
     template <typename T>
     void to(T& t, typename check_is_string<T>::type* = 0) const
     {
-        t = (T)to_string();
+        t = to_string();
     }
 
     /// Returns the underlying boolean value of this object. If this is not a
