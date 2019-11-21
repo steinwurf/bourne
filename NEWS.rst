@@ -6,6 +6,10 @@ every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+7.3.1
+-----
 * Patch: Fix warning on windows.
 
 7.3.0
