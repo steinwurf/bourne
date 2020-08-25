@@ -6,16 +6,16 @@
 #pragma once
 
 #include <cstdint>
-#include <string>
-#include <type_traits>
 #include <ostream>
+#include <string>
 #include <system_error>
+#include <type_traits>
 
-#include "version.hpp"
 #include "class_type.hpp"
 #include "detail/backing_data.hpp"
 #include "detail/json_const_wrapper.hpp"
 #include "detail/json_wrapper.hpp"
+#include "version.hpp"
 
 namespace bourne
 {
@@ -24,30 +24,27 @@ inline namespace STEINWURF_BOURNE_VERSION
 class json
 {
 private:
-
-    template<class T, class R = void>
+    template <class T, class R = void>
     using check_is_bool = std::enable_if<std::is_same<T, bool>::value, R>;
 
-    template<class T, class R = void>
+    template <class T, class R = void>
     using check_is_integral = std::enable_if<
-                              std::is_integral<T>::value && !std::is_same<T, bool>::value, R>;
+        std::is_integral<T>::value && !std::is_same<T, bool>::value, R>;
 
-    template<class T, class R = void>
-    using check_is_floating_point = std::enable_if<
-                                    std::is_floating_point<T>::value, R>;
+    template <class T, class R = void>
+    using check_is_floating_point =
+        std::enable_if<std::is_floating_point<T>::value, R>;
 
-    template<class T, class R = void>
-    using check_is_string = std::enable_if<
-                            std::is_convertible<T, std::string>::value, R>;
+    template <class T, class R = void>
+    using check_is_string =
+        std::enable_if<std::is_convertible<T, std::string>::value, R>;
 
 private:
-
     using object_type = detail::backing_data::object_type;
 
     using array_type = detail::backing_data::array_type;
 
 public:
-
     ////////////////////
     /// Constructors ///
     ////////////////////
@@ -80,30 +77,30 @@ public:
     /// Constructor for creating a boolean value.
     template <typename T>
     json(T b, typename check_is_bool<T>::type* = 0) :
-        m_internal(b),
-        m_type(class_type::boolean)
-    {}
+        m_internal(b), m_type(class_type::boolean)
+    {
+    }
 
     /// Constructor for creating an integral value.
     template <typename T>
     json(T i, typename check_is_integral<T>::type* = 0) :
-        m_internal((int64_t)i),
-        m_type(class_type::integral)
-    {}
+        m_internal((int64_t)i), m_type(class_type::integral)
+    {
+    }
 
     /// Constructor for creating a floating point value.
     template <typename T>
     json(T f, typename check_is_floating_point<T>::type* = 0) :
-        m_internal((double)f),
-        m_type(class_type::floating)
-    {}
+        m_internal((double)f), m_type(class_type::floating)
+    {
+    }
 
     /// Constructor for creating a string value.
     template <typename T>
     json(T s, typename check_is_string<T>::type* = 0) :
-        m_internal(std::string(s)),
-        m_type(class_type::string)
-    {}
+        m_internal(std::string(s)), m_type(class_type::string)
+    {
+    }
 
     /// Constructor for creating a null value.
     json(std::nullptr_t);
@@ -323,7 +320,6 @@ public:
     /// string of this object to the ostream.
     friend std::ostream& operator<<(std::ostream&, const json&);
 
-
     ////////////////////////////
     /// Comparison operators ///
     ////////////////////////////
@@ -365,7 +361,6 @@ public:
     static json object(std::initializer_list<json> list);
 
 private:
-
     /// Clears this object - deletes the backing data and sets the type to null
     void clear();
 
@@ -374,7 +369,6 @@ private:
     void set_type(class_type type);
 
 private:
-
     /// The object containing the underlying data
     detail::backing_data m_internal;
 

@@ -10,26 +10,23 @@
 
 #include <cassert>
 #include <iostream>
-#include <string>
 #include <stdexcept>
+#include <string>
 
 namespace bourne
 {
 inline namespace STEINWURF_BOURNE_VERSION
 {
-json::json() :
-    m_internal(), m_type(class_type::null)
+json::json() : m_internal(), m_type(class_type::null)
 {
 }
 
-json::json(class_type type) :
-    json()
+json::json(class_type type) : json()
 {
     set_type(type);
 }
 
-json::json(std::initializer_list<json> list) :
-    json()
+json::json(std::initializer_list<json> list) : json()
 {
     assert(list.size() % 2 == 0 && "Missing value for key value pair.");
     set_type(class_type::object);
@@ -39,15 +36,13 @@ json::json(std::initializer_list<json> list) :
     }
 }
 
-json::json(json&& other) :
-    m_internal(other.m_internal), m_type(other.m_type)
+json::json(json&& other) : m_internal(other.m_internal), m_type(other.m_type)
 {
     other.m_type = class_type::null;
     other.m_internal.m_map = nullptr;
 }
 
-json::json(std::nullptr_t) :
-    m_internal(), m_type(class_type::null)
+json::json(std::nullptr_t) : m_internal(), m_type(class_type::null)
 {
 }
 

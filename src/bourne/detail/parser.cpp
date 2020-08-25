@@ -4,14 +4,14 @@
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
 #include "parser.hpp"
+#include "../error.hpp"
 #include "../json.hpp"
 #include "throw_if_error.hpp"
-#include "../error.hpp"
 
-#include <string>
+#include <cctype>
 #include <cmath>
 #include <iostream>
-#include <cctype>
+#include <string>
 #include <system_error>
 
 namespace bourne
@@ -53,8 +53,8 @@ void parser::consume_white_space(const std::string& input, size_t& offset)
     }
 }
 
-json parser::parse_object(
-    const std::string& input, size_t& offset, std::error_code& error)
+json parser::parse_object(const std::string& input, size_t& offset,
+                          std::error_code& error)
 {
     assert(!error);
     json object = json(class_type::object);
@@ -85,7 +85,6 @@ json parser::parse_object(
         if (error)
             return json(class_type::null);
 
-
         object[key.to_string()] = value;
 
         consume_white_space(input, offset);
@@ -109,8 +108,8 @@ json parser::parse_object(
     return object;
 }
 
-json parser::parse_array(
-    const std::string& input, size_t& offset, std::error_code& error)
+json parser::parse_array(const std::string& input, size_t& offset,
+                         std::error_code& error)
 {
     assert(!error);
     json array = json(class_type::array);
@@ -133,15 +132,18 @@ json parser::parse_array(
 
         if (input[offset] == ',')
         {
-            offset++; continue;
+            offset++;
+            continue;
         }
         else if (input[offset] == ']')
         {
-            offset++; break;
+            offset++;
+            break;
         }
         else
         {
-            error = bourne::error::parse_array_expected_comma_or_closing_bracket;
+            error =
+                bourne::error::parse_array_expected_comma_or_closing_bracket;
             return json(class_type::null);
         }
     }
@@ -149,17 +151,17 @@ json parser::parse_array(
     return array;
 }
 
-json parser::parse_string(
-    const std::string& input, size_t& offset, std::error_code& error)
+json parser::parse_string(const std::string& input, size_t& offset,
+                          std::error_code& error)
 {
     assert(!error);
     json string;
     std::string val;
-    for (char c = input[++offset]; c != '\"' ; c = input[++offset])
+    for (char c = input[++offset]; c != '\"'; c = input[++offset])
     {
         if (c == '\\')
         {
-            switch (input[ ++offset ])
+            switch (input[++offset])
             {
             case '\"':
                 val += '\"';
@@ -167,32 +169,31 @@ json parser::parse_string(
             case '\\':
                 val += '\\';
                 break;
-            case '/' :
-                val += '/' ;
+            case '/':
+                val += '/';
                 break;
-            case 'b' :
+            case 'b':
                 val += '\b';
                 break;
-            case 'f' :
+            case 'f':
                 val += '\f';
                 break;
-            case 'n' :
+            case 'n':
                 val += '\n';
                 break;
-            case 'r' :
+            case 'r':
                 val += '\r';
                 break;
-            case 't' :
+            case 't':
                 val += '\t';
                 break;
-            case 'u' :
+            case 'u':
             {
-                val += "\\u" ;
+                val += "\\u";
                 for (uint32_t i = 1; i <= 4; ++i)
                 {
                     c = input[offset + i];
-                    if ((c >= '0' && c <= '9') ||
-                        (c >= 'a' && c <= 'f') ||
+                    if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') ||
                         (c >= 'A' && c <= 'F'))
                     {
                         val += c;
@@ -221,8 +222,8 @@ json parser::parse_string(
     return string;
 }
 
-json parser::parse_number(
-    const std::string& input, size_t& offset, std::error_code& error)
+json parser::parse_number(const std::string& input, size_t& offset,
+                          std::error_code& error)
 {
     assert(!error);
     json number;
@@ -267,7 +268,8 @@ json parser::parse_number(
             }
             else if (!isspace(c) && c != ',' && c != ']' && c != '}')
             {
-                error = bourne::error::parse_number_expected_number_for_component;
+                error =
+                    bourne::error::parse_number_expected_number_for_component;
                 return json(class_type::null);
             }
             else
@@ -295,8 +297,8 @@ json parser::parse_number(
     return number;
 }
 
-json parser::parse_bool(
-    const std::string& input, size_t& offset, std::error_code& error)
+json parser::parse_bool(const std::string& input, size_t& offset,
+                        std::error_code& error)
 {
     assert(!error);
     json boolean;
@@ -315,11 +317,10 @@ json parser::parse_bool(
         error = bourne::error::parse_boolean_expected_true_or_false;
         return json(class_type::null);
     }
-
 }
 
-json parser::parse_null(
-    const std::string& input, size_t& offset, std::error_code& error)
+json parser::parse_null(const std::string& input, size_t& offset,
+                        std::error_code& error)
 {
     assert(!error);
     if (input.substr(offset, 4) != "null")
@@ -331,8 +332,8 @@ json parser::parse_null(
     return json(class_type::null);
 }
 
-json parser::parse_next(
-    const std::string& input, size_t& offset, std::error_code& error)
+json parser::parse_next(const std::string& input, size_t& offset,
+                        std::error_code& error)
 {
     assert(!error);
     char value;
@@ -340,12 +341,17 @@ json parser::parse_next(
     value = input[offset];
     switch (value)
     {
-    case '[': return parse_array(input, offset, error);
-    case '{': return parse_object(input, offset, error);
-    case '\"': return parse_string(input, offset, error);
+    case '[':
+        return parse_array(input, offset, error);
+    case '{':
+        return parse_object(input, offset, error);
+    case '\"':
+        return parse_string(input, offset, error);
     case 't':
-    case 'f': return parse_bool(input, offset, error);
-    case 'n': return parse_null(input, offset, error);
+    case 'f':
+        return parse_bool(input, offset, error);
+    case 'n':
+        return parse_null(input, offset, error);
     default:
     {
         if ((value <= '9' && value >= '0') || value == '-')
