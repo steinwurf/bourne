@@ -18,13 +18,10 @@ class json_const_wrapper
 {
 
 private:
-
     using iterator = typename Container::const_iterator;
 
 public:
-
-    json_const_wrapper(const Container* val) :
-        m_object(val)
+    json_const_wrapper(const Container* val) : m_object(val)
     {
         assert(m_object);
     }
@@ -40,7 +37,6 @@ public:
     }
 
 private:
-
     const Container* m_object;
 };
 }

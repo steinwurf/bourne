@@ -23,7 +23,7 @@ int main()
     // types can always be overwritten by supported types
     bourne::json value;
     value = false;
-    value = "rtew";
+    value = "c-string";
     value = 1;
     value = 1.1;
     value = std::string("asd");
@@ -59,6 +59,8 @@ int main()
 
     // Another, more json-like syntax, can be used to create json objects.
     std::cout << std::endl << "json like syntax:" << std::endl;
+
+    // clang-format off
     bourne::json json =
         {
             "key1", "Value",
@@ -76,6 +78,7 @@ int main()
                 }
             }
         };
+    // clang-format on
 
     // This results in the following:
     std::cout << json << std::endl;
