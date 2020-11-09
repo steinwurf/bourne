@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <ostream>
 #include <string>
@@ -168,16 +169,16 @@ public:
     const json& operator[](const std::string& key) const;
 
     /// Access operator for index this assumes the json value is of type array
-    json& operator[](uint32_t index);
-    const json& operator[](uint32_t index) const;
+    json& operator[](std::size_t index);
+    const json& operator[](std::size_t index) const;
 
     /// Returns a reference to the json value of the element identified with the
     /// given key. If this
     json& at(const std::string& key);
     const json& at(const std::string& key) const;
 
-    json& at(uint32_t index);
-    const json& at(uint32_t index) const;
+    json& at(std::size_t index);
+    const json& at(std::size_t index) const;
 
     /// Append a json value to this json array. If this object is not a json
     /// array, an assert will be triggered.
@@ -204,7 +205,7 @@ public:
 
     /// Returns the number of elements in this object or array. If this is not
     /// an object or array, an assert will be triggered.
-    uint32_t size() const;
+    std::size_t size() const;
 
     /// Returns the type of this object.
     class_type json_type() const;

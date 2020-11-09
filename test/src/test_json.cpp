@@ -8,16 +8,15 @@
 
 TEST(test_json, test_dump)
 {
-    bourne::json object(
-        {
-            "k1", 1,
-            "k2", true,
-            "k3", nullptr,
-            "k4", {
-                "k5", "some string",
-                "some_array", bourne::json::array(9, "some other string", false)
-            }
-        });
+    bourne::json object({"k1",
+                         1,
+                         "k2",
+                         true,
+                         "k3",
+                         nullptr,
+                         "k4",
+                         {"k5", "some string", "some_array",
+                          bourne::json::array(9, "some other string", false)}});
 
     std::string expected =
         "{\n"
@@ -67,7 +66,6 @@ TEST(test_json, test_retrival_of_primitives)
         element.to(result);
         EXPECT_EQ(element.to_bool(), result);
     }
-
 
     element = 42;
     EXPECT_FALSE(element.is_bool());
@@ -142,7 +140,6 @@ TEST(test_json, test_retrival_of_primitives)
     EXPECT_EQ(bourne::json::array(), element);
 }
 
-
 TEST(test_json, test_array)
 {
     bourne::json array;
@@ -167,9 +164,9 @@ TEST(test_json, test_nested_array)
 
 TEST(test_json, test_iterator)
 {
-    std::vector<uint32_t> expected = { 100, 12, 123, 56, 53, 4, 356, 6, 76, 5 };
+    std::vector<uint32_t> expected = {100, 12, 123, 56, 53, 4, 356, 6, 76, 5};
 
-    uint32_t index = 0;
+    std::size_t index = 0;
 
     auto array = bourne::json(bourne::class_type::array);
     auto object = bourne::json(bourne::class_type::object);
@@ -202,29 +199,29 @@ TEST(test_json, test_equality)
     // Test null equality
     EXPECT_EQ(bourne::json(), bourne::json());
 
-    bourne::json object1(
-        {
-            "k1", 1,
-            "k2", true,
-            "k3", nullptr,
-            "k4", {
-                "k5", "some string",
-                "some_array", bourne::json::array(9, "some other string", false)
-            },
-            "none", bourne::json()
-        });
+    bourne::json object1({"k1",
+                          1,
+                          "k2",
+                          true,
+                          "k3",
+                          nullptr,
+                          "k4",
+                          {"k5", "some string", "some_array",
+                           bourne::json::array(9, "some other string", false)},
+                          "none",
+                          bourne::json()});
 
-    bourne::json object2(
-        {
-            "k2", true,
-            "k4", {
-                "k5", "some string",
-                "some_array", bourne::json::array(9, "some other string", false)
-            },
-            "k3", nullptr,
-            "k1", 1,
-            "none", bourne::json()
-        });
+    bourne::json object2({"k2",
+                          true,
+                          "k4",
+                          {"k5", "some string", "some_array",
+                           bourne::json::array(9, "some other string", false)},
+                          "k3",
+                          nullptr,
+                          "k1",
+                          1,
+                          "none",
+                          bourne::json()});
 
     // check equality
     EXPECT_EQ(object1, object2);
@@ -249,8 +246,7 @@ TEST(test_json, test_const_retrival)
 {
     auto obj = bourne::json::object();
     obj["test"] = 4;
-    auto const_retrival = [](const bourne::json& json)
-    {
+    auto const_retrival = [](const bourne::json& json) {
         ASSERT_TRUE(json.has_key("test"));
         ASSERT_TRUE(json["test"].is_int());
         EXPECT_EQ(4, json["test"].to_int());
