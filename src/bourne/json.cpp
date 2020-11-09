@@ -9,6 +9,7 @@
 #include "detail/parser.hpp"
 
 #include <cassert>
+#include <cstddef>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -119,7 +120,7 @@ const json& json::operator[](const std::string& key) const
     return m_internal.m_map->operator[](key);
 }
 
-json& json::operator[](uint32_t index)
+json& json::operator[](std::size_t index)
 {
     if (m_type == class_type::null)
         set_type(class_type::array);
@@ -131,7 +132,7 @@ json& json::operator[](uint32_t index)
     return m_internal.m_array->operator[](index);
 }
 
-const json& json::operator[](uint32_t index) const
+const json& json::operator[](std::size_t index) const
 {
     assert(is_array());
     assert(index < m_internal.m_array->size());
@@ -203,14 +204,14 @@ const json& json::at(const std::string& key) const
     return m_internal.m_map->at(key);
 }
 
-json& json::at(uint32_t index)
+json& json::at(std::size_t index)
 {
     assert(is_array());
     assert(index < size());
     return m_internal.m_array->at(index);
 }
 
-const json& json::at(uint32_t index) const
+const json& json::at(std::size_t index) const
 {
     assert(is_array());
     assert(index < size());
@@ -223,7 +224,7 @@ bool json::has_key(const std::string& key) const
     return m_internal.m_map->find(key) != m_internal.m_map->end();
 }
 
-uint32_t json::size() const
+std::size_t json::size() const
 {
     assert(is_array() || is_object());
     if (is_object())
@@ -305,7 +306,7 @@ std::string json::to_string() const
     assert(is_string());
     const std::string& str = *m_internal.m_string;
     std::string output;
-    for (uint32_t i = 0; i < str.length(); ++i)
+    for (std::size_t i = 0; i < str.length(); ++i)
     {
         switch (str[i])
         {

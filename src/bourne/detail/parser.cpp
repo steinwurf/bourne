@@ -10,6 +10,7 @@
 
 #include <cctype>
 #include <cmath>
+#include <cstddef>
 #include <iostream>
 #include <string>
 #include <system_error>
@@ -113,7 +114,7 @@ json parser::parse_array(const std::string& input, size_t& offset,
 {
     assert(!error);
     json array = json(class_type::array);
-    uint32_t index = 0;
+    std::size_t index = 0;
 
     offset++;
     consume_white_space(input, offset);
@@ -190,7 +191,7 @@ json parser::parse_string(const std::string& input, size_t& offset,
             case 'u':
             {
                 val += "\\u";
-                for (uint32_t i = 1; i <= 4; ++i)
+                for (std::size_t i = 1; i <= 4; ++i)
                 {
                     c = input[offset + i];
                     if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') ||

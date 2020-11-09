@@ -6,7 +6,7 @@ every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Minor: Use `std::size_t` instead of `uint32_t`.
 
 7.3.1
 -----

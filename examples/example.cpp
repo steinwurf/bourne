@@ -35,7 +35,7 @@ int main()
     array.append("test");
     array.append(false);
 
-    // Array elements are accessed with operator[](uint32_t).
+    // Array elements are accessed with operator[](std::size_t).
     bourne::json array_element = array[0];
 
     // Arrays can also be intialized with values
@@ -100,7 +100,7 @@ int main()
 
     // Elements can be iterated.
     std::cout << std::endl << "iterating arrays:" << std::endl;
-    uint32_t index = 0;
+    std::size_t index = 0;
     for (auto& v : array.array_range())
     {
         std::cout << "array[" << index++ << "] = " << v << std::endl;
