@@ -4,7 +4,7 @@
 from waflib.Build import BuildContext
 
 APPNAME = 'bourne'
-VERSION = '7.3.2'
+VERSION = '7.4.0'
 
 
 def build(bld):
