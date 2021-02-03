@@ -10,7 +10,7 @@ Latest
 
 7.4.0
 -----
-* Minor: Added install step to CMake.
+* Major: Change cmake build to be object library based.
 
 7.3.2
 -----
