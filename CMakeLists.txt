@@ -10,6 +10,7 @@ target_compile_features(bourne_internal PUBLIC cxx_std_14)
 add_library(bourne_objects INTERFACE)
 target_sources(bourne_objects INTERFACE $<TARGET_OBJECTS:bourne_internal>)
 target_include_directories(bourne_objects INTERFACE src)
+target_compile_features(bourne_objects INTERFACE cxx_std_14)
 
 # Install headers excluding "detail" as these are internal to the library.
 install(
