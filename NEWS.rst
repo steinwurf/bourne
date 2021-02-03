@@ -6,6 +6,10 @@ every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+8.0.0
+-----
 * Major: Change cmake build to be object library based.
 
 7.4.0
