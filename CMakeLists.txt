@@ -23,7 +23,7 @@ else()
 endif()
 
 target_include_directories(bourne INTERFACE src)
-target_compile_features(bourne PRIVATE cxx_std_14)
+target_compile_features(bourne PUBLIC cxx_std_14)
 add_library(steinwurf::bourne ALIAS bourne)
 
 # Install headers excluding "detail" as these are internal to the library.
