@@ -1,16 +1,30 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.12)
 project(bourne)
+
+if(NOT DEFINED STEINWURF_TOP_NAME)
+  set(STEINWURF_TOP_NAME bourne)
+endif()
 
 # Define library
 file(GLOB_RECURSE bourne_sources ./src/*.cpp)
-add_library(bourne_internal OBJECT ${bourne_sources})
-target_compile_features(bourne_internal PUBLIC cxx_std_14)
 
-# Add interface library encapsulating the internal the library object
-add_library(bourne_objects INTERFACE)
-target_sources(bourne_objects INTERFACE $<TARGET_OBJECTS:bourne_internal>)
-target_include_directories(bourne_objects INTERFACE src)
-target_compile_features(bourne_objects INTERFACE cxx_std_14)
+# Is this the top-level steinwurf project?
+if(${PROJECT_NAME} STREQUAL ${STEINWURF_TOP_NAME})
+  # Create static library
+  add_library(bourne STATIC ${bourne_sources})
+  # Install library
+  install(FILES $<TARGET_FILE:bourne> DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+else()
+  # Create object library
+  add_library(bourne OBJECT ${bourne_sources})
+  # Add this library to a global list of steinwurf object libraries
+  set_property(GLOBAL APPEND PROPERTY steinwurf::object_libraries
+                                      steinwurf::bourne)
+endif()
+
+target_include_directories(bourne INTERFACE src)
+target_compile_features(bourne INTERFACE cxx_std_14)
+add_library(steinwurf::bourne ALIAS bourne)
 
 # Install headers excluding "detail" as these are internal to the library.
 install(
@@ -22,16 +36,7 @@ install(
 
 # Is top level project?
 if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
-  add_library(bourne_static STATIC)
-  target_link_libraries(bourne_static PUBLIC bourne_objects)
-  set_target_properties(bourne_static PROPERTIES OUTPUT_NAME bourne)
-
-  install(FILES $<TARGET_FILE:bourne_static>
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-
   # Build executables
   add_executable(example examples/example.cpp)
-  target_link_libraries(example bourne_static)
-else()
-  add_library(steinwurf::bourne ALIAS bourne_objects)
+  target_link_libraries(example bourne)
 endif()
