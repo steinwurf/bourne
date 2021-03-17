@@ -8,11 +8,14 @@
 #include "class_type.hpp"
 #include "detail/parser.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 namespace bourne
 {
@@ -224,6 +227,17 @@ bool json::has_key(const std::string& key) const
     return m_internal.m_map->find(key) != m_internal.m_map->end();
 }
 
+std::vector<std::string> json::keys() const
+{
+    assert(is_object());
+    std::vector<std::string> keys;
+
+    std::transform(std::begin(*m_internal.m_map), std::end(*m_internal.m_map),
+                   std::back_inserter(keys),
+                   [](const auto& pair) { return pair.first; });
+    return keys;
+}
+
 std::size_t json::size() const
 {
     assert(is_array() || is_object());
@@ -377,37 +391,30 @@ std::string json::dump(uint32_t depth, std::string tab) const
         return "null";
     case class_type::object:
     {
-        std::string s = "{\n";
-        bool skip = true;
+        std::stringstream s;
+        s << "{\n";
+        const char* sep = "";
         for (auto& p : *m_internal.m_map)
         {
-            if (!skip)
-            {
-                s += ",\n";
-            }
-            s += pad;
-            s += "\"" + p.first + "\" : ";
-            s += p.second.dump(depth + 1, tab);
-            skip = false;
+            s << sep << pad << "\"" << p.first << "\" : ";
+            s << p.second.dump(depth + 1, tab);
+            sep = ",\n";
         }
-        s += "\n" + pad.erase(0, 2) + "}";
-        return s;
+        s << "\n" << pad.erase(0, tab.size()) << "}";
+        return s.str();
     }
     case class_type::array:
     {
-        std::string s = "[";
-        bool skip = true;
+        std::stringstream s;
+        s << "[";
+        const char* sep = "";
         for (auto& p : *m_internal.m_array)
         {
-            if (!skip)
-            {
-                s += ", ";
-            }
-            s += p.dump(depth + 1, tab);
-            skip = false;
+            s << sep << p.dump(depth + 1, tab);
+            sep = ", ";
         }
-        s += "]";
-        return s;
+        s << "]";
+        return s.str();
     }
     case class_type::string:
         return "\"" + to_string() + "\"";
@@ -419,6 +426,45 @@ std::string json::dump(uint32_t depth, std::string tab) const
         return m_internal.m_bool ? "true" : "false";
     default:
         return "";
+    }
+}
+std::string json::dump_min() const
+{
+    switch (m_type)
+    {
+    case class_type::object:
+    {
+        std::stringstream s;
+        s << "{";
+        const char* sep = "";
+        for (auto& p : *m_internal.m_map)
+        {
+            s << sep << "\"" << p.first << "\":" << p.second.dump_min();
+            sep = ",";
+        }
+        s << "}";
+        return s.str();
+    }
+    case class_type::array:
+    {
+        std::stringstream s;
+        s << "[";
+        const char* sep = "";
+        for (auto& p : *m_internal.m_array)
+        {
+            s << sep << p.dump_min();
+            sep = ",";
+        }
+        s << "]";
+        return s.str();
+    }
+    case class_type::null:
+    case class_type::string:
+    case class_type::floating:
+    case class_type::integral:
+    case class_type::boolean:
+    default:
+        return dump(0, "");
     }
 }
 

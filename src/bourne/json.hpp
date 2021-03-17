@@ -8,9 +8,11 @@
 #include <cstddef>
 #include <cstdint>
 #include <ostream>
+#include <set>
 #include <string>
 #include <system_error>
 #include <type_traits>
+#include <vector>
 
 #include "class_type.hpp"
 #include "detail/backing_data.hpp"
@@ -203,6 +205,10 @@ public:
     /// is a json object value.
     bool has_key(const std::string& key) const;
 
+    /// Returns the available set of keys. This functions assumes this object
+    /// is a json object value.
+    std::vector<std::string> keys() const;
+
     /// Returns the number of elements in this object or array. If this is not
     /// an object or array, an assert will be triggered.
     std::size_t size() const;
@@ -316,6 +322,9 @@ public:
 
     /// Dumps this object as a json string.
     std::string dump(uint32_t depth = 1, std::string tab = "  ") const;
+
+    /// Dumps this object as a minified json string.
+    std::string dump_min() const;
 
     /// Friend function for the insertion operator. This will insert the json
     /// string of this object to the ostream.

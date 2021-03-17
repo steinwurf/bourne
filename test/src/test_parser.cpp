@@ -13,9 +13,12 @@ namespace
 void test_parser(const std::string& json_string, const bourne::json& expected)
 {
     std::error_code error;
-    EXPECT_EQ(
-        expected.dump(),
-        bourne::detail::parser::parse(json_string, error).dump())
+    EXPECT_EQ(expected.dump(),
+              bourne::detail::parser::parse(json_string, error).dump())
+        << "Input: '" << json_string << "'";
+    std::error_code error_min;
+    EXPECT_EQ(expected.dump_min(),
+              bourne::detail::parser::parse(json_string, error_min).dump_min())
         << "Input: '" << json_string << "'";
 }
 }
@@ -28,28 +31,20 @@ TEST(test_parser, test_parse)
     test_parser(" 90200.10 ", bourne::json(90200.10));
     test_parser(" 90200..10 ", bourne::json::null());
     test_parser("\"Text String\"", bourne::json("Text String"));
-    test_parser(
-        "\"you are a \\\"great\\\" agent\\/spy\"",
-        bourne::json("you are a \"great\" agent/spy"));
+    test_parser("\"you are a \\\"great\\\" agent\\/spy\"",
+                bourne::json("you are a \"great\" agent/spy"));
     test_parser("[1, 2,3]", bourne::json::array(1, 2, 3));
-    test_parser("{\"value\":3}", bourne::json {"value", 3});
+    test_parser("{\"value\":3}", bourne::json{"value", 3});
 
-    bourne::json expected_json =
-        {
-            "key1", "value",
-            "key2", true,
-            "key3", 1234,
-            "key4", -42,
-            "key5", nullptr
-        };
+    bourne::json expected_json = {"key1", "value", "key2", true,   "key3",
+                                  1234,   "key4",  -42,    "key5", nullptr};
 
-    test_parser(
-        "{ \"key1\" : \"value\","
-        "  \"key2\" : true, "
-        "  \"key3\" : 1234, "
-        "  \"key4\" : -42, "
-        "  \"key5\" : null }",
-        expected_json);
+    test_parser("{ \"key1\" : \"value\","
+                "  \"key2\" : true, "
+                "  \"key3\" : 1234, "
+                "  \"key4\" : -42, "
+                "  \"key5\" : null }",
+                expected_json);
 }
 
 TEST(test_parser, test_parse_file)
