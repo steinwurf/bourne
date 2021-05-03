@@ -1,0 +1,11 @@
+name: Build Test
+on: [push]
+jobs:
+
+  Linux-x64:
+    runs-on: [self-hosted, linux, x64]
+    steps:
+      - uses: actions/checkout@v2
+      - run: python3 waf configure --git_protocol=git@
+      - run: python3 waf --run_tests
+      - run: echo "Build ${{ job.status }}"
