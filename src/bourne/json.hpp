@@ -361,6 +361,10 @@ public:
     /// Create a json object
     static json object(std::initializer_list<json> list);
 
+    void test_warning(int unused)
+    {
+    }
+
 private:
     /// Clears this object - deletes the backing data and sets the type to null
     void clear();
