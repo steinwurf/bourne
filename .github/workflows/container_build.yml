@@ -3,6 +3,7 @@ on: [push, pull_request]
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         cxx_mkspec: [
         cxx_msvc16_x86,
