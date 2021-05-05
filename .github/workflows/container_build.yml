@@ -26,12 +26,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Configure
-        run: ${{ env.action_state }} waf configure --cxx_mkspec=${{ matrix.cxx_mkspec }}
+        run: ${{ env.python }} waf configure --cxx_mkspec=${{ matrix.cxx_mkspec }}
       - name: Build
         run: |
           echo "::add-matcher::.github/gcc-problem-matcher.json"
-          ${{ env.action_state }} waf
+          ${{ env.python }} waf
       - name: Test
-        run: ${{ env.action_state }} waf --run_tests
+        run: ${{ env.python }} waf --run_tests
       - name: Status
         run: echo "Build ${{ job.status }}"
