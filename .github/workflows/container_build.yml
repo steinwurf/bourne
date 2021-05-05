@@ -15,7 +15,7 @@ jobs:
         cxx_clang70_address_sanitizer_x64,
         cxx_clang70_thread_sanitizer_x64,
         cxx_clang70_memory_sanitizer_x64]
-    runs-on: [self-hosted, matrix.cxx_mkspec]
+    runs-on: [self-hosted, '${{ matrix.cxx_mkspec }}']
     steps:
       - name: Checkout
         uses: actions/checkout@v2
