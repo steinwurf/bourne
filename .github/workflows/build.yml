@@ -5,7 +5,7 @@ jobs:
     runs-on: [self-hosted, docker]
     container: conanio/gcc5
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
       - run: g++ --version
       - run: python3 waf configure --git_protocol=git@
       - run: python3 waf --run_tests
@@ -14,7 +14,7 @@ jobs:
     runs-on: [self-hosted, docker]
     container: conanio/gcc6
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
       - run: g++ --version
       - run: python3 waf configure --git_protocol=git@
       - run: python3 waf --run_tests
