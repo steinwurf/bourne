@@ -1,9 +1,19 @@
 name: Build
 on: [push, pull_request]
 jobs:
-  gcc5:
+  setup:
     runs-on: [self-hosted, docker]
-    container: conanio/gcc5
+    outputs:
+      uid_gid: ${{ steps.get-user.outputs.uid_gid }}
+    steps:
+      - id: get-user
+        run: echo "::set-output name=uid_gid::$(id -u):$(id -g)"
+  gcc5:
+    needs: setup
+    runs-on: [self-hosted, docker]
+    container:
+      image: conanio/gcc5
+      options: --user ${{ needs.configure.outputs.uid_gid }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
