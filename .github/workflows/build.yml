@@ -15,7 +15,7 @@ jobs:
       - name: Configure
         run: python3 waf configure
       - uses: ammaraskar/gcc-problem-matcher@master
-        if: ${{ '${{ matrix.compiler }}' == 'gcc*' }}
+        if: matrix.compiler == 'gcc*'
       - name: Build
         run: python3 waf
       - name: Test
