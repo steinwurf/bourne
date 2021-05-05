@@ -22,8 +22,7 @@ jobs:
         run: echo "python=python3" >> $GITHUB_ENV
       - name: Rename python3 to python
         if: runner.os == 'Windows'
-        shell: git-bash
-        run: echo "python=python3" >> $GITHUB_ENV
+        run: echo "python=python3" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
       - name: Checkout
         uses: actions/checkout@v2
       - name: Configure
