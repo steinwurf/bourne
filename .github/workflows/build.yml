@@ -20,7 +20,7 @@ jobs:
       - name: Install git
         run: apt install git
       - name: Install ssh
-        run: apt install openssh-client
+        run: apt-get -y update && apt-get -y upgrade && apt-get -y install ssh
       - name: Check version
         run: g++ --version
       - name: Configure
