@@ -5,17 +5,13 @@ jobs:
     runs-on: [self-hosted, docker]
     container: conanio/gcc5
     steps:
+      - name: Checkout
       - uses: actions/checkout@v1
+      - name: Check version
       - run: g++ --version
+      - name: Configure
       - run: python3 waf configure --git_protocol=git@
+      - name: Configure
       - run: python3 waf --run_tests
-      - run: echo "Build ${{ job.status }}"
-  gcc6:
-    runs-on: [self-hosted, docker]
-    container: conanio/gcc6
-    steps:
-      - uses: actions/checkout@v1
-      - run: g++ --version
-      - run: python3 waf configure --git_protocol=git@
-      - run: python3 waf --run_tests
+      - name: Status
       - run: echo "Build ${{ job.status }}"
