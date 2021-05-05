@@ -20,9 +20,6 @@ jobs:
     steps:
       - name: Set python env variable
         run: echo "python=python3" >> $GITHUB_ENV
-      - name: Rename python3 to python
-        if: runner.os == 'Windows'
-        run: echo "python=python" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v2
       - name: Configure
