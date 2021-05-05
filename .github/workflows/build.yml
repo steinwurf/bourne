@@ -18,7 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install git
-        uses: apt install git
+        run: apt install git
       - name: Check version
         run: g++ --version
       - name: Configure
