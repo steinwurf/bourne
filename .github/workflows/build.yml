@@ -1,0 +1,21 @@
+name: Build
+on: [push, pull_request]
+jobs:
+  gcc5:
+    runs-on: [self-hosted, docker]
+    container: conanio/gcc5
+    steps:
+      - uses: actions/checkout@v2
+      - run: g++ --version
+      - run: python3 waf configure --git_protocol=git@
+      - run: python3 waf --run_tests
+      - run: echo "Build ${{ job.status }}"
+  gcc6:
+    runs-on: [self-hosted, docker]
+    container: conanio/gcc6
+    steps:
+      - uses: actions/checkout@v2
+      - run: g++ --version
+      - run: python3 waf configure --git_protocol=git@
+      - run: python3 waf --run_tests
+      - run: echo "Build ${{ job.status }}"
