@@ -1,26 +1,19 @@
 name: Build
 on: [push, pull_request]
 jobs:
-  setup:
-    runs-on: [self-hosted, docker]
-    outputs:
-      uid_gid: ${{ steps.get-user.outputs.uid_gid }}
-    steps:
-      - id: get-user
-        run: echo "::set-output name=uid_gid::$(id -u):$(id -g)"
-  gcc5:
-    needs: setup
+  build:
+    strategy:
+      matrix:
+        compiler: [gcc5, gcc6, gcc7]
     runs-on: [self-hosted, docker]
     container:
-      image: conanio/gcc5
-      options: --user ${{ needs.setup.outputs.uid_gid }}
+      image: conanio/${{ matrix.compiler }}
+      options: --user 1000:1000
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install git
         run: apt install git
-      - name: Check version
-        run: g++ --version
       - name: Configure
         run: python3 waf configure
       - name: Build
