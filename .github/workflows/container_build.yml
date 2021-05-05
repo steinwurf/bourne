@@ -2,6 +2,8 @@ name: Build
 on: [push, pull_request]
 jobs:
   build:
+    env:
+        PYTHON: python3
     strategy:
       fail-fast: false
       matrix:
@@ -15,22 +17,21 @@ jobs:
         cxx_gxx83_x86,
         cxx_clang70_address_sanitizer_x64,
         cxx_clang70_thread_sanitizer_x64,
-        cxx_clang70_memory_sanitizer_x64]
+        cxx_clang70_memory_sanitizer_x64]          
     runs-on: [self-hosted, '${{ matrix.cxx_mkspec }}']
     steps:
+      - name: Rename python3 to python
+        if: runner.os == 'Windows'
+        run: echo "::set-env name=PYTHON::python"
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
       - name: Configure
-        run: python3 waf configure --cxx_mkspec=${{ matrix.cxx_mkspec }}
+        run: $PYTHON waf configure --cxx_mkspec=${{ matrix.cxx_mkspec }}
       - name: Build
         run: |
           echo "::add-matcher::.github/gcc-problem-matcher.json"
-          python3 waf
+          $PYTHON waf
       - name: Test
-        run: python3 waf --run_tests
+        run: $PYTHON waf --run_tests
       - name: Status
         run: echo "Build ${{ job.status }}"
