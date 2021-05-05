@@ -4,7 +4,7 @@ jobs:
   build:
     strategy:
       matrix:
-        compiler: [gcc5, gcc6, gcc7, clang39, clang10]
+        compiler: [gcc5, gcc10, clang39, clang10]
     runs-on: [self-hosted, docker]
     container:
       image: conanio/${{ matrix.compiler }}
