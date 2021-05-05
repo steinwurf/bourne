@@ -13,7 +13,7 @@ jobs:
     runs-on: [self-hosted, docker]
     container:
       image: conanio/gcc5
-      options: --user ${{ needs.configure.outputs.uid_gid }}
+      options: --user ${{ needs.setup.outputs.uid_gid }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -21,7 +21,9 @@ jobs:
         run: g++ --version
       - name: Configure
         run: python3 waf configure --git_protocol=git@
-      - name: Configure
+      - name: Build
+        run: python3 waf
+      - name: Test
         run: python3 waf --run_tests
       - name: Status
         run: echo "Build ${{ job.status }}"
