@@ -5,6 +5,9 @@ jobs:
     strategy:
       matrix:
         compiler: [gcc5, gcc6, gcc7, clang39, clang10]
+        include:
+          - compiler: gcc*
+            gcc_problem_matcher: true
     runs-on: [self-hosted, docker]
     container:
       image: conanio/${{ matrix.compiler }}
@@ -15,7 +18,7 @@ jobs:
       - name: Configure
         run: python3 waf configure
       - uses: ammaraskar/gcc-problem-matcher@master
-        if: matrix.compiler == 'gcc*'
+        if: matrix.gcc_problem_matcher
       - name: Build
         run: python3 waf
       - name: Test
