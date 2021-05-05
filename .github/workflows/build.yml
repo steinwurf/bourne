@@ -12,10 +12,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Install git
-        run: apt install git
       - name: Configure
         run: python3 waf configure
+      - uses: ammaraskar/gcc-problem-matcher@master
+        if: ${{ "${{ matrix.compiler }}" == "gcc*" }}
       - name: Build
         run: python3 waf
       - name: Test
