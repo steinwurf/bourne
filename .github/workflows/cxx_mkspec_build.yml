@@ -20,7 +20,7 @@ jobs:
           name: GCC 8.3 64-Bit
         - cxx_mkspec: cxx_gxx83_x86
           name: GCC 8.3 32-Bit
-    runs-on: [self-hosted, '${{ matrix.cxx_mkspec }}']
+    runs-on: [self-hosted, '${{ matrix.config.cxx_mkspec }}']
     name: ${{ matrix.config.name }}
     env:
       python: python3
