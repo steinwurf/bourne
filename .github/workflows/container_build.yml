@@ -20,6 +20,7 @@ jobs:
       - name: INFO
         run: id
       - name: INFO
+        continue-on-error: true
         run: ls ~/.ssh
       - name: INFO
         continue-on-error: true
