@@ -109,8 +109,8 @@ jobs:
               shutil.rmtree(build_path)
           os.mkdir(build_path)
           os.chdir(build_path)
-          subprocess.check_call(['cmake', '../'], env=dict(os.environ.copy(), VERBOSE=1)
-          subprocess.check_call(['cmake', '--build', '.'], env=dict(os.environ.copy(), VERBOSE=1)
+          subprocess.check_call(['cmake', '../'], env=dict(os.environ.copy(), VERBOSE=1))
+          subprocess.check_call(['cmake', '--build', '.'], env=dict(os.environ.copy(), VERBOSE=1))
 
   # Format checking
   clang-format:
