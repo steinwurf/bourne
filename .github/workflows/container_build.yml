@@ -27,6 +27,10 @@ jobs:
         run: apt update
       - name: install ssh
         run: apt -y install openssh-client
+      - name: ssh start agent
+        run: eval "$(ssh-agent -s)"
+      - name: add key
+        run: ssh-add ~/.ssh/id_ed25519
       - name: github ssh check
         run: ssh -T git@github.com
       - name: Configure
