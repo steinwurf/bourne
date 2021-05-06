@@ -15,6 +15,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: INFO
+        run: echo $HOME
+      - name: INFO
+        run: id
       - name: Configure
         run: python3 waf configure --git_protocol=git@
       - name: Build
