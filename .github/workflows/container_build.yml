@@ -5,23 +5,31 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [gcc5, gcc10, clang39, clang10]
+        config:
+        - container: conanio/gcc5
+          cxx_mkspec: --cxx_mkspec=cxx_gxx54_x64
+        - container: conanio/gcc9
+          cxx_mkspec: --cxx_mkspec=cxx_gxx92_x64
+        - container: conanio/clang39
+        - container: conanio/clang10
     runs-on: [self-hosted, docker]
     container:
-      image: conanio/${{ matrix.compiler }}
+      image: ${{ matrix.config.container }}
       options: --user 0:0
       volumes:
         - /home/buildbot/.ssh:/root/.ssh
     steps:
-      - name: Checkout
+      - name: Install SSH client
+        run: apt update && apt -y install openssh-client
+      - name: Checkout source code
         uses: actions/checkout@v2
-      - name: Configure
+      - name: Waf Configure
         run: python3 waf configure --git_protocol=git@
-      - name: Build
+      - name: Waf Build
         run: |
           echo "::add-matcher::.github/gcc-problem-matcher.json"
           python3 waf
-      - name: Test
+      - name: Waf Test
         run: python3 waf --run_tests
       - name: Status
         run: echo "Build ${{ job.status }}"

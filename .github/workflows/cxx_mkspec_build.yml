@@ -33,5 +33,3 @@ jobs:
           ${{ env.python }} waf
       - name: Test
         run: ${{ env.python }} waf --run_tests
-      - name: Status
-        run: echo "Build ${{ job.status }}"
