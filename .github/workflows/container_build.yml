@@ -13,6 +13,7 @@ jobs:
         - container: conanio/clang39
         - container: conanio/clang10
     runs-on: [self-hosted, docker]
+    name: Build ${{ matrix.container }}
     container:
       image: ${{ matrix.config.container }}
       options: --user 0:0
