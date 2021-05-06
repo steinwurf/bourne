@@ -14,10 +14,11 @@ jobs:
           name: GCC 9.2
         - container: conanio/clang39
           name: Clang 3.9
+          cxx_mkspec: --cxx_mkspec=cxx_clang39_x64
         - container: conanio/clang10
           name: Clang 10
     runs-on: [self-hosted, docker]
-    name: Build ${{ matrix.config.name }}
+    name: ${{ matrix.config.name }}
     container:
       image: ${{ matrix.config.container }}
       options: --user 0:0

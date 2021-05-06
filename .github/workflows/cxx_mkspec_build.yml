@@ -5,18 +5,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        cxx_mkspec: [
-        cxx_msvc16_x86,
-        cxx_msvc16_x64,
-        cxx_apple_llvm120_x64,
-        cxx_clang70_x64,
-        cxx_clang70_x86,
-        cxx_gxx83_x64,
-        cxx_gxx83_x86,
-        cxx_clang70_address_sanitizer_x64,
-        cxx_clang70_thread_sanitizer_x64,
-        cxx_clang70_memory_sanitizer_x64]          
+        config:
+        - cxx_mkspec: cxx_msvc16_x86,
+          name: MSVC 16 32-bit
+        - cxx_mkspec: cxx_msvc16_x64,
+          name: MSVC 16 64-bit
+        - cxx_mkspec: cxx_apple_llvm120_x64
+          name: Apple LLVM 12.0 64-bit
     runs-on: [self-hosted, '${{ matrix.cxx_mkspec }}']
+    name: ${{ matrix.config.name }}
     steps:
       - name: Set python env variable
         run: echo "python=python3" >> $GITHUB_ENV
