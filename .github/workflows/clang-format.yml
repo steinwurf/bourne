@@ -1,0 +1,13 @@
+name: Check formatting
+on: [push, pull_request]
+jobs:
+  Clang-format:
+    runs-on: [self-hosted, docker]
+    container:
+      image: unibeautify/clang-format/
+      options: --user 0:0
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: Run Clang-format
+        run: find ./ -iname *.hpp -o -iname *.cpp -o -iname *.c -o -iname *.h | xargs clang-format --dry-run --Werror
