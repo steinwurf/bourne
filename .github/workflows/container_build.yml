@@ -19,6 +19,8 @@ jobs:
         run: echo $HOME
       - name: INFO
         run: id
+      - name: github ssh check
+        run: ssh -T git@github.com
       - name: Configure
         run: python3 waf configure --git_protocol=git@
       - name: Build
