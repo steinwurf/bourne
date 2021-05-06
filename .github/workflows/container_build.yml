@@ -29,7 +29,7 @@ jobs:
         run: apt -y install openssh-client
       - name: ssh start agent
         continue-on-error: true
-        run: eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
+        run: eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519 && ssh -T git@github.com
       - name: github ssh check
         continue-on-error: true
         run: ssh -T git@github.com
