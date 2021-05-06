@@ -19,21 +19,16 @@ jobs:
         run: echo $HOME
       - name: INFO
         run: id
-      - name: INFO
-        continue-on-error: true
-        run: ls ~/.ssh
-      - name: INFO
-        continue-on-error: true
-        run: ls /etc/ssh/ssh_config
-      - name: INFO
-        run: ls -la ~/.ssh
       - name: install ssh
         run: apt update
       - name: install ssh
         run: apt -y install openssh-client
+      - name: INFO
+        continue-on-error: true
+        run: ls /etc/ssh/ssh_config
       - name: ssh start agent
         continue-on-error: true
-        run: eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519 && ssh -T git@github.com
+        run: eval "$(ssh-agent -s)" && ssh-add /root/.ssh/id_ed25519 && ssh -T git@github.com
       - name: github ssh check
         continue-on-error: true
         run: ssh -T git@github.com
