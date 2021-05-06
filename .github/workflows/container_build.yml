@@ -11,7 +11,7 @@ jobs:
       image: conanio/${{ matrix.compiler }}
       options: --user 0:0
       volumes:
-        - /home/buildbot/.ssh:/home/user/.ssh
+        - /home/buildbot/.ssh:/root/.ssh
     steps:
       - name: Checkout
         uses: actions/checkout@v2
