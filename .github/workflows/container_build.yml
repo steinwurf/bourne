@@ -22,7 +22,7 @@ jobs:
       - name: install ssh
         run: apt update
       - name: install ssh
-        run: apt install openssh-client
+        run: apt -y install openssh-client
       - name: github ssh check
         run: ssh -T git@github.com
       - name: Configure
