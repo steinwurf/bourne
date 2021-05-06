@@ -12,4 +12,6 @@ jobs:
       - name: Run Clang-format
         run: clang-format --help
       - name: Run Clang-format
+        run: clang-format -version
+      - name: Run Clang-format
         run: find ./ -iname *.hpp -o -iname *.cpp -o -iname *.c -o -iname *.h | xargs clang-format --dry-run --Werror
