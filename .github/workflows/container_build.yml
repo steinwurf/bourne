@@ -11,7 +11,7 @@ jobs:
       image: conanio/${{ matrix.compiler }}
       options: --user 0:0
       volumes:
-        - /home/buildbot/.ssh:/github/home/.ssh
+        - /home/buildbot/.ssh:/root/.ssh
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -21,6 +21,8 @@ jobs:
         run: id
       - name: INFO
         run: ls ~/.ssh
+      - name: INFO
+        run: ls /etc/ssh/ssh_config
       - name: INFO
         run: ls -la ~/.ssh
       - name: install ssh
