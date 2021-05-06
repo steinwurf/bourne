@@ -28,10 +28,13 @@ jobs:
       - name: install ssh
         run: apt -y install openssh-client
       - name: ssh start agent
+        continue-on-error: true
         run: eval "$(ssh-agent -s)"
       - name: add key
+        continue-on-error: true
         run: ssh-add ~/.ssh/id_ed25519
       - name: github ssh check
+        continue-on-error: true
         run: ssh -T git@github.com
       - name: Configure
         run: python3 waf configure --git_protocol=git@
