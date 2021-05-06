@@ -19,6 +19,8 @@ jobs:
         run: echo $HOME
       - name: INFO
         run: id
+      - name: install ssh
+        run: apt install openssh-client
       - name: github ssh check
         run: ssh -T git@github.com
       - name: Configure
