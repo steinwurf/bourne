@@ -19,6 +19,10 @@ jobs:
         run: echo $HOME
       - name: INFO
         run: id
+      - name: INFO
+        run: ls ~/.ssh
+      - name: INFO
+        run: ls -la ~/.ssh
       - name: install ssh
         run: apt update
       - name: install ssh
