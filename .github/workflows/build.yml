@@ -107,7 +107,7 @@ jobs:
           if os.path.exists(build_path):
               print("Path '{}' already exists - removing".format(build_path))
               shutil.rmtree(build_path)
-          os.mkdir(build_path))
+          os.mkdir(build_path)
           os.chdir(build_path)
           subprocess.check_call(['cmake', '../'], env=dict(os.environ.copy(), VERBOSE=1)
           subprocess.check_call(['cmake', '--build', '.'], env=dict(os.environ.copy(), VERBOSE=1)
