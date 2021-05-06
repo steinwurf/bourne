@@ -15,8 +15,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: install ssh
-        run: apt update && apt -y install openssh-client
       - name: Configure
         run: python3 waf configure --git_protocol=git@
       - name: Build
