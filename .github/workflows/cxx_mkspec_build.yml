@@ -1,24 +1,37 @@
-name: Build
+name: C++ make-specs Build
 on: [push, pull_request]
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
-        compiler: [gcc5, gcc10, clang39, clang10]
-    runs-on: [self-hosted, docker]
-    container:
-      image: conanio/${{ matrix.compiler }}
-      options: --user 0:0
+        cxx_mkspec: [
+        cxx_msvc16_x86,
+        cxx_msvc16_x64,
+        cxx_apple_llvm120_x64,
+        cxx_clang70_x64,
+        cxx_clang70_x86,
+        cxx_gxx83_x64,
+        cxx_gxx83_x86,
+        cxx_clang70_address_sanitizer_x64,
+        cxx_clang70_thread_sanitizer_x64,
+        cxx_clang70_memory_sanitizer_x64]          
+    runs-on: [self-hosted, '${{ matrix.cxx_mkspec }}']
     steps:
+      - name: Set python env variable
+        run: echo "python=python3" >> $GITHUB_ENV
+      - name: Rename python3 to python
+        if: runner.os == 'Windows'
+        run: echo "python=python" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
       - name: Checkout
         uses: actions/checkout@v2
       - name: Configure
-        run: python3 waf configure
+        run: ${{ env.python }} waf configure --git_protocol=git@ --cxx_mkspec=${{ matrix.cxx_mkspec }}
       - name: Build
         run: |
           echo "::add-matcher::.github/gcc-problem-matcher.json"
-          python3 waf
+          ${{ env.python }} waf
       - name: Test
-        run: python3 waf --run_tests
+        run: ${{ env.python }} waf --run_tests
       - name: Status
         run: echo "Build ${{ job.status }}"
