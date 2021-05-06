@@ -22,6 +22,7 @@ jobs:
       - name: INFO
         run: ls ~/.ssh
       - name: INFO
+        continue-on-error: true
         run: ls /etc/ssh/ssh_config
       - name: INFO
         run: ls -la ~/.ssh
