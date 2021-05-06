@@ -8,12 +8,16 @@ jobs:
         config:
         - container: conanio/gcc5
           cxx_mkspec: --cxx_mkspec=cxx_gxx54_x64
+          name: GCC 5.4
         - container: conanio/gcc9
           cxx_mkspec: --cxx_mkspec=cxx_gxx92_x64
+          name: GCC 9.2
         - container: conanio/clang39
+          name: Clang 3.9
         - container: conanio/clang10
+          name: Clang 10
     runs-on: [self-hosted, docker]
-    name: Build ${{ matrix.config.container }}
+    name: Build ${{ matrix.config.name }}
     container:
       image: ${{ matrix.config.container }}
       options: --user 0:0
