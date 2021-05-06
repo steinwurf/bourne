@@ -15,23 +15,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: INFO
-        run: echo $HOME
-      - name: INFO
-        run: id
       - name: install ssh
-        run: apt update
-      - name: install ssh
-        run: apt -y install openssh-client
-      - name: INFO
-        continue-on-error: true
-        run: ls /etc/ssh/ssh_config
+        run: apt update && apt -y install openssh-client
       - name: ssh start agent
-        continue-on-error: true
-        run: eval "$(ssh-agent -s)" && ssh-add /root/.ssh/id_ed25519 && ssh -T git@github.com
-      - name: github ssh check
-        continue-on-error: true
-        run: ssh -T git@github.com
+        run: eval "$(ssh-agent -s)" && ssh-add /root/.ssh/id_ed25519
       - name: Configure
         run: python3 waf configure --git_protocol=git@
       - name: Build
