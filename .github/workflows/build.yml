@@ -100,6 +100,12 @@ jobs:
       - name: Change from root to buildbot user on Linux
         if: runner.os == 'Linux'
         run: su buildbot
+      - name: INFO
+        if: runner.os == 'Linux'
+        run: id
+      - name: INFO
+        if: runner.os == 'Linux'
+        run: echo $HOME
       - name: Checkout
         uses: actions/checkout@v2
       - name: CMake Build
