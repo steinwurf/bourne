@@ -99,6 +99,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: CMake Build
+        env:
+          GIT_SSH_COMMAND: "${{ runner.os != 'Linux' && 'ssh' || 'ssh -i /home/buildbot/.ssh/id_ed25519 -o IdentitiesOnly=yes' }}"
         shell: python
         run: |
           import shutil
@@ -140,6 +142,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Configure
+        env:
+          GIT_SSH_COMMAND: "${{ runner.os != 'Linux' && 'ssh' || 'ssh -i /home/buildbot/.ssh/id_ed25519 -o IdentitiesOnly=yes' }}"
         run: python3 waf configure --git_protocol=git@
       - name: Build
         run: |
