@@ -118,7 +118,7 @@ jobs:
           subprocess.check_call(['cmake', '../'], env=dict(os.environ.copy(), VERBOSE="1"))
           subprocess.check_call(['cmake', '--build', '.'], env=dict(os.environ.copy(), VERBOSE="1"))
 
-  # Format checking
+  # Code Format Check
   clang-format:
     name: ClangFormat
     runs-on: [self-hosted, docker]
