@@ -21,9 +21,10 @@ jobs:
         - container: conanio/clang10
           cxx_mkspec: --cxx_mkspec=cxx_clang10_address_sanitizer_x64
           name: Clang 10 Address Sanitizer
-        - container: conanio/clang10
-          cxx_mkspec: --cxx_mkspec=cxx_clang10_memory_sanitizer_x64
-          name: Clang 10 Memory Sanitizer
+        # TODO: Re-able this when we have fixed memory issue in google-test
+        # - container: conanio/clang10 
+        #   cxx_mkspec: --cxx_mkspec=cxx_clang10_memory_sanitizer_x64
+        #   name: Clang 10 Memory Sanitizer
         - container: conanio/clang10
           cxx_mkspec: --cxx_mkspec=cxx_clang10_thread_sanitizer_x64
           name: Clang 10 Thread Sanitizer
@@ -61,12 +62,8 @@ jobs:
           name: Apple LLVM 12.0 64-bit
         - cxx_mkspec: cxx_clang70_x64
           name: Clang 7.0 64-Bit
-        - cxx_mkspec: cxx_clang70_x86
-          name: Clang 7.0 32-Bit
         - cxx_mkspec: cxx_gxx83_x64
           name: GCC 8.3 64-Bit
-        - cxx_mkspec: cxx_gxx83_x86
-          name: GCC 8.3 32-Bit
     runs-on: [self-hosted, '${{ matrix.config.cxx_mkspec }}']
     name: ${{ matrix.config.name }}
     env:
@@ -136,15 +133,29 @@ jobs:
     name: Valgrind
     runs-on: [self-hosted, valgrind]
     steps:
-      - name: Change from root to buildbot user on Linux
-        if: runner.os == 'Linux'
-        run: su buildbot
       - name: Checkout
         uses: actions/checkout@v2
       - name: Configure
         env:
           GIT_SSH_COMMAND: "${{ runner.os != 'Linux' && 'ssh' || 'ssh -i /home/buildbot/.ssh/id_ed25519 -o IdentitiesOnly=yes' }}"
         run: python3 waf configure --git_protocol=git@
+      - name: Build
+        run: |
+          echo "::add-matcher::.github/gcc-problem-matcher.json"
+          ${{ env.python }} waf
+      - name: Valgrind Test
+        run: ${{ env.python }} waf --run_tests --run_cmd="valgrind %s"
+  # NDEBUG compilation
+  ndebug:
+    name: NDEBUG Flag (no assertions)
+    runs-on: [self-hosted, linux]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Configure
+        env:
+          GIT_SSH_COMMAND: "${{ runner.os != 'Linux' && 'ssh' || 'ssh -i /home/buildbot/.ssh/id_ed25519 -o IdentitiesOnly=yes' }}"
+        run: python3 waf configure --cxx_nodebug --git_protocol=git@
       - name: Build
         run: |
           echo "::add-matcher::.github/gcc-problem-matcher.json"
