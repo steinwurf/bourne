@@ -134,7 +134,7 @@ jobs:
         run: clang-format -version
       - name: Run Clang-format
         run: find ./ -iname *.hpp -o -iname *.cpp -o -iname *.c -o -iname *.h | xargs clang-format --dry-run --Werror
-  # Check build using valgrind
+  # Valgrind Check
   valgrind:
     name: Valgrind
     runs-on: [self-hosted, valgrind]
