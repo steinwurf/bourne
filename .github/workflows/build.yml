@@ -78,8 +78,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Configure
-      env: 
-        GIT_SSH_COMMAND: "${{ runner.os == 'Linux' && 'ssh -i /home/buildbot/.ssh/id_ed25519 -o IdentitiesOnly=yes' || '' }}"
+        env:
+          GIT_SSH_COMMAND: "${{ runner.os == 'Linux' && 'ssh -i /home/buildbot/.ssh/id_ed25519 -o IdentitiesOnly=yes' || '' }}"
         run: ${{ env.python }} waf configure --git_protocol=git@ --cxx_mkspec=${{ matrix.config.cxx_mkspec }}
       - name: Build
         run: |
