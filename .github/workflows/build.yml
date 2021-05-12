@@ -147,7 +147,7 @@ jobs:
         run: ${{ env.python }} waf --run_tests --run_cmd="valgrind %s"
   # NDEBUG compilation
   ndebug:
-    name: NDEBUG Flag (no assertions)
+    name: No Assertions
     runs-on: [self-hosted, linux]
     steps:
       - name: Checkout
