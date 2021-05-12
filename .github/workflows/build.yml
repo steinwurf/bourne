@@ -142,9 +142,9 @@ jobs:
       - name: Build
         run: |
           echo "::add-matcher::.github/gcc-problem-matcher.json"
-          ${{ env.python }} waf
+          python3 waf
       - name: Valgrind Test
-        run: ${{ env.python }} waf --run_tests --run_cmd="valgrind %s"
+        run: python3 waf --run_tests --run_cmd="valgrind %s"
   # NDEBUG compilation
   ndebug:
     name: No Assertions
@@ -159,6 +159,6 @@ jobs:
       - name: Build
         run: |
           echo "::add-matcher::.github/gcc-problem-matcher.json"
-          ${{ env.python }} waf
+          python3 waf
       - name: Valgrind Test
-        run: ${{ env.python }} waf --run_tests --run_cmd="valgrind %s"
+        run: python3 waf --run_tests --run_cmd="valgrind %s"
