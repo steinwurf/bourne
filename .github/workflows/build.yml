@@ -96,8 +96,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: CMake Build
-        env:
-          GIT_SSH_COMMAND: "${{ runner.os != 'Linux' && 'ssh' || 'ssh -i /home/buildbot/.ssh/id_ed25519 -o IdentitiesOnly=yes' }}"
         shell: python
         run: |
           import shutil
@@ -110,8 +108,9 @@ jobs:
               shutil.rmtree(build_path)
           os.mkdir(build_path)
           os.chdir(build_path)
-          subprocess.check_call(['cmake', '../'], env=dict(os.environ.copy(), VERBOSE="1"))
-          subprocess.check_call(['cmake', '--build', '.'], env=dict(os.environ.copy(), VERBOSE="1"))
+          extras = { "VERBOSE": "1" }
+          subprocess.check_call(['cmake', '../'], env=dict(os.environ.copy(), **extras))
+          subprocess.check_call(['cmake', '--build', '.'], env=dict(os.environ.copy(), **extras))
   # Code Format Check
   clang-format:
     name: ClangFormat
@@ -161,4 +160,4 @@ jobs:
           echo "::add-matcher::.github/gcc-problem-matcher.json"
           python3 waf
       - name: Valgrind Test
-        run: python3 waf --run_tests --run_cmd="valgrind %s"
+        run: python3 waf --run_tests
