@@ -16,6 +16,10 @@ void test_parser(const std::string& json_string, const bourne::json& expected)
     EXPECT_EQ(expected.dump(),
               bourne::detail::parser::parse(json_string, error).dump())
         << "Input: '" << json_string << "'";
+    std::error_code error_min;
+    EXPECT_EQ(expected.dump_min(),
+              bourne::detail::parser::parse(json_string, error_min).dump_min())
+        << "Input: '" << json_string << "'";
 }
 }
 

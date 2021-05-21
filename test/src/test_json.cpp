@@ -32,6 +32,24 @@ TEST(test_json, test_dump)
     EXPECT_EQ(expected, object.dump());
 }
 
+TEST(test_json, test_dump_min)
+{
+    bourne::json object({"k1",
+                         1,
+                         "k2",
+                         true,
+                         "k3",
+                         nullptr,
+                         "k4",
+                         {"k5", "some string", "some_array",
+                          bourne::json::array(9, "some other string", false)}});
+
+    std::string expected = "{\"k1\":1,\"k2\":true,\"k3\":null,\"k4\":{\"k5\":"
+                           "\"some string\",\"some_array\":[9,"
+                           "\"some other string\",false]}}";
+
+    EXPECT_EQ(expected, object.dump_min());
+}
 TEST(test_json, test_assignment)
 {
     auto object = bourne::json::object();
@@ -252,4 +270,19 @@ TEST(test_json, test_const_retrival)
         EXPECT_EQ(4, json["test"].to_int());
     };
     const_retrival(obj);
+}
+
+TEST(test_json, test_keys)
+{
+    auto obj = bourne::json::object();
+    obj["key1"] = 1;
+    obj["key2"] = 2;
+    obj["key3"] = 3;
+    obj["key4"] = 4;
+
+    for (const auto& key : obj.keys())
+    {
+        EXPECT_TRUE(obj.has_key(key));
+    }
+    EXPECT_EQ(4U, obj.keys().size());
 }
