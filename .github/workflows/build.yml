@@ -1,5 +1,9 @@
 name: Build
-on: [push, pull_request]
+on: 
+  schedule:
+    - cron:  '*/15 * * * *'
+  push:
+  pull_request:
 jobs:
   # Builds performed in docker
   docker_builds:
