@@ -95,22 +95,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: CMake Build
-        shell: python
-        run: |
-          import shutil
-          import os
-          import subprocess
-
-          build_path = 'build'
-          if os.path.exists(build_path):
-              print("Path '{}' already exists - removing".format(build_path))
-              shutil.rmtree(build_path)
-          os.mkdir(build_path)
-          os.chdir(build_path)
-          extras = { "VERBOSE": "1" }
-          subprocess.check_call(['cmake', '../'], env=dict(os.environ.copy(), **extras))
-          subprocess.check_call(['cmake', '--build', '.'], env=dict(os.environ.copy(), **extras))
+      - name: CMake Setup
+        # Create a separate build directory
+        run: cmake -E make_directory ${{github.workspace}}/build
+      - name: CMake Configure
+        # bash shell allows the same syntax regardless of platform
+        shell: bash
+        working-directory: ${{github.workspace}}/build
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
+        
+      - name: Cmake Build
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: cmake --build .
   # Code Format Check
   clang-format:
     name: ClangFormat
