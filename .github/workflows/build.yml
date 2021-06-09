@@ -100,7 +100,7 @@ jobs:
         run: cmake -E make_directory ${{github.workspace}}/build
       - name: CMake Configure
         working-directory: ${{github.workspace}}/build
-        run: cmake $GITHUB_WORKSPACE -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
+        run: cmake ${{github.workspace}} -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
         
       - name: Cmake Build
         working-directory: ${{github.workspace}}/build
