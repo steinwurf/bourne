@@ -84,33 +84,6 @@ jobs:
           ${{ env.python }} waf
       - name: Test
         run: ${{ env.python }} waf --run_tests
-  # CMake build
-  cmake_build:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [Windows, macOS_X64, Linux]
-    runs-on: [self-hosted, '${{ matrix.os }}', 'cmake']
-    name: ${{ matrix.os }} CMake Build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: CMake Build
-        shell: python
-        run: |
-          import shutil
-          import os
-          import subprocess
-
-          build_path = 'build'
-          if os.path.exists(build_path):
-              print("Path '{}' already exists - removing".format(build_path))
-              shutil.rmtree(build_path)
-          os.mkdir(build_path)
-          os.chdir(build_path)
-          extras = { "VERBOSE": "1" }
-          subprocess.check_call(['cmake', '../'], env=dict(os.environ.copy(), **extras))
-          subprocess.check_call(['cmake', '--build', '.'], env=dict(os.environ.copy(), **extras))
   # Code Format Check
   clang-format:
     name: ClangFormat
