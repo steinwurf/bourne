@@ -6,7 +6,7 @@ on:
           description: "Extra Resolve Options"
           required: false
   schedule:
-    - cron: "0 3 * * *"
+    - cron: "0 10 * * *" # cron: "0 1 * * *" # 3 AM CET
   push:
   pull_request:
 env:
