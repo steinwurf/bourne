@@ -1,4 +1,4 @@
-clang-format:
+name: Clang-Format
 on:
   workflow_dispatch:
     inputs:
