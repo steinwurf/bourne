@@ -1,4 +1,4 @@
-name: Cxx Makespecs
+name: C++ make-specs
 on:
   workflow_dispatch:
     inputs:
@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - container: conanio/gcc64
+          - container: conanio/gcc54
             cxx_mkspec: --cxx_mkspec=cxx_gxx64_x64
             name: GCC 5.4
           - container: conanio/gcc9
