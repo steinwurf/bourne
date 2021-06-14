@@ -18,7 +18,7 @@ jobs:
       matrix:
         config:
           - container: conanio/gcc54
-            cxx_mkspec: --cxx_mkspec=cxx_gxx64_x64
+            cxx_mkspec: --cxx_mkspec=cxx_gxx54_x64
             name: GCC 5.4
           - container: conanio/gcc9
             cxx_mkspec: --cxx_mkspec=cxx_gxx92_x64
