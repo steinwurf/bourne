@@ -10,7 +10,8 @@ on:
   push:
   pull_request:
 jobs:
-  name: ClangFormat
+  clang-format:
+    name: ClangFormat
     runs-on: [self-hosted, docker]
     container:
       image: fifty2technology/clang-format
