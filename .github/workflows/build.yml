@@ -1,22 +1,6 @@
 name: Build
 on: [push, pull_request]
 jobs:
-  # Code Format Check
-  clang-format:
-    name: ClangFormat
-    runs-on: [self-hosted, docker]
-    container:
-      image: fifty2technology/clang-format
-      options: --user 0:0
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v2
-      - name: Run Clang-format
-        run: clang-format --help
-      - name: Run Clang-format
-        run: clang-format -version
-      - name: Run Clang-format
-        run: find ./ -iname *.hpp -o -iname *.cpp -o -iname *.c -o -iname *.h | xargs clang-format --dry-run --Werror
   # Valgrind Check
   valgrind:
     name: Valgrind
