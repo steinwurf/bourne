@@ -58,13 +58,6 @@ public:
     /// Creates a json object.
     /// Odd indexed items in the list will serve as keys for their even counter
     /// part.
-    /// Example:
-    /// json({"key1", "value1", "key2", "value2"})
-    /// will create the following json value:
-    /// {
-    ///   "key1": "value1",
-    ///   "key2": "value2"
-    /// }
     json(std::initializer_list<json> list);
 
     /// Move constructor.
