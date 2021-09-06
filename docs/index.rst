@@ -1,15 +1,9 @@
-Abacus Documentation
+Bourne Documentation
 ====================
 
-Abacus is a C++ metrics library. We wanted to create a library that allows us to
-create counters in our other libraries that:
+Bourne is a simple c++11 json reader and writer.
 
-* Are fast to increment/update
-* Are fast to copy/transfer between dependencies
-* Can separate hot and cold memory
-* Can keep everything in one contiguous memory block
-
-The Abacus repository: https://github.com/steinwurf/abacus
+The bourne repository: https://github.com/steinwurf/bourne
 
 The ``examples`` folder contains some programs that demonstrate the usage
 of the available API.
