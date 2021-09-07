@@ -26,7 +26,7 @@ wurfapi = {
         "../src/bourne/json.hpp",
     ],
     "recursive": False,
-    "user_templates": "rst_templates",
+    "user_templates": "",
     "include_paths": ["../src"],
     "parser": {
         "type": "doxygen",
@@ -69,7 +69,7 @@ release = u""
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ["rst_templates"]
+exclude_patterns = []
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
@@ -88,9 +88,7 @@ except ImportError:
     )
     pass
 
-html_sidebars = {
-    "**": ["logo.html", "logo-text.html", "globaltoc.html", "searchbox.html"]
-}
+html_sidebars = {"**": ["logo-text.html", "globaltoc.html", "searchbox.html"]}
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

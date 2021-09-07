@@ -155,25 +155,27 @@ public:
     const json& operator[](const std::string& key) const;
 
     /// Access operator for index this assumes the json value is of type array
+    /// given index
     json& operator[](std::size_t index);
 
-    /// Access operator for keys this assumes the json value is of type object
+    /// Access operator for keys this assumes the json value is of type array
+    /// given index
     const json& operator[](std::size_t index) const;
 
     /// Returns a reference to the json value of the element identified with the
-    /// given key. If this
+    /// given key.
     json& at(const std::string& key);
 
     /// Returns a reference to the json value of the element identified with the
-    /// given key. If this
+    /// given key.
     const json& at(const std::string& key) const;
 
     /// Returns a reference to the json value of the element identified with the
-    /// given key. If this
+    /// given key.
     json& at(std::size_t index);
 
     /// Returns a reference to the json value of the element identified with the
-    /// given key. If this
+    /// given key.
     const json& at(std::size_t index) const;
 
     /// Append a json value to this json array. If this object is not a json
