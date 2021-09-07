@@ -24,6 +24,7 @@ namespace bourne
 {
 inline namespace STEINWURF_BOURNE_VERSION
 {
+/// A json object
 class json
 {
 private:
@@ -48,10 +49,6 @@ private:
     using array_type = detail::backing_data::array_type;
 
 public:
-    ////////////////////
-    /// Constructors ///
-    ////////////////////
-
     /// Default constructor, creates a null value.
     json();
 
@@ -61,13 +58,6 @@ public:
     /// Creates a json object.
     /// Odd indexed items in the list will serve as keys for their even counter
     /// part.
-    /// Example:
-    /// json({"key1", "value1", "key2", "value2"})
-    /// will create the following json value:
-    /// {
-    ///   "key1": "value1",
-    ///   "key2": "value2"
-    /// }
     json(std::initializer_list<json> list);
 
     /// Move constructor.
@@ -110,10 +100,6 @@ public:
 
     /// Destructor
     ~json();
-
-    /////////////////////////////////////
-    /// Assignment operator functions ///
-    /////////////////////////////////////
 
     /// Assignment operator for json
     json& operator=(json&& other);
@@ -162,24 +148,34 @@ public:
     /// Assignment operator for null value
     json& operator=(std::nullptr_t);
 
-    ////////////////////////
-    /// Access operators ///
-    ////////////////////////
-
     /// Access operator for keys this assumes the json value is of type object
     json& operator[](const std::string& key);
+
+    /// Access operator for keys this assumes the json value is of type object
     const json& operator[](const std::string& key) const;
 
     /// Access operator for index this assumes the json value is of type array
+    /// given index
     json& operator[](std::size_t index);
+
+    /// Access operator for keys this assumes the json value is of type array
+    /// given index
     const json& operator[](std::size_t index) const;
 
     /// Returns a reference to the json value of the element identified with the
-    /// given key. If this
+    /// given key.
     json& at(const std::string& key);
+
+    /// Returns a reference to the json value of the element identified with the
+    /// given key.
     const json& at(const std::string& key) const;
 
+    /// Returns a reference to the json value of the element identified with the
+    /// given key.
     json& at(std::size_t index);
+
+    /// Returns a reference to the json value of the element identified with the
+    /// given key.
     const json& at(std::size_t index) const;
 
     /// Append a json value to this json array. If this object is not a json
@@ -330,20 +326,12 @@ public:
     /// string of this object to the ostream.
     friend std::ostream& operator<<(std::ostream&, const json&);
 
-    ////////////////////////////
-    /// Comparison operators ///
-    ////////////////////////////
-
     /// Equality operator, this compares if the content of two json objects are
     /// the same.
     bool operator==(const json& other) const;
 
     /// Inequality operator, negated equality operator.
     bool operator!=(const json& other) const;
-
-    ////////////////////////
-    /// Static Functions ///
-    ////////////////////////
 
     /// Parse a string as a json object.
     static json parse(const std::string& input, std::error_code& error);
@@ -354,6 +342,7 @@ public:
     /// Create a json array
     static json array();
     template <typename... T>
+    /// Create a json array
     static json array(T... args)
     {
         json array = json(class_type::array);
