@@ -6,6 +6,7 @@ every change, see the Git log.
 
 Latest
 ------
+* Minor: Updated waf.
 * Minor: Added json::dump_min for dumping a minified json string.
 * Minor: Added json::keys function for getting the keys of an object.
 
