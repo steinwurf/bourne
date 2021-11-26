@@ -63,7 +63,6 @@ jobs:
         run: cmake -E make_directory $working_dir/build
       - name: CMake Configure
         run: cmake $working_dir -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DSTEINWURF_RESOLVE_OPTIONS="--git_protocol=git@ $EXTRA_RESOLVE_OPTIONS"
-      - name: Change directory to build
-        run: cd build
       - name: CMake Build
         run: cmake --build .
+        working-directory: ./build

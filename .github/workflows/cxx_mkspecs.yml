@@ -77,10 +77,10 @@ jobs:
         run: |
           echo "::add-matcher::.github/gcc-problem-matcher.json"
           python3 waf
-      - name: Upload ${{ github.workspace }}_tests Artifact
+      - name: Upload bourne_tests Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: raspberry_${{ github.workspace }}_tests
+          name: raspberry_bourne_tests
           path: |
             build/linux/test
             !build/linux/test/**/**.*
@@ -93,12 +93,12 @@ jobs:
     runs-on: [self-hosted, raspberry_pi_3]
     name: Raspberry Pi 3 Run Tests
     steps:
-      - name: Download ${{ github.workspace }}_tests Artifact
+      - name: Download bourne_tests Artifact
         uses: actions/download-artifact@v2
         with:
-          name: raspberry_${{ github.workspace }}_tests
+          name: raspberry_bourne_tests
       - name: Run all tests
-        run: chmod +x ${{ github.workspace }}_tests && ./${{ github.workspace }}_tests
+        run: chmod +x bourne_tests && ./bourne_tests
 
 
   # Build performed on runner using make specs
