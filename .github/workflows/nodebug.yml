@@ -15,13 +15,18 @@ jobs:
   # NDEBUG compilation
   ndebug:
     name: No Assertions
-    runs-on: [self-hosted, valgrind]
+    runs-on: [self-hosted, docker, builder]
+    container:
+      image: steinwurf/gcc-11.2.0:1.0.0
+      options: --user 0:0
+      volumes:
+        - /home/buildbot/.ssh:/root/.ssh
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Configure
         env:
-          GIT_SSH_COMMAND: "${{ runner.os != 'Linux' && 'ssh' || 'ssh -i /home/buildbot/.ssh/id_ed25519 -o IdentitiesOnly=yes' }}"
+          GIT_SSH_COMMAND: ssh -i /home/buildbot/.ssh/id_ed25519 -o IdentitiesOnly=yes
         run: python3 waf configure --cxx_nodebug --git_protocol=git@ $EXTRA_RESOLVE_OPTIONS
       - name: Build
         run: |
