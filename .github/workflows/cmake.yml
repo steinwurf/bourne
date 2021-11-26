@@ -65,4 +65,4 @@ jobs:
         run: cmake $working_dir -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DSTEINWURF_RESOLVE_OPTIONS="--git_protocol=git@ $EXTRA_RESOLVE_OPTIONS"
       - name: CMake Build
         run: cmake --build .
-        working-directory: ./build
+        working-directory: build
