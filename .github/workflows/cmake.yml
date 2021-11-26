@@ -55,14 +55,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Get current directory
-        run: working_dir=$(pwd)
       - name: CMake Cleanup
-        run: cmake -E remove_directory $working_dir/build
+        run: cmake -E remove_directory ${{github.workspace}}/build
       - name: CMake Setup
-        run: cmake -E make_directory $working_dir/build
+        run: cmake -E make_directory ${{github.workspace}}/build
       - name: CMake Configure
-        run: cmake $working_dir -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DSTEINWURF_RESOLVE_OPTIONS="--git_protocol=git@ $EXTRA_RESOLVE_OPTIONS"
+        run: cmake ${{github.workspace}} -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DSTEINWURF_RESOLVE_OPTIONS="--git_protocol=git@ $EXTRA_RESOLVE_OPTIONS"
       - name: CMake Build
+        working-directory: ${{github.workspace}}/build
         run: cmake --build .
-        working-directory: build
