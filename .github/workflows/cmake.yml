@@ -62,6 +62,7 @@ jobs:
       - name: LS this
         run: ls
       - name: CMake Configure
+        working-directory: ${{github.workspace}}/build
         run: cmake ${{github.workspace}} -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DSTEINWURF_RESOLVE_OPTIONS="--git_protocol=git@ $EXTRA_RESOLVE_OPTIONS"
       - name: CMake Build
         working-directory: ${{github.workspace}}/build
