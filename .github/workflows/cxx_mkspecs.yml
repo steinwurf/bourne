@@ -86,21 +86,6 @@ jobs:
             !build/linux/test/**/**.*
           retention-days: 1
 
-  raspberry_pi_tests:
-    needs: cross-compile-raspberry-pi
-    strategy:
-      fail-fast: false
-    runs-on: [self-hosted, raspberry_pi_3]
-    name: Raspberry Pi 3 Run Tests
-    steps:
-      - name: Download bourne_tests Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: raspberry_bourne_tests
-      - name: Run all tests
-        run: chmod +x bourne_tests && ./bourne_tests
-
-
   # Build performed on runner using make specs
   cxx_mkspec:
     strategy:
