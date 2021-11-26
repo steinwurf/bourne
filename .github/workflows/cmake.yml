@@ -59,6 +59,8 @@ jobs:
         run: cmake -E remove_directory ${{github.workspace}}/build
       - name: CMake Setup
         run: cmake -E make_directory ${{github.workspace}}/build
+      - name: LS this
+        run: ls
       - name: CMake Configure
         run: cmake ${{github.workspace}} -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DSTEINWURF_RESOLVE_OPTIONS="--git_protocol=git@ $EXTRA_RESOLVE_OPTIONS"
       - name: CMake Build
