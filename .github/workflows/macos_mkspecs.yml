@@ -1,4 +1,4 @@
-name: Windows C++ make-specs
+name: MacOS C++ make-specs
 on:
   workflow_dispatch:
     inputs:
@@ -12,5 +12,5 @@ on:
 env:
   EXTRA_RESOLVE_OPTIONS: ${{ github.event.inputs.resolve_options }}
 jobs:
-  Windows-mkspecs:
+  MacOS-mkspecs:
     uses: steinwurf/windows-mkspecs-action/.github/workflows/action.yml@v1
