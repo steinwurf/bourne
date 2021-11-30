@@ -14,4 +14,4 @@ env:
 jobs:
   build:
     - name: Run all the Linux mkspecs
-      uses: steinwurf/linux-mkspecs-action@v1
+      uses: steinwurf/linux-mkspecs-action/.github/workflows/linux-mkspecs.yml@v1
