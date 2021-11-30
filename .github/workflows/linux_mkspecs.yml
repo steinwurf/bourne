@@ -14,3 +14,5 @@ env:
 jobs:
   Linux-mkspecs:
     uses: steinwurf/linux-mkspecs-action/.github/workflows/action.yml@v1
+    with:
+      extra_resolve_options: $EXTRA_RESOLVE_OPTIONS

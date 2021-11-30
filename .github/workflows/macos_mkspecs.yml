@@ -14,3 +14,5 @@ env:
 jobs:
   MacOS-mkspecs:
     uses: steinwurf/macos-mkspecs-action/.github/workflows/action.yml@v1
+    with:
+      extra_resolve_options: $EXTRA_RESOLVE_OPTIONS

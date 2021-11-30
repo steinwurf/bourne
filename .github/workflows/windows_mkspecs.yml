@@ -14,3 +14,5 @@ env:
 jobs:
   Windows-mkspecs:
     uses: steinwurf/windows-mkspecs-action/.github/workflows/action.yml@v1
+    with:
+      extra_resolve_options: $EXTRA_RESOLVE_OPTIONS
