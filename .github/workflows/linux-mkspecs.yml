@@ -12,6 +12,5 @@ on:
 env:
   EXTRA_RESOLVE_OPTIONS: ${{ github.event.inputs.resolve_options }}
 jobs:
-  build:
-    - name: Linux Make Specs
-      uses: steinwurf/linux-mkspecs-action/.github/workflows/action.yml@v1
+  Linux-mkspecs:
+    uses: steinwurf/linux-mkspecs-action/.github/workflows/action.yml@v1
