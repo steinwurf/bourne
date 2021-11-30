@@ -14,6 +14,6 @@ env:
 jobs:
   valgrind:
     name: Valgrind
-    uses: steinwurf/valgrind-action/.github/workflows/action.yml@v1
+    uses: steinwurf/valgrind-action/.github/workflows/action.yml@1.0.0
     with:
       extra_resolve_options: $EXTRA_RESOLVE_OPTIONS
