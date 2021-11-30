@@ -13,6 +13,4 @@ env:
   EXTRA_RESOLVE_OPTIONS: ${{ github.event.inputs.resolve_options }}
 jobs:
   build:
-    steps:
-      - name: Run all the Linux mkspecs
-        uses: steinwurf/linux-mkspecs-action/.github/workflows/action.yml@v1
+    uses: steinwurf/linux-mkspecs-action/.github/workflows/action.yml@v1
