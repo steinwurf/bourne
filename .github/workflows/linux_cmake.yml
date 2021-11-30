@@ -13,6 +13,6 @@ env:
   EXTRA_RESOLVE_OPTIONS: ${{ github.event.inputs.resolve_options }}
 jobs:
   Linux-cmake:
-    - uses: steinwurf/linux-cmake-action/.github/workflows/action.yml@v1
-      with:
-        extra_resolve_options: ${{ env.EXTRA_RESOLVE_OPTIONS }}
+    uses: steinwurf/linux-cmake-action/.github/workflows/action.yml@v1
+    with:
+      extra_resolve_options: ${{ env.EXTRA_RESOLVE_OPTIONS }}
