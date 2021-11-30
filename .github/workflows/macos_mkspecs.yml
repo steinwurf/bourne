@@ -13,4 +13,4 @@ env:
   EXTRA_RESOLVE_OPTIONS: ${{ github.event.inputs.resolve_options }}
 jobs:
   MacOS-mkspecs:
-    uses: steinwurf/windows-mkspecs-action/.github/workflows/action.yml@v1
+    uses: steinwurf/macos-mkspecs-action/.github/workflows/action.yml@v1
