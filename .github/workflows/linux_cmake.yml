@@ -15,4 +15,4 @@ jobs:
   Linux-cmake:
     uses: steinwurf/linux-cmake-action/.github/workflows/action.yml@v1
     with:
-      extra_resolve_options: ${{ env.EXTRA_RESOLVE_OPTIONS }}
+      extra_resolve_options: $EXTRA_RESOLVE_OPTIONS
