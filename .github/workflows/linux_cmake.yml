@@ -1,4 +1,3 @@
-name: Linux Cmake
 on:
   workflow_dispatch:
     inputs:
@@ -13,6 +12,7 @@ env:
   EXTRA_RESOLVE_OPTIONS: ${{ github.event.inputs.resolve_options }}
 jobs:
   Linux-cmake:
+    name: Linux Cmake
     uses: steinwurf/linux-cmake-action/.github/workflows/action.yml@v1
     with:
       extra_resolve_options: $EXTRA_RESOLVE_OPTIONS
