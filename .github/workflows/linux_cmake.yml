@@ -10,7 +10,7 @@ on:
   push:
   pull_request:
 env:
-  EXTRA_RESOLVE_OPTIONS: ${{ github.event.inputs.resolve_options }}
+  EXTRA_RESOLVE_OPTIONS: ${{ github.event.inputs.extra_resolve_options }}
 jobs:
   Linux-cmake:
     name: Linux Cmake
