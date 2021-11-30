@@ -6,5 +6,5 @@ on:
   push:
   pull_request:
 jobs:
-  Clang-format:
+  Clang-Format:
     uses: steinwurf/clang-format-action/.github/workflows/action.yml@v1
