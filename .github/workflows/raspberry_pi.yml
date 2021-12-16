@@ -20,4 +20,3 @@ jobs:
       test_runner: raspberry_pi_3
       test_binary_name: test/bourne_tests
       test_binary_directory: build/cxx_raspberry_gxx83_armv7/test
-      test_file1: test/test.json
