@@ -89,6 +89,9 @@ json& json::operator=(json&& other)
 
 json& json::operator=(const json& other)
 {
+    if (this == &other)
+        return *this;
+
     switch (other.m_type)
     {
     case class_type::object:

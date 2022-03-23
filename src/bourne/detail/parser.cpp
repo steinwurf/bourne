@@ -306,12 +306,12 @@ json parser::parse_bool(const std::string& input, size_t& offset,
     if (input.substr(offset, 4) == "true")
     {
         offset += 4;
-        return true;
+        return json(true);
     }
     else if (input.substr(offset, 5) == "false")
     {
         offset += 5;
-        return false;
+        return json(false);
     }
     else
     {
