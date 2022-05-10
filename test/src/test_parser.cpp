@@ -23,6 +23,16 @@ void test_parser(const std::string& json_string, const bourne::json& expected)
 }
 }
 
+TEST(test_parser, test_parse_stream){
+    std::string json =
+        R"({"foo": "bar"})";
+    std::istringstream stream(json);
+
+    auto json_obj = bourne::detail::parser::parse(stream);
+
+    EXPECT_EQ(json_obj["foo"], "bar");
+}
+
 TEST(test_parser, test_parse)
 {
     test_parser("753 ", bourne::json(753));

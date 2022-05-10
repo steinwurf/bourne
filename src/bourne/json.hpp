@@ -339,6 +339,12 @@ public:
     /// Parse a string as a json object.
     static json parse(const std::string& input);
 
+    /// Parse a stream as a json object.
+    static json parse(std::istream& input, std::error_code& error);
+
+    /// Parse a stream as a json object.
+    static json parse(std::istream& input);
+
     /// Create a json array
     static json array();
     template <typename... T>

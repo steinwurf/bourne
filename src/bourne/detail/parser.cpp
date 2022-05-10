@@ -33,12 +33,13 @@ json parser::parse(const std::string& input)
 }
 json parser::parse(const std::string& input, std::error_code& error)
 {
+    auto input_stream = std::istringstream{input};
     assert(!error);
     std::size_t offset = 0;
-    auto result = parse_next(input, offset, error);
+    auto result = parse_next(input_stream, offset, error);
     if (error)
         return result;
-    consume_white_space(input, offset);
+    consume_white_space(input_stream, offset);
     if (offset != input.size())
     {
         error = bourne::error::parse_found_multiple_unstructured_elements;
@@ -48,14 +49,31 @@ json parser::parse(const std::string& input, std::error_code& error)
     return result;
 }
 
-json parser::parse(const std::istream& input)
+json parser::parse(std::istream& input)
 {
     std::error_code error;
     std::size_t offset = 0;
     auto result = parse_next(input, offset, error);
     throw_if_error(error);
     return result;
+}
 
+json parser::parse(std::istream& input, std::error_code& error)
+{
+    assert(!error);
+    std::size_t offset = 0;
+    auto result = parse_next(input, offset, error);
+    if (error)
+        return result;
+    consume_white_space(input, offset);
+
+    if (!input.eof())
+    {
+        error = bourne::error::parse_found_multiple_unstructured_elements;
+        return json(class_type::null);
+    }
+    assert(input.eof());
+    return result;
 }
 
 void parser::consume_white_space(std::istream& input, size_t& offset)
@@ -67,15 +85,31 @@ void parser::consume_white_space(std::istream& input, size_t& offset)
     }
 }
 
-json parser::parse_object(const std::string& input, size_t& offset,
+bool string_exists(std::istream& input, std::string str){
+    auto old_position = input.tellg();
+
+    for (size_t i = 0; i < str.size(); i++)
+    {
+        if (input.peek() != str[i])
+        {
+            input.seekg (old_position); // rewind
+            return false;
+        }
+        input.get();
+    }
+    return true;
+}
+
+json parser::parse_object(std::istream& input, size_t& offset,
                           std::error_code& error)
 {
     assert(!error);
     json object = json(class_type::object);
 
-    offset++;
+    char head;
+    input.get(head);
     consume_white_space(input, offset);
-    if (input[offset] == '}')
+    if (head == '}')
     {
         offset++;
         return object;
@@ -88,7 +122,8 @@ json parser::parse_object(const std::string& input, size_t& offset,
             return json(class_type::null);
 
         consume_white_space(input, offset);
-        if (input[offset] != ':')
+        input.get(head);
+        if (head != ':')
         {
             error = bourne::error::parse_object_expected_colon;
             return json(class_type::null);
@@ -102,12 +137,13 @@ json parser::parse_object(const std::string& input, size_t& offset,
         object[key.to_string()] = value;
 
         consume_white_space(input, offset);
-        if (input[offset] == ',')
+        input.get(head);
+        if (head == ',')
         {
             offset++;
             continue;
         }
-        else if (input[offset] == '}')
+        else if (head == '}')
         {
             offset++;
             break;
@@ -122,16 +158,19 @@ json parser::parse_object(const std::string& input, size_t& offset,
     return object;
 }
 
-json parser::parse_array(const std::string& input, size_t& offset,
+json parser::parse_array(std::istream& input, size_t& offset,
                          std::error_code& error)
 {
     assert(!error);
     json array = json(class_type::array);
     std::size_t index = 0;
 
-    offset++;
+    char head;
+    // consume opening bracket
+    input.get(head);
     consume_white_space(input, offset);
-    if (input[offset] == ']')
+    input.get(head);
+    if (head == ']')
     {
         offset++;
         return array;
@@ -144,12 +183,13 @@ json parser::parse_array(const std::string& input, size_t& offset,
             return json(class_type::null);
         consume_white_space(input, offset);
 
-        if (input[offset] == ',')
+        input.get(head);
+        if (head == ',')
         {
             offset++;
             continue;
         }
-        else if (input[offset] == ']')
+        else if (head == ']')
         {
             offset++;
             break;
@@ -165,17 +205,19 @@ json parser::parse_array(const std::string& input, size_t& offset,
     return array;
 }
 
-json parser::parse_string(const std::string& input, size_t& offset,
+json parser::parse_string(std::istream& input, size_t& offset,
                           std::error_code& error)
 {
     assert(!error);
     json string;
     std::string val;
-    for (char c = input[++offset]; c != '\"'; c = input[++offset])
+    char c;
+    for (input.get(c); c != '\"'; input.get(c))
     {
         if (c == '\\')
         {
-            switch (input[++offset])
+            input.get(c);
+            switch (c)
             {
             case '\"':
                 val += '\"';
@@ -204,9 +246,10 @@ json parser::parse_string(const std::string& input, size_t& offset,
             case 'u':
             {
                 val += "\\u";
+                auto old_position = input.tellg();
                 for (std::size_t i = 1; i <= 4; ++i)
                 {
-                    c = input[offset + i];
+                    input.get(c);
                     if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') ||
                         (c >= 'A' && c <= 'F'))
                     {
@@ -214,6 +257,7 @@ json parser::parse_string(const std::string& input, size_t& offset,
                     }
                     else
                     {
+                        input.seekg (old_position); // rewind
                         error = bourne::error::parse_string_expected_hex_char;
                         return json(class_type::null);
                     }
@@ -236,7 +280,7 @@ json parser::parse_string(const std::string& input, size_t& offset,
     return string;
 }
 
-json parser::parse_number(const std::string& input, size_t& offset,
+json parser::parse_number(std::istream& input, size_t& offset,
                           std::error_code& error)
 {
     assert(!error);
@@ -247,7 +291,7 @@ json parser::parse_number(const std::string& input, size_t& offset,
     int64_t exp = 0;
     while (true)
     {
-        c = input[offset++];
+        input.get(c);
         if ((c == '-') || (c >= '0' && c <= '9'))
         {
             val += c;
@@ -266,16 +310,16 @@ json parser::parse_number(const std::string& input, size_t& offset,
     {
         std::string exp_str;
 
-        c = input[offset++];
+        input.get(c);
         if (c == '-')
         {
-            offset++;
+            input.get(c);
             exp_str += '-';
         }
 
         while (true)
         {
-            c = input[offset++];
+            input.get(c);
             if (c >= '0' && c <= '9')
             {
                 exp_str += c;
@@ -311,17 +355,18 @@ json parser::parse_number(const std::string& input, size_t& offset,
     return number;
 }
 
-json parser::parse_bool(const std::string& input, size_t& offset,
+json parser::parse_bool(std::istream& input, size_t& offset,
                         std::error_code& error)
 {
     assert(!error);
     json boolean;
-    if (input.substr(offset, 4) == "true")
+
+    if (string_exists(input, "true"))
     {
         offset += 4;
         return json(true);
     }
-    else if (input.substr(offset, 5) == "false")
+    else if (string_exists(input, "false"))
     {
         offset += 5;
         return json(false);
@@ -333,11 +378,11 @@ json parser::parse_bool(const std::string& input, size_t& offset,
     }
 }
 
-json parser::parse_null(const std::string& input, size_t& offset,
+json parser::parse_null(std::istream& input, size_t& offset,
                         std::error_code& error)
 {
     assert(!error);
-    if (input.substr(offset, 4) != "null")
+    if (!string_exists(input, "null"))
     {
         error = bourne::error::parse_null_expected_null;
         return json(class_type::null);
@@ -346,13 +391,14 @@ json parser::parse_null(const std::string& input, size_t& offset,
     return json(class_type::null);
 }
 
-json parser::parse_next(const std::istream& input, size_t& offset,
+json parser::parse_next(std::istream& input, size_t& offset,
                         std::error_code& error)
 {
     assert(!error);
     char value;
-    consume_white_space(input, offset);
-    value = input[offset];
+    std::cout << "first char is: " << input.peek() << std::endl;
+    //consume_white_space(input, offset);
+    input.get(value);
     switch (value)
     {
     case '[':

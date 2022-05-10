@@ -471,7 +471,7 @@ std::string json::dump_min() const
     }
 }
 
-json json::parse(const std::string& input, std::error_code& error)
+json json::parse(const std::string &input, std::error_code& error)
 {
     assert(!error);
     return detail::parser::parse(input, error);
@@ -481,6 +481,17 @@ json json::parse(const std::string& input)
 {
     return detail::parser::parse(input);
 }
+json json::parse(std::istream &input, std::error_code& error)
+{
+    assert(!error);
+    return detail::parser::parse(input, error);
+}
+
+json json::parse(std::istream &input)
+{;
+    return detail::parser::parse(input);
+}
+
 
 json json::array()
 {
