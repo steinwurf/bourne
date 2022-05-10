@@ -12,6 +12,7 @@
 #include <cmath>
 #include <cstddef>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <system_error>
 
@@ -23,9 +24,10 @@ namespace detail
 {
 json parser::parse(const std::string& input)
 {
+    auto input_stream = std::istringstream{input};
     std::error_code error;
     std::size_t offset = 0;
-    auto result = parse_next(input, offset, error);
+    auto result = parse_next(input_stream, offset, error);
     throw_if_error(error);
     return result;
 }
@@ -46,9 +48,20 @@ json parser::parse(const std::string& input, std::error_code& error)
     return result;
 }
 
-void parser::consume_white_space(const std::string& input, size_t& offset)
+json parser::parse(const std::istream& input)
 {
-    while (offset < input.size() && isspace(input[offset]))
+    std::error_code error;
+    std::size_t offset = 0;
+    auto result = parse_next(input, offset, error);
+    throw_if_error(error);
+    return result;
+
+}
+
+void parser::consume_white_space(std::istream& input, size_t& offset)
+{
+    char c;
+    while (input.get(c) && std::isspace(c))
     {
         offset++;
     }
@@ -333,7 +346,7 @@ json parser::parse_null(const std::string& input, size_t& offset,
     return json(class_type::null);
 }
 
-json parser::parse_next(const std::string& input, size_t& offset,
+json parser::parse_next(const std::istream& input, size_t& offset,
                         std::error_code& error)
 {
     assert(!error);

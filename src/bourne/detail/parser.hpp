@@ -23,9 +23,10 @@ class parser
 public:
     static json parse(const std::string& input);
     static json parse(const std::string& input, std::error_code& error);
+    static json parse(const std::istream& input);
 
 private:
-    static void consume_white_space(const std::string& input, size_t& offest);
+    static void consume_white_space(std::istream& input, size_t& offest);
     static json parse_object(const std::string& input, size_t& offest,
                              std::error_code& error);
     static json parse_array(const std::string& input, size_t& offest,
@@ -38,7 +39,7 @@ private:
                            std::error_code& error);
     static json parse_null(const std::string& input, size_t& offest,
                            std::error_code& error);
-    static json parse_next(const std::string& input, size_t& offest,
+    static json parse_next(const std::istream& input, size_t& offest,
                            std::error_code& error);
 };
 }
