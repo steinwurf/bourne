@@ -66,6 +66,7 @@ json parser::parse(std::istream& input, std::error_code& error)
     if (error)
         return result;
     consume_white_space(input);
+    std::cout << "input.peek '" << input.peek() << "'" << std::endl;
 
     if (!input.eof())
     {
@@ -81,6 +82,7 @@ void parser::consume_white_space(std::istream& input)
     char c;
     while (std::isspace(input.peek()))
     {
+        std::cout << "consume_white_space: '" << static_cast<char>(input.peek()) << "'" << std::endl;
         input.get(c);
     }
 }
@@ -88,9 +90,9 @@ void parser::consume_white_space(std::istream& input)
 bool string_exists(std::istream& input, std::string str)
 {
     auto old_position = input.tellg();
-
     for (size_t i = 0; i < str.size(); i++)
     {
+        std::cout << "input.peek: " << static_cast<char>(input.peek()) << std::endl;
         if (input.peek() != str[i])
         {
             input.seekg(old_position); // rewind
@@ -108,9 +110,19 @@ json parser::parse_object(std::istream& input, std::error_code& error)
 
     char head;
     input.get(head);
+    if (head != '{')
+    {
+        error = bourne::error::parse_object_expected_head;
+        return json(class_type::null);
+    }
+    std::cout << "object peek 0'" << static_cast<char>(input.peek()) << "'" << std::endl;
+
     consume_white_space(input);
+    head = input.peek();
+
     if (head == '}')
     {
+        input.get(head);
         std::cout << "return object" << std::endl;
 
         return object;
@@ -131,12 +143,13 @@ json parser::parse_object(std::istream& input, std::error_code& error)
         std::cout << "object peek is in string parse 3'"
                   << static_cast<char>(input.peek()) << "'" << std::endl;
 
-        input.get(head);
+        head = input.peek();
         if (head != ':')
         {
             error = bourne::error::parse_object_expected_colon;
             return json(class_type::null);
         }
+        input.get(head);
         std::cout << "head '" << head << "'" << std::endl;
         std::cout << "peek is in string parse 4'"
                   << static_cast<char>(input.peek()) << "'" << std::endl;
@@ -238,7 +251,7 @@ json parser::parse_string(std::istream& input, std::error_code& error)
               << std::endl;
     for (input.get(c); c != '\"'; input.get(c))
     {
-        std::cout << "c is '" << c << "'" << std::endl;
+        std::cout << "c is for loop '" << c << "'" << std::endl;
         if (c == '\\')
         {
             input.get(c);
@@ -274,7 +287,8 @@ json parser::parse_string(std::istream& input, std::error_code& error)
                 val += "\\u";
                 for (std::size_t i = 1; i <= 4; ++i)
                 {
-                    c = input.peek();
+                    //c = input.peek();
+                    std::cout << "hex is '" << c << "'" << std::endl;
                     if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') ||
                         (c >= 'A' && c <= 'F'))
                     {
@@ -287,7 +301,6 @@ json parser::parse_string(std::istream& input, std::error_code& error)
                     }
                 }
                 // TODO Fix hex
-                // offset += 4;
                 break;
             }
             default:

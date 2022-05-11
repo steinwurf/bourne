@@ -15,73 +15,73 @@ void test_parser(const std::string& json_string, const bourne::json& expected)
     std::error_code error;
     EXPECT_EQ(expected.dump(),
               bourne::detail::parser::parse(json_string, error).dump())
-        << "Input: '" << json_string << "'";
+        << "Input: '" << json_string << "'" << std::endl << "Error: " << error.message();
     std::error_code error_min;
     EXPECT_EQ(expected.dump_min(),
               bourne::detail::parser::parse(json_string, error_min).dump_min())
-        << "Input: '" << json_string << "'";
+        << "Input: '" << json_string << "'" << std::endl << "Error: " << error_min.message();
 }
 }
 
-//TEST(test_parser, test_parse_stream){
-//    std::string json ="{\"foo\": \"bar\"}";
-//    std::istringstream stream(json);
-//    auto json_obj = bourne::detail::parser::parse(stream);
-//
-//    EXPECT_EQ(json_obj["foo"], "bar");
-//}
-//
-//TEST(test_parser, test_parse)
-//{
-//    test_parser("753 ", bourne::json(753));
-//    test_parser(" 75..3 ", bourne::json::null());
-//    test_parser(" 753 ", bourne::json(753));
-//    test_parser(" 90200.10 ", bourne::json(90200.10));
-//    test_parser(" 90200..10 ", bourne::json::null());
-//    test_parser("\"Text String\"", bourne::json("Text String"));
-//    test_parser("\"you are a \\\"great\\\" agent\\/spy\"",
-//                bourne::json("you are a \"great\" agent/spy"));
-//    test_parser("[1, 2,3]", bourne::json::array(1, 2, 3));
-//    test_parser("{\"value\":3}", bourne::json{"value", 3});
-//
-//    bourne::json expected_json = {"key1", "value", "key2", true,   "key3",
-//                                  1234,   "key4",  -42,    "key5", nullptr};
-//    test_parser("{ \"key1\" : \"value\","
-//                "  \"key2\" : true, "
-//                "  \"key3\" : 1234, "
-//                "  \"key4\" : -42, "
-//                "  \"key5\" : null }",
-//                expected_json);
-//}
+//EST(test_parser, test_parse_stream){
+//   std::string json ="{\"foo\": \"bar\"}";
+//   std::istringstream stream(json);
+//   auto json_obj = bourne::detail::parser::parse(stream);
 
-//TEST(test_parser, test_parse_file)
-//{
-//    std::ifstream test_json("test.json");
-//    EXPECT_TRUE(test_json.is_open());
+//   EXPECT_EQ(json_obj["foo"], "bar");
 //
-//    std::error_code error;
-//    auto json = bourne::detail::parser::parse(test_json, error);
+
+//EST(test_parser, test_parse)
 //
-//    EXPECT_EQ("László", json["hungarian_name"].to_string());
-//    EXPECT_EQ("Jørgen", json["danish_name"].to_string());
-//    EXPECT_EQ("秀英", json["chinese_name"].to_string());
-//    EXPECT_EQ("John", json["english_name"].to_string());
+//   test_parser("753 ", bourne::json(753));
+//   test_parser(" 75..3 ", bourne::json::null());
+//   test_parser(" 753 ", bourne::json(753));
+//   test_parser(" 90200.10 ", bourne::json(90200.10));
+//   test_parser(" 90200..10 ", bourne::json::null());
+//   test_parser("\"Text String\"", bourne::json("Text String"));
+//   test_parser("\"you are a \\\"great\\\" agent\\/spy\"",
+//               bourne::json("you are a \"great\" agent/spy"));
+//   test_parser("[1, 2,3]", bourne::json::array(1, 2, 3));
+//   test_parser("{\"value\":3}", bourne::json{"value", 3});
+
+//   bourne::json expected_json = {"key1", "value", "key2", true,   "key3",
+//                                 1234,   "key4",  -42,    "key5", nullptr};
+//   test_parser("{ \"key1\" : \"value\","
+//               "  \"key2\" : true, "
+//               "  \"key3\" : 1234, "
+//               "  \"key4\" : -42, "
+//               "  \"key5\" : null }",
+//               expected_json);
 //
-//    EXPECT_EQ("værdi", json["nøgle"].to_string());
-//    EXPECT_EQ("值", json["键"].to_string());
-//}
-//
-TEST(test_parser, test_parse_out_of_object_structure_elements_error)
+
+TEST(test_parser, test_parse_file)
 {
-    auto expected_error =
-        bourne::error::parse_found_multiple_unstructured_elements;
+    std::ifstream test_json("test.json");
+    EXPECT_TRUE(test_json.is_open());
+
     std::error_code error;
-    std::string json_string = "{} 1  ";
-    auto result = bourne::detail::parser::parse(json_string, error);
-    EXPECT_EQ(expected_error, error) << error.message();
-    ASSERT_EQ(bourne::json::null(), result);
+    auto json = bourne::detail::parser::parse(test_json, error);
+
+    //EXPECT_EQ("László", json["hungarian_name"].to_string());
+    EXPECT_EQ("Jørgen", json["danish_name"].to_string());
+    //EXPECT_EQ("秀英", json["chinese_name"].to_string());
+    //EXPECT_EQ("John", json["english_name"].to_string());
+//
+    //EXPECT_EQ("værdi", json["nøgle"].to_string());
+    //EXPECT_EQ("值", json["键"].to_string());
 }
 
+//TEST(test_parser, test_parse_out_of_object_structure_elements_error)
+//{
+//    auto expected_error =
+//        bourne::error::parse_found_multiple_unstructured_elements;
+//    std::error_code error;
+//    std::string json_string = "{} 1  ";
+//    auto result = bourne::detail::parser::parse(json_string, error);
+//    EXPECT_EQ(expected_error, error) << error.message();
+//    ASSERT_EQ(bourne::json::null(), result);
+//}
+//
 //TEST(test_parser, test_parse_object_expected_colon_error)
 //{
 //    auto expected_error = bourne::error::parse_object_expected_colon;
