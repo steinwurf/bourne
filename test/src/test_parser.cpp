@@ -30,29 +30,29 @@ void test_parser(const std::string& json_string, const bourne::json& expected)
 //
 //    EXPECT_EQ(json_obj["foo"], "bar");
 //}
-
-TEST(test_parser, test_parse)
-{
-    test_parser("753 ", bourne::json(753));
-    test_parser(" 75..3 ", bourne::json::null());
-    test_parser(" 753 ", bourne::json(753));
-    test_parser(" 90200.10 ", bourne::json(90200.10));
-    test_parser(" 90200..10 ", bourne::json::null());
-    test_parser("\"Text String\"", bourne::json("Text String"));
-    test_parser("\"you are a \\\"great\\\" agent\\/spy\"",
-                bourne::json("you are a \"great\" agent/spy"));
-    test_parser("[1, 2,3]", bourne::json::array(1, 2, 3));
-    test_parser("{\"value\":3}", bourne::json{"value", 3});
-
-    bourne::json expected_json = {"key1", "value", "key2", true,   "key3",
-                                  1234,   "key4",  -42,    "key5", nullptr};
-    test_parser("{ \"key1\" : \"value\","
-                "  \"key2\" : true, "
-                "  \"key3\" : 1234, "
-                "  \"key4\" : -42, "
-                "  \"key5\" : null }",
-                expected_json);
-}
+//
+//TEST(test_parser, test_parse)
+//{
+//    test_parser("753 ", bourne::json(753));
+//    test_parser(" 75..3 ", bourne::json::null());
+//    test_parser(" 753 ", bourne::json(753));
+//    test_parser(" 90200.10 ", bourne::json(90200.10));
+//    test_parser(" 90200..10 ", bourne::json::null());
+//    test_parser("\"Text String\"", bourne::json("Text String"));
+//    test_parser("\"you are a \\\"great\\\" agent\\/spy\"",
+//                bourne::json("you are a \"great\" agent/spy"));
+//    test_parser("[1, 2,3]", bourne::json::array(1, 2, 3));
+//    test_parser("{\"value\":3}", bourne::json{"value", 3});
+//
+//    bourne::json expected_json = {"key1", "value", "key2", true,   "key3",
+//                                  1234,   "key4",  -42,    "key5", nullptr};
+//    test_parser("{ \"key1\" : \"value\","
+//                "  \"key2\" : true, "
+//                "  \"key3\" : 1234, "
+//                "  \"key4\" : -42, "
+//                "  \"key5\" : null }",
+//                expected_json);
+//}
 
 //TEST(test_parser, test_parse_file)
 //{
@@ -71,17 +71,17 @@ TEST(test_parser, test_parse)
 //    EXPECT_EQ("值", json["键"].to_string());
 //}
 //
-//TEST(test_parser, test_parse_out_of_object_structure_elements_error)
-//{
-//    auto expected_error =
-//        bourne::error::parse_found_multiple_unstructured_elements;
-//    std::error_code error;
-//    std::string json_string = "{} 1  ";
-//    auto result = bourne::detail::parser::parse(json_string, error);
-//    EXPECT_EQ(expected_error, error) << error.message();
-//    ASSERT_EQ(bourne::json::null(), result);
-//}
-//
+TEST(test_parser, test_parse_out_of_object_structure_elements_error)
+{
+    auto expected_error =
+        bourne::error::parse_found_multiple_unstructured_elements;
+    std::error_code error;
+    std::string json_string = "{} 1  ";
+    auto result = bourne::detail::parser::parse(json_string, error);
+    EXPECT_EQ(expected_error, error) << error.message();
+    ASSERT_EQ(bourne::json::null(), result);
+}
+
 //TEST(test_parser, test_parse_object_expected_colon_error)
 //{
 //    auto expected_error = bourne::error::parse_object_expected_colon;
@@ -122,18 +122,19 @@ TEST(test_parser, test_parse)
 //    EXPECT_EQ(expected_error, error) << error.message();
 //    ASSERT_EQ(bourne::json::null(), result);
 //}
-
-TEST(test_parser, test_parse_number_expected_number_for_component_error)
-{
-    auto expected_error =
-        bourne::error::parse_number_expected_number_for_component;
-    std::error_code error;
-    std::string json_string = "{\"bourne\": 1e}";
-    auto result = bourne::detail::parser::parse(json_string, error);
-    EXPECT_EQ(expected_error, error) << error.message();
-    ASSERT_EQ(bourne::json::null(), result);
-}
-
+//
+//TEST(test_parser, test_parse_number_expected_number_for_component_error)
+//{
+//    std::cout << "what"    << std::endl;
+//    auto expected_error =
+//        bourne::error::parse_number_expected_number_for_component;
+//    std::error_code error;
+//    std::string json_string = "{\"bourne\": 1e}";
+//    auto result = bourne::detail::parser::parse(json_string, error);
+//    EXPECT_EQ(expected_error, error) << error.message();
+//    ASSERT_EQ(bourne::json::null(), result);
+//}
+//
 //TEST(test_parser, test_parse_number_unexpected_char_error)
 //{
 //    auto expected_error = bourne::error::parse_number_unexpected_char;
