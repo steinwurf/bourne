@@ -126,7 +126,6 @@ TEST(test_parser, test_parse_string_expected_hex_char_error)
 
 TEST(test_parser, test_parse_number_expected_number_for_component_error)
 {
-    std::cout << "what"    << std::endl;
     auto expected_error =
         bourne::error::parse_number_expected_number_for_component;
     std::error_code error;
