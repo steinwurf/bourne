@@ -340,11 +340,12 @@ json parser::parse_number(std::istream& input, std::error_code& error)
         }
     }
     std::cout << "val is '" << val << "'" << std::endl;
-    std::cout << "c is '" << c << "'" << std::endl;
+    std::cout << "1c is '" << c << "'" << std::endl;
 
     if (tolower(c) == 'e')
     {
         std::string exp_str;
+        std::cout << "2c is '" << c << "'" << std::endl;
 
         input.get(c);
 
@@ -353,11 +354,13 @@ json parser::parse_number(std::istream& input, std::error_code& error)
             input.get(c);
             exp_str += '-';
         }
+        std::cout << "3c is '" << c << "'" << std::endl;
+
 
         while (true)
         {
             input.get(c);
-            std::cout << "c is '" << c << "'" << std::endl;
+            std::cout << "4c is '" << c << "'" << std::endl;
             if (c >= '0' && c <= '9')
             {
                 exp_str += c;
