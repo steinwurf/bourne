@@ -57,7 +57,7 @@ TEST(test_parser, test_parse_file)
 
     std::error_code error;
     auto json = bourne::detail::parser::parse(buffer.str(), error);
-
+    ASSERT_FALSE((bool)error);
     EXPECT_EQ("László", json["hungarian_name"].to_string());
     EXPECT_EQ("Jørgen", json["danish_name"].to_string());
     EXPECT_EQ("秀英", json["chinese_name"].to_string());
@@ -65,6 +65,15 @@ TEST(test_parser, test_parse_file)
 
     EXPECT_EQ("værdi", json["nøgle"].to_string());
     EXPECT_EQ("值", json["键"].to_string());
+}
+
+TEST(test_parser, test_parse_unicode_escape_hex_char)
+{
+    std::error_code error;
+    std::string json_string = "{\"bourne\": \"\\u0026\"}";
+    auto result = bourne::detail::parser::parse(json_string, error);
+    ASSERT_FALSE((bool)error);
+    ASSERT_EQ("\\u0026", result["bourne"].to_string());
 }
 
 TEST(test_parser, test_parse_out_of_object_structure_elements_error)
@@ -109,9 +118,10 @@ TEST(test_parser, test_parse_array_expected_comma_or_closing_bracket_error)
     ASSERT_EQ(bourne::json::null(), result);
 }
 
-TEST(test_parser, test_parse_string_expected_hex_char_error)
+TEST(test_parser, test_parse_string_expected_unicode_escape_hex_char_error)
 {
-    auto expected_error = bourne::error::parse_string_expected_hex_char;
+    auto expected_error =
+        bourne::error::parse_string_expected_unicode_escape_hex_char;
     std::error_code error;
     std::string json_string = "{\"bourne\": \"\\uG\"}";
     auto result = bourne::detail::parser::parse(json_string, error);
