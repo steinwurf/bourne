@@ -10,7 +10,8 @@ BOURNE_ERROR_TAG(parse_object_expected_colon, "Expected \":\"")
 BOURNE_ERROR_TAG(parse_object_expected_comma, "Expected \",\"")
 BOURNE_ERROR_TAG(parse_array_expected_comma_or_closing_bracket,
                  "Expected \",\" or \"]\"")
-BOURNE_ERROR_TAG(parse_string_expected_hex_char, "Expected hex character")
+BOURNE_ERROR_TAG(parse_string_expected_unicode_escape_hex_char,
+                 "Expected unicode escape hex character")
 BOURNE_ERROR_TAG(parse_number_expected_number_for_component,
                  "Expected number for component")
 BOURNE_ERROR_TAG(parse_number_unexpected_char, "Unexpected character")

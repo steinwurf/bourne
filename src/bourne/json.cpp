@@ -331,7 +331,7 @@ std::string json::to_string() const
             output += "\\\"";
             break;
         case '\\':
-            output += "\\\\";
+            output += "\\";
             break;
         case '\b':
             output += "\\b";

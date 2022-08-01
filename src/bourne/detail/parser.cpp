@@ -201,7 +201,8 @@ json parser::parse_string(const std::string& input, size_t& offset,
                     }
                     else
                     {
-                        error = bourne::error::parse_string_expected_hex_char;
+                        error = bourne::error::
+                            parse_string_expected_unicode_escape_hex_char;
                         return json(class_type::null);
                     }
                 }
