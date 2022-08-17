@@ -25,20 +25,20 @@ public:
     static json parse(const std::string& input, std::error_code& error);
 
 private:
-    static void consume_white_space(const std::string& input, size_t& offest);
-    static json parse_object(const std::string& input, size_t& offest,
+    static void consume_white_space(const std::string& input, size_t& offset);
+    static json parse_object(const std::string& input, size_t& offset,
                              std::error_code& error);
-    static json parse_array(const std::string& input, size_t& offest,
+    static json parse_array(const std::string& input, size_t& offset,
                             std::error_code& error);
-    static json parse_string(const std::string& input, size_t& offest,
+    static json parse_string(const std::string& input, size_t& offset,
                              std::error_code& error);
-    static json parse_number(const std::string& input, size_t& offest,
+    static json parse_number(const std::string& input, size_t& offset,
                              std::error_code& error);
-    static json parse_bool(const std::string& input, size_t& offest,
+    static json parse_bool(const std::string& input, size_t& offset,
                            std::error_code& error);
-    static json parse_null(const std::string& input, size_t& offest,
+    static json parse_null(const std::string& input, size_t& offset,
                            std::error_code& error);
-    static json parse_next(const std::string& input, size_t& offest,
+    static json parse_next(const std::string& input, size_t& offset,
                            std::error_code& error);
 };
 }
