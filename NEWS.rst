@@ -6,6 +6,10 @@ every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+10.0.0
+------
 * Major: Use waf-tools 5.
 * Minor: Updated waf.
 * Minor: Added json::dump_min for dumping a minified json string.
