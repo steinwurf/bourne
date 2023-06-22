@@ -237,7 +237,8 @@ std::vector<std::string> json::keys() const
 
     std::transform(std::begin(*m_internal.m_map), std::end(*m_internal.m_map),
                    std::back_inserter(keys),
-                   [](const auto& pair) { return pair.first; });
+                   [](const std::pair<std::string, json>& pair)
+                   { return pair.first; });
     return keys;
 }
 
