@@ -194,3 +194,21 @@ TEST(test_parser, test_exception_throw)
     }
     EXPECT_TRUE(caught);
 }
+
+TEST(test_parser, test_parse_backslash)
+{
+    std::error_code error;
+    std::string json_string = "{\"bourne\":\"\\\\\"}";
+    auto result = bourne::detail::parser::parse(json_string, error);
+    ASSERT_FALSE((bool)error);
+    EXPECT_EQ(json_string, result.dump_min());
+}
+
+TEST(test_parser, test_parse_unicode)
+{
+    std::error_code error;
+    std::string json_string = "{\"bourne\":\"\\u0026\"}";
+    auto result = bourne::detail::parser::parse(json_string, error);
+    ASSERT_FALSE((bool)error);
+    ASSERT_EQ(json_string, result.dump_min());
+}

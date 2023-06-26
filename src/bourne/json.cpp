@@ -324,7 +324,8 @@ std::string json::to_string() const
     assert(is_string());
     const std::string& str = *m_internal.m_string;
     std::string output;
-    for (std::size_t i = 0; i < str.length(); ++i)
+    auto size = str.length();
+    for (std::size_t i = 0; i < size; ++i)
     {
         switch (str[i])
         {
@@ -332,8 +333,17 @@ std::string json::to_string() const
             output += "\\\"";
             break;
         case '\\':
-            output += "\\";
+        {
+            // Check if the next character is a unicode escape sequence
+            if (i + 1 < size && str[i + 1] == 'u')
+            {
+                output += "\\u";
+                i += 1;
+                break;
+            }
+            output += "\\\\";
             break;
+        }
         case '\b':
             output += "\\b";
             break;

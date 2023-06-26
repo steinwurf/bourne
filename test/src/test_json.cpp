@@ -287,3 +287,18 @@ TEST(test_json, test_keys)
     }
     EXPECT_EQ(4U, obj.keys().size());
 }
+
+TEST(test_json, test_unicode_dump)
+{
+    {
+        bourne::json object({"unicode", "\u00E6"});
+        std::string expected = "{\"unicode\":\"\u00E6\"}";
+        EXPECT_EQ(expected, object.dump_min());
+    }
+
+    {
+        bourne::json object({"bad_unicode", "\\u0"});
+        std::string expected = "{\"bad_unicode\":\"\\u0\"}";
+        EXPECT_EQ(expected, object.dump_min());
+    }
+}
