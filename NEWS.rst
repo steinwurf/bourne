@@ -6,6 +6,10 @@ every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+10.0.1
+------
 * Patch: Better support for unicode escape sequences.
 
 10.0.0

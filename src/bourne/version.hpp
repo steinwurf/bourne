@@ -11,7 +11,7 @@ namespace cpuid
 {
 /// Here we define the STEINWURF_BOURNE_VERSION this should be updated on each
 /// release
-#define STEINWURF_BOURNE_VERSION v10_0_0
+#define STEINWURF_BOURNE_VERSION v10_0_1
 
 inline namespace STEINWURF_BOURNE_VERSION
 {

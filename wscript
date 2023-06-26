@@ -5,7 +5,7 @@ import os
 from waflib.Build import BuildContext
 
 APPNAME = "bourne"
-VERSION = "10.0.0"
+VERSION = "10.0.1"
 
 
 def configure(conf):
