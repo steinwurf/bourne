@@ -302,3 +302,13 @@ TEST(test_json, test_unicode_dump)
         EXPECT_EQ(expected, object.dump_min());
     }
 }
+
+TEST(test_json, nested_assignment_cause_memory_leak)
+{
+    bourne::json object1;
+    bourne::json object2;
+    object1["key1"] = bourne::json::object();
+    object2["key2"] = bourne::json::object();
+    std::cout << "now" << std::endl;
+    object1["key1"] = object2["key2"];
+}
