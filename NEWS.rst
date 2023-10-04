@@ -6,7 +6,8 @@ every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Patch: Fixed bug where re-assignment via the ``operator[]`` would cause a memory
+  leak.
 
 10.0.1
 ------
