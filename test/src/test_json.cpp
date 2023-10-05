@@ -303,12 +303,10 @@ TEST(test_json, test_unicode_dump)
     }
 }
 
-TEST(test_json, nested_assignment_cause_memory_leak)
+TEST(test_json, check_reassignment_with_operator_square_brackets)
 {
-    bourne::json object1;
-    bourne::json object2;
-    object1["key1"] = bourne::json::object();
-    object2["key2"] = bourne::json::object();
-    std::cout << "now" << std::endl;
-    object1["key1"] = object2["key2"];
+    bourne::json object;
+    object["key"] = "value 1";
+    bourne::json thing = bourne::json("value 2");
+    object["key"] = thing;
 }

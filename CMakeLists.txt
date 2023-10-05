@@ -1,7 +1,21 @@
 cmake_minimum_required(VERSION 3.12)
 project(bourne)
 
-if(NOT DEFINED STEINWURF_TOP_NAME)
+find_package(Python COMPONENTS Interpreter)
+
+# Use waf to resolve dependencies
+if(NOT DEFINED STEINWURF_RESOLVE)
+  message(STATUS "Resolving dependencies...")
+  execute_process(
+    COMMAND ${Python_EXECUTABLE} waf resolve ${STEINWURF_RESOLVE_OPTIONS}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    RESULT_VARIABLE STATUS)
+
+  if(STATUS AND NOT STATUS EQUAL 0)
+    message(FATAL_ERROR "Failed: ${STATUS}")
+  endif()
+
+  set(STEINWURF_RESOLVE "${CMAKE_CURRENT_SOURCE_DIR}/resolve_symlinks")
   set(STEINWURF_TOP_NAME bourne)
 endif()
 
@@ -36,6 +50,32 @@ install(
 
 # Is top level project?
 if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
+
+  enable_testing()
+  if(CMAKE_C_COMPILER_ID MATCHES "MSVC")
+    # For Windows: Prevent overriding the parent project's compiler/linker
+    # settings
+    set(gtest_force_shared_crt
+        ON
+        CACHE BOOL "" FORCE)
+  endif()
+
+  # Google Test dependency
+  add_subdirectory("${STEINWURF_RESOLVE}/gtest-source" gtest_main
+                  EXCLUDE_FROM_ALL)
+  # Copy test file
+  execute_process(
+    COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/test.json
+    ${CMAKE_CURRENT_BINARY_DIR})
+
+  # Define tests
+  file(GLOB_RECURSE bourne_test_sources test/**/*.cpp)
+  add_executable(bourne_tests ${bourne_test_sources})
+  target_link_libraries(bourne_tests steinwurf::bourne gtest_main)
+  add_test(bourne_tests bourne_tests)
+
   # Build executables
   add_executable(example examples/example.cpp)
   target_link_libraries(example bourne)

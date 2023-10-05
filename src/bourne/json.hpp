@@ -134,13 +134,13 @@ public:
         return *this;
     }
 
-    /// Assignment operator for string value
+    /// Assignment operator for a string value
     template <typename T>
     typename check_is_string<T, json&>::type operator=(T s)
     {
         set_type(class_type::string);
 
-        // use assignment operator to copy over the string
+        // use the assignment operator to copy over the string
         *m_internal.m_string = std::string(s);
         return *this;
     }
