@@ -9,15 +9,6 @@
 
 int main()
 {
-
-    bourne::json obj = {"key", 1, "nested", {"key", 2}};
-
-    // Create leak
-    obj = obj["nested"];
-
-    std::cout << obj["key"].to_int() << std::endl;
-    return 0;
-
     // This is how each type can be created:
     // default is null
     bourne::json null;
