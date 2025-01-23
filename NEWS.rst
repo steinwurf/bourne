@@ -6,6 +6,10 @@ every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+10.1.0
+------
 * Patch: Fixed bug where assignment of a json object to a contained object would
   cause a memory leak.
 * Patch: Fixed bug where re-assignment via the ``operator[]`` would cause a memory
