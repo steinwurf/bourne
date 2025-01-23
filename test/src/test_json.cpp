@@ -309,7 +309,6 @@ TEST(test_json, nested_assignment_cause_memory_leak)
     bourne::json object2;
     object1["key1"] = bourne::json::object();
     object2["key2"] = bourne::json::object();
-    std::cout << "now" << std::endl;
     object1["key1"] = object2["key2"];
 }
 
@@ -340,4 +339,13 @@ TEST(test_json, contains)
     EXPECT_FALSE(
         object.contains(other)); // Check that the objects are not contained in
                                  // each other even though they are equal
+}
+
+TEST(test_json, looped_reference)
+{
+    bourne::json object = {"key", 1};
+    object["loop"] = object;
+    object = object["loop"];
+
+    EXPECT_EQ(1, object["key"].to_int());
 }
