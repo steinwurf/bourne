@@ -334,7 +334,7 @@ public:
     bool operator!=(const json& other) const;
 
     /// Check if this object contains the other object, i.e., if the other
-    /// object is the same or nested in this object.
+    /// object is the same or nested in this object based on pointer equality.
     /// @param other The object to check if it is contained in this object.
     /// @return true if the other object is contained in this object, otherwise
     /// false.
