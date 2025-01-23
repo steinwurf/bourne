@@ -12,18 +12,20 @@ file(GLOB_RECURSE bourne_sources ./src/*.cpp)
 if(${PROJECT_NAME} STREQUAL ${STEINWURF_TOP_NAME})
   # Create static library
   add_library(bourne STATIC ${bourne_sources})
+
   # Install library
   install(FILES $<TARGET_FILE:bourne> DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 else()
   # Create object library
   add_library(bourne OBJECT ${bourne_sources})
+
   # Add this library to a global list of steinwurf object libraries
   set_property(GLOBAL APPEND PROPERTY steinwurf::object_libraries
-                                      steinwurf::bourne)
+    steinwurf::bourne)
 endif()
 
 target_include_directories(bourne INTERFACE src)
-target_compile_features(bourne PUBLIC cxx_std_14)
+target_compile_features(bourne PUBLIC cxx_std_17)
 add_library(steinwurf::bourne ALIAS bourne)
 
 # Install headers excluding "detail" as these are internal to the library.

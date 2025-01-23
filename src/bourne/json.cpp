@@ -89,8 +89,22 @@ json& json::operator=(json&& other)
 
 json& json::operator=(const json& other)
 {
+    // If the other object is this object, just return this object
     if (this == &other)
         return *this;
+
+    // Check if the other object is nested in this object
+    if (contains(other))
+    {
+        // Copy the other object to a temporary object and then clear this
+        // object
+        bourne::json tmp = other;
+        clear();
+
+        // Call the assignment operator with the temporary object
+        *this = tmp;
+        return *this;
+    }
 
     clear();
     switch (other.m_type)
@@ -481,6 +495,43 @@ std::string json::dump_min() const
     default:
         return dump(0, "");
     }
+}
+
+bool json::contains(const json& other) const
+{
+    if (this == &other)
+    {
+        return true;
+    }
+
+    // Check if this object can contain other objects
+    if (!is_object() && !is_array())
+    {
+        return false;
+    }
+
+    if (is_object())
+    {
+        for (const auto& [_, value] : object_range())
+        {
+            if (value.contains(other))
+            {
+                return true;
+            }
+        }
+    }
+    else if (is_array())
+    {
+        for (const auto& value : array_range())
+        {
+            if (value.contains(other))
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 json json::parse(const std::string& input, std::error_code& error)
