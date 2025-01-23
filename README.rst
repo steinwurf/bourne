@@ -47,7 +47,7 @@ A simple c++17 json reader and writer.
 Usage
 =====
 
-Usage examples are located in the examples folder.
+Usage example is located in the examples folder.
 
 Build
 =====
