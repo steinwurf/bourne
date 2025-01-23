@@ -6,19 +6,19 @@ bourne
 
 .. |Linux make-specs| image:: https://github.com/steinwurf/bourne/actions/workflows/linux_mkspecs.yml/badge.svg
    :target: https://github.com/steinwurf/bourne/actions/workflows/linux_mkspecs.yml
-   
+
 .. |Windows make-specs| image:: https://github.com/steinwurf/bourne/actions/workflows/windows_mkspecs.yml/badge.svg
    :target: https://github.com/steinwurf/bourne/actions/workflows/windows_mkspecs.yml
 
 .. |MacOS make-specs| image:: https://github.com/steinwurf/bourne/actions/workflows/macos_mkspecs.yml/badge.svg
    :target: https://github.com/steinwurf/bourne/actions/workflows/macos_mkspecs.yml
-   
+
 .. |Linux CMake| image:: https://github.com/steinwurf/bourne/actions/workflows/linux_cmake.yml/badge.svg
    :target: https://github.com/steinwurf/bourne/actions/workflows/linux_cmake.yml
 
 .. |Windows CMake| image:: https://github.com/steinwurf/bourne/actions/workflows/windows_cmake.yml/badge.svg
    :target: https://github.com/steinwurf/bourne/actions/workflows/windows_cmake.yml
-   
+
 .. |MacOS CMake| image:: https://github.com/steinwurf/bourne/actions/workflows/macos_cmake.yml/badge.svg
    :target: https://github.com/steinwurf/bourne/actions/workflows/macos_cmake.yml
 
@@ -36,10 +36,10 @@ bourne
 
 .. |Cppcheck| image:: https://github.com/steinwurf/bourne/actions/workflows/cppcheck.yml/badge.svg
    :target: https://github.com/steinwurf/bourne/actions/workflows/cppcheck.yml
-    
+
 .. image:: https://raw.githubusercontent.com/steinwurf/bourne/master/bourne.gif
 
-A simple c++11 json reader and writer.
+A simple c++17 json reader and writer.
 
 .. contents:: Table of Contents:
    :local:
@@ -47,7 +47,7 @@ A simple c++11 json reader and writer.
 Usage
 =====
 
-Usage examples are located in the examples folder.
+Usage example is located in the examples folder.
 
 Build
 =====

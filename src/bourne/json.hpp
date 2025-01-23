@@ -333,6 +333,13 @@ public:
     /// Inequality operator, negated equality operator.
     bool operator!=(const json& other) const;
 
+    /// Check if this object contains the other object, i.e., if the other
+    /// object is the same or nested in this object based on pointer equality.
+    /// @param other The object to check if it is contained in this object.
+    /// @return true if the other object is contained in this object, otherwise
+    /// false.
+    bool contains(const json& other) const;
+
     /// Parse a string as a json object.
     static json parse(const std::string& input, std::error_code& error);
 

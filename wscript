@@ -9,7 +9,7 @@ VERSION = "10.0.1"
 
 
 def configure(conf):
-    conf.set_cxx_std(11)
+    conf.set_cxx_std(17)
 
 
 def build(bld):

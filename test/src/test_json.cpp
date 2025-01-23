@@ -312,3 +312,32 @@ TEST(test_json, nested_assignment_cause_memory_leak)
     std::cout << "now" << std::endl;
     object1["key1"] = object2["key2"];
 }
+
+TEST(test_json, memory_leak)
+{
+    bourne::json object = {"key", 1, "nested", {"key", 2}};
+
+    EXPECT_EQ(1, object["key"].to_int());
+    EXPECT_EQ(2, object["nested"]["key"].to_int());
+
+    // Create leak
+    object = object["nested"];
+
+    EXPECT_EQ(2, object["key"].to_int());
+}
+
+TEST(test_json, contains)
+{
+    bourne::json object = {"key", 1, "nested", {"key", 2}};
+
+    EXPECT_TRUE(object.contains(object));
+    EXPECT_TRUE(object.contains(object["nested"]));
+    EXPECT_FALSE(object["nested"].contains(object));
+
+    bourne::json other = {"key", 1, "nested", {"key", 2}};
+
+    EXPECT_TRUE(other == object); // Check that the objects are equal
+    EXPECT_FALSE(
+        object.contains(other)); // Check that the objects are not contained in
+                                 // each other even though they are equal
+}
