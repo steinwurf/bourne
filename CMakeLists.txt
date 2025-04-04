@@ -75,12 +75,12 @@ if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
 
   # Build test executable
   file(GLOB_RECURSE bourne_test_sources ./test/*.cpp)
-  add_executable(bourne_test ${bourne_test_sources})
-  target_link_libraries(bourne_test gtest_main)
-  target_link_libraries(bourne_test steinwurf::bourne)
+  add_executable(bourne_tests ${bourne_test_sources})
+  target_link_libraries(bourne_tests gtest_main)
+  target_link_libraries(bourne_tests steinwurf::bourne)
 
   # Copy test/test.json to build directory
   file(COPY test/test.json DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-  add_test(bourne_test bourne_test)
+  add_test(bourne_tests bourne_tests)
 endif()
