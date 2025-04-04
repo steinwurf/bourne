@@ -63,8 +63,6 @@ jobs:
         run: |
           echo "::add-matcher::.github/gcc-problem-matcher.json"
           python3 waf
-      - name: Copy Test files
-        run: cp test/encode_decode_simple_encoder.json build_current/ && cp test/encode_decode_simple_decoder.json build_current/
       - name: Waf Test
         run: ${{ matrix.config.env }} python3 waf --run_tests
 
