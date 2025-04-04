@@ -39,6 +39,7 @@ jobs:
         run: |
           mkdir artifact
           mv cmake_build/bourne_tests ./artifact
+          cp cmake_build/test.json ./artifact
       - name: Upload Test Binary Artifact
         uses: actions/upload-artifact@v4
         with:
