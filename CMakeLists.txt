@@ -37,6 +37,10 @@ else()
   set_property(GLOBAL APPEND PROPERTY steinwurf::object_libraries
     steinwurf::bourne)
 endif()
+find_package(Threads REQUIRED)
+
+# Link against pthreads
+target_link_libraries(bourne PUBLIC Threads::Threads)
 
 target_include_directories(bourne INTERFACE src)
 target_compile_features(bourne PUBLIC cxx_std_17)
