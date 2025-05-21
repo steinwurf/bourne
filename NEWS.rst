@@ -6,7 +6,8 @@ every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Major: Upgraded to gtest 6.x.y.
+* Major: Build with CMake only.
 
 10.1.0
 ------
