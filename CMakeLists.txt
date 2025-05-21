@@ -16,14 +16,16 @@ if(NOT DEFINED STEINWURF_RESOLVE)
   endif()
 
   set(STEINWURF_RESOLVE "${CMAKE_CURRENT_SOURCE_DIR}/resolve_symlinks")
-  set(STEINWURF_TOP_NAME bourne)
 endif()
+
+# Include common CMake settings
+include("${STEINWURF_RESOLVE}/toolchains/common_settings.cmake")
 
 # Define library
 file(GLOB_RECURSE bourne_sources ./src/*.cpp)
 
 # Is this the top-level steinwurf project?
-if(${PROJECT_NAME} STREQUAL ${STEINWURF_TOP_NAME})
+if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
   # Create static library
   add_library(bourne STATIC ${bourne_sources})
 
@@ -58,29 +60,21 @@ install(
 if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
   # Build executables
   add_executable(example examples/example.cpp)
-  target_link_libraries(example bourne)
+  target_link_libraries(example steinwurf::bourne)
 
   enable_testing()
 
-  if(CMAKE_C_COMPILER_ID MATCHES "MSVC")
-    # For Windows: Prevent overriding the parent project's compiler/linker
-    # settings
-    set(gtest_force_shared_crt
-      ON
-      CACHE BOOL "" FORCE)
-  endif()
-
   # Google Test dependency
-  add_subdirectory("${STEINWURF_RESOLVE}/gtest-source")
-
+  add_subdirectory("${STEINWURF_RESOLVE}/gtest" gtest EXCLUDE_FROM_ALL)
+  
   # Build test executable
   file(GLOB_RECURSE bourne_test_sources ./test/*.cpp)
   add_executable(bourne_tests ${bourne_test_sources})
-  target_link_libraries(bourne_tests gtest_main)
+  target_link_libraries(bourne_tests steinwurf::gtest)
   target_link_libraries(bourne_tests steinwurf::bourne)
 
   # Copy test/test.json to build directory
   file(COPY test/test.json DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-  add_test(bourne_tests bourne_tests)
+  add_test(NAME bourne_testing COMMAND bourne_tests)
 endif()
