@@ -60,7 +60,7 @@ install(
 if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
   # Build executables
   add_executable(example examples/example.cpp)
-  target_link_libraries(example bourne)
+  target_link_libraries(example steinwurf::bourne)
 
   enable_testing()
 
