@@ -76,5 +76,5 @@ if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
   # Copy test/test.json to build directory
   file(COPY test/test.json DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-  add_test(NAME bourne_tests COMMAND bourne_tests)
+  add_test(NAME bourne_testing COMMAND bourne_tests)
 endif()
