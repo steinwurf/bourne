@@ -65,8 +65,8 @@ if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
   enable_testing()
 
   # Google Test dependency
-  add_subdirectory("${STEINWURF_RESOLVE}/gtest")
-
+  add_subdirectory("${STEINWURF_RESOLVE}/gtest" gtest EXCLUDE_FROM_ALL)
+  
   # Build test executable
   file(GLOB_RECURSE bourne_test_sources ./test/*.cpp)
   add_executable(bourne_tests ${bourne_test_sources})
