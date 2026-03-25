@@ -12,7 +12,7 @@ import subprocess
 from waflib.Build import BuildContext
 
 APPNAME = "bourne"
-VERSION = "11.0.0"
+VERSION = "11.1.0"
 
 
 def options(opt):

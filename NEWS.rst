@@ -6,6 +6,10 @@ every change, see the Git log.
 
 Latest
 ------
+* tbd
+
+11.1.0
+------
 * Minor: Added ``json::parse_options`` and new ``json::parse`` overloads for
   strict parsing.
 * Minor: Added ``bourne::error::parse_object_duplicate_key`` when strict
