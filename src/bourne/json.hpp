@@ -49,6 +49,15 @@ private:
     using array_type = detail::backing_data::array_type;
 
 public:
+    struct parse_options
+    {
+        /// Enable strict JSON parsing checks.
+        ///
+        /// Currently this enables:
+        /// - bourne::error::parse_object_duplicate_key
+        bool strict = false;
+    };
+
     /// Default constructor, creates a null value.
     json();
 
@@ -343,8 +352,15 @@ public:
     /// Parse a string as a json object.
     static json parse(const std::string& input, std::error_code& error);
 
+    /// Parse a string as a json object with options.
+    static json parse(const std::string& input, const parse_options& options,
+                      std::error_code& error);
+
     /// Parse a string as a json object.
     static json parse(const std::string& input);
+
+    /// Parse a string as a json object with options.
+    static json parse(const std::string& input, const parse_options& options);
 
     /// Create a json array
     static json array();

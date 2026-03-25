@@ -8,6 +8,7 @@ BOURNE_ERROR_TAG(parse_found_multiple_unstructured_elements,
                  "Found multiple unstructured elements.")
 BOURNE_ERROR_TAG(parse_object_expected_colon, "Expected \":\"")
 BOURNE_ERROR_TAG(parse_object_expected_comma, "Expected \",\"")
+BOURNE_ERROR_TAG(parse_object_duplicate_key, "Duplicate key in object")
 BOURNE_ERROR_TAG(parse_array_expected_comma_or_closing_bracket,
                  "Expected \",\" or \"]\"")
 BOURNE_ERROR_TAG(parse_string_expected_unicode_escape_hex_char,

@@ -6,6 +6,7 @@
 #include <fstream>
 
 #include <bourne/detail/parser.hpp>
+#include <bourne/json.hpp>
 #include <gtest/gtest.h>
 
 namespace
@@ -211,4 +212,45 @@ TEST(test_parser, test_parse_unicode)
     auto result = bourne::detail::parser::parse(json_string, error);
     ASSERT_FALSE((bool)error);
     ASSERT_EQ(json_string, result.dump_min());
+}
+
+TEST(test_parser, test_parse_object_duplicate_key_non_strict)
+{
+    std::error_code error;
+    std::string json_string = "{\"bourne\":1,\"bourne\":2}";
+    auto result = bourne::detail::parser::parse(json_string, error);
+
+    ASSERT_FALSE((bool)error);
+    ASSERT_TRUE(result.is_object());
+    ASSERT_TRUE(result.has_key("bourne"));
+    EXPECT_EQ(2, result["bourne"].to_int());
+}
+
+TEST(test_parser, test_parse_object_duplicate_key_strict)
+{
+    std::error_code error;
+    std::string json_string = "{\"bourne\":1,\"bourne\":2}";
+    bourne::json::parse_options options;
+    options.strict = true;
+
+    auto result = bourne::detail::parser::parse(json_string, options, error);
+
+    EXPECT_EQ(bourne::error::parse_object_duplicate_key, error)
+        << error.message();
+    ASSERT_EQ(bourne::json::null(), result);
+}
+
+TEST(test_parser, test_parse_nested_object_duplicate_key_strict)
+{
+    std::error_code error;
+    std::string json_string =
+        "{\"outer\":{\"bourne\":1,\"bourne\":2},\"ok\":true}";
+    bourne::json::parse_options options;
+    options.strict = true;
+
+    auto result = bourne::json::parse(json_string, options, error);
+
+    EXPECT_EQ(bourne::error::parse_object_duplicate_key, error)
+        << error.message();
+    ASSERT_EQ(bourne::json::null(), result);
 }
