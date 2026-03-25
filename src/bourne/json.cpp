@@ -537,12 +537,24 @@ bool json::contains(const json& other) const
 json json::parse(const std::string& input, std::error_code& error)
 {
     assert(!error);
-    return detail::parser::parse(input, error);
+    return detail::parser::parse(input, json::parse_options{}, error);
+}
+
+json json::parse(const std::string& input, const json::parse_options& options,
+                 std::error_code& error)
+{
+    assert(!error);
+    return detail::parser::parse(input, options, error);
 }
 
 json json::parse(const std::string& input)
 {
-    return detail::parser::parse(input);
+    return detail::parser::parse(input, json::parse_options{});
+}
+
+json json::parse(const std::string& input, const json::parse_options& options)
+{
+    return detail::parser::parse(input, options);
 }
 
 json json::array()

@@ -23,17 +23,39 @@ namespace detail
 {
 json parser::parse(const std::string& input)
 {
+    return parse(input, json::parse_options{});
+}
+
+json parser::parse(const std::string& input, const json::parse_options& options)
+{
     std::error_code error;
     std::size_t offset = 0;
-    auto result = parse_next(input, offset, error);
+    auto result = parse_next(input, offset, error, options);
+    if (error)
+    {
+        throw_if_error(error);
+    }
+    consume_white_space(input, offset);
+    if (offset != input.size())
+    {
+        error = bourne::error::parse_found_multiple_unstructured_elements;
+        throw_if_error(error);
+    }
     throw_if_error(error);
     return result;
 }
+
 json parser::parse(const std::string& input, std::error_code& error)
+{
+    return parse(input, json::parse_options{}, error);
+}
+
+json parser::parse(const std::string& input, const json::parse_options& options,
+                   std::error_code& error)
 {
     assert(!error);
     std::size_t offset = 0;
-    auto result = parse_next(input, offset, error);
+    auto result = parse_next(input, offset, error, options);
     if (error)
         return result;
     consume_white_space(input, offset);
@@ -55,7 +77,8 @@ void parser::consume_white_space(const std::string& input, size_t& offset)
 }
 
 json parser::parse_object(const std::string& input, size_t& offset,
-                          std::error_code& error)
+                          std::error_code& error,
+                          const json::parse_options& options)
 {
     assert(!error);
     json object = json(class_type::object);
@@ -70,7 +93,7 @@ json parser::parse_object(const std::string& input, size_t& offset,
 
     while (true)
     {
-        json key = parse_next(input, offset, error);
+        json key = parse_next(input, offset, error, options);
         if (error)
             return json(class_type::null);
 
@@ -82,11 +105,17 @@ json parser::parse_object(const std::string& input, size_t& offset,
         }
         offset++;
         consume_white_space(input, offset);
-        json value = parse_next(input, offset, error);
+        json value = parse_next(input, offset, error, options);
         if (error)
             return json(class_type::null);
 
-        object[key.to_string()] = value;
+        std::string key_string = key.to_string();
+        if (options.strict && object.has_key(key_string))
+        {
+            error = bourne::error::parse_object_duplicate_key;
+            return json(class_type::null);
+        }
+        object[key_string] = value;
 
         consume_white_space(input, offset);
         if (input[offset] == ',')
@@ -110,7 +139,8 @@ json parser::parse_object(const std::string& input, size_t& offset,
 }
 
 json parser::parse_array(const std::string& input, size_t& offset,
-                         std::error_code& error)
+                         std::error_code& error,
+                         const json::parse_options& options)
 {
     assert(!error);
     json array = json(class_type::array);
@@ -126,7 +156,7 @@ json parser::parse_array(const std::string& input, size_t& offset,
 
     while (true)
     {
-        array[index++] = parse_next(input, offset, error);
+        array[index++] = parse_next(input, offset, error, options);
         if (error)
             return json(class_type::null);
         consume_white_space(input, offset);
@@ -335,7 +365,8 @@ json parser::parse_null(const std::string& input, size_t& offset,
 }
 
 json parser::parse_next(const std::string& input, size_t& offset,
-                        std::error_code& error)
+                        std::error_code& error,
+                        const json::parse_options& options)
 {
     assert(!error);
     char value;
@@ -344,9 +375,9 @@ json parser::parse_next(const std::string& input, size_t& offset,
     switch (value)
     {
     case '[':
-        return parse_array(input, offset, error);
+        return parse_array(input, offset, error, options);
     case '{':
-        return parse_object(input, offset, error);
+        return parse_object(input, offset, error, options);
     case '\"':
         return parse_string(input, offset, error);
     case 't':

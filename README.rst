@@ -49,6 +49,29 @@ Usage
 
 Usage example is located in the examples folder.
 
+Strict Parsing
+==============
+
+By default, parsing is permissive and later values overwrite earlier ones if
+an object contains duplicate keys.
+
+To enable strict parsing, pass ``parse_options`` with ``strict = true``. In
+strict mode, parsing fails with
+``bourne::error::parse_object_duplicate_key`` when duplicate keys are found.
+
+::
+
+   bourne::json::parse_options options;
+   options.strict = true;
+
+   std::error_code error;
+   auto result = bourne::json::parse("{\"a\":1,\"a\":2}", options, error);
+
+   if (error == bourne::error::parse_object_duplicate_key)
+   {
+       // duplicate key found
+   }
+
 Build
 =====
 
